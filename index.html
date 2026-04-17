@@ -1,0 +1,2386 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corina OS — Sistema de Vida</title>
+    <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;900&family=Figtree:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+    <style>
+        :root {
+            --bg: #07090f;
+            --s1: #0e1018;
+            --s2: #141820;
+            --s3: #1c2230;
+            --border: #1e2535;
+            --b2: #2a3448;
+            --gold: #e8c46a;
+            --g2: #f5dfa0;
+            --gd: rgba(232, 196, 106, .09);
+            --teal: #2de8c4;
+            --t2: #90f5e4;
+            --td: rgba(45, 232, 196, .09);
+            --rose: #f05a7e;
+            --rd: rgba(240, 90, 126, .09);
+            --sky: #5ab4f5;
+            --skd: rgba(90, 180, 245, .09);
+            --lav: #b07ef8;
+            --ld: rgba(176, 126, 248, .09);
+            --text: #dce6f5;
+            --muted: #4a5a7a;
+            --m2: #8898b8;
+            --fh: 'Figtree', sans-serif;
+            --fm: 'Fira Code', monospace;
+            --fu: 'Unbounded', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--fh);
+            overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+        }
+
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 200;
+            background: rgba(7, 9, 15, .96);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            min-height: 52px;
+            gap: 0;
+        }
+
+        .nav-logo {
+            font-family: var(--fu);
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--teal);
+            margin-right: 20px;
+            white-space: nowrap;
+        }
+
+        .nav-logo span {
+            color: var(--gold);
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 0;
+            flex: 1;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .nav-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .nav-tab {
+            font-family: var(--fm);
+            font-size: 9px;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            padding: 14px 12px;
+            cursor: pointer;
+            color: var(--muted);
+            border-bottom: 2px solid transparent;
+            transition: all .2s;
+            white-space: nowrap;
+            background: transparent;
+            border-top: none;
+            border-left: none;
+            border-right: none;
+        }
+
+        .nav-tab:hover {
+            color: var(--m2);
+        }
+
+        .nav-tab.active {
+            color: var(--teal);
+            border-bottom-color: var(--teal);
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 5px;
+            margin-left: auto;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .nbtn {
+            font-family: var(--fm);
+            font-size: 8px;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            padding: 6px 10px;
+            background: transparent;
+            border: 1px solid;
+            cursor: pointer;
+            transition: all .2s;
+            white-space: nowrap;
+        }
+
+        .nb-t {
+            border-color: rgba(45, 232, 196, .4);
+            color: var(--teal);
+        }
+
+        .nb-t:hover {
+            background: var(--td);
+        }
+
+        .nb-g {
+            border-color: rgba(232, 196, 106, .4);
+            color: var(--gold);
+        }
+
+        .nb-g:hover {
+            background: var(--gd);
+        }
+
+        .nb-r {
+            border-color: rgba(240, 90, 126, .4);
+            color: var(--rose);
+        }
+
+        .nb-r:hover {
+            background: var(--rd);
+        }
+
+        .sdot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--teal);
+            display: inline-block;
+            margin-right: 4px;
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: .2;
+            }
+        }
+
+        .modal-ov {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .75);
+            z-index: 500;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-ov.open {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--s1);
+            border: 1px solid var(--b2);
+            padding: 24px;
+            width: 90%;
+            max-width: 560px;
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-lg {
+            max-width: 700px;
+        }
+
+        .modal-ttl {
+            font-family: var(--fu);
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--gold);
+            margin-bottom: 5px;
+        }
+
+        .modal-sub {
+            font-family: var(--fm);
+            font-size: 10px;
+            color: var(--m2);
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+
+        .modal-x {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            cursor: pointer;
+            color: var(--muted);
+            font-size: 16px;
+            background: none;
+            border: none;
+            font-family: var(--fh);
+            line-height: 1;
+        }
+
+        .modal-x:hover {
+            color: var(--text);
+        }
+
+        .modal textarea {
+            width: 100%;
+            height: 130px;
+            background: var(--s2);
+            border: 1px solid var(--border);
+            padding: 10px 12px;
+            font-family: var(--fm);
+            font-size: 9px;
+            color: var(--text);
+            outline: none;
+            resize: none;
+            line-height: 1.6;
+        }
+
+        .modal textarea:focus {
+            border-color: var(--teal);
+        }
+
+        .modal-btns {
+            display: flex;
+            gap: 7px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .page {
+            display: none;
+            padding-top: 52px;
+            min-height: 100vh;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .wrap {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 28px 16px 80px;
+        }
+
+        .sec {
+            margin-bottom: 40px;
+        }
+
+        .stag {
+            font-family: var(--fm);
+            font-size: 8px;
+            letter-spacing: .3em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 5px;
+        }
+
+        .sttl {
+            font-family: var(--fu);
+            font-size: clamp(16px, 2.8vw, 26px);
+            font-weight: 700;
+            line-height: 1.05;
+            letter-spacing: -.01em;
+            margin-bottom: 14px;
+        }
+
+        .tc {
+            color: var(--teal);
+        }
+
+        .gc {
+            color: var(--gold);
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 9px;
+        }
+
+        .card {
+            background: var(--s1);
+            border: 1px solid var(--border);
+            padding: 14px;
+            position: relative;
+            overflow: hidden;
+            transition: border-color .2s;
+        }
+
+        .card:hover {
+            border-color: var(--b2);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+        }
+
+        .ct::before {
+            background: var(--teal);
+        }
+
+        .cg::before {
+            background: var(--gold);
+        }
+
+        .cr::before {
+            background: var(--rose);
+        }
+
+        .cs::before {
+            background: var(--sky);
+        }
+
+        .cl::before {
+            background: var(--lav);
+        }
+
+        .clbl {
+            font-family: var(--fm);
+            font-size: 8px;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 7px;
+        }
+
+        .cval {
+            font-family: var(--fu);
+            font-size: 20px;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 3px;
+        }
+
+        .csub {
+            font-family: var(--fm);
+            font-size: 8px;
+            color: var(--m2);
+        }
+
+        .lbar-wrap {
+            margin-bottom: 24px;
+        }
+
+        .lbar-hd {
+            display: flex;
+            justify-content: space-between;
+            font-family: var(--fm);
+            font-size: 8px;
+            color: var(--muted);
+            margin-bottom: 7px;
+        }
+
+        .lbar-hd span:last-child {
+            color: var(--gold);
+        }
+
+        .lbar {
+            height: 5px;
+            background: var(--s3);
+            border-radius: 3px;
+            position: relative;
+            margin-bottom: 5px;
+        }
+
+        .lbar-fill {
+            height: 100%;
+            border-radius: 3px;
+            background: linear-gradient(90deg, var(--teal), var(--gold));
+            width: 32.1%;
+            position: relative;
+        }
+
+        .lbar-fill::after {
+            content: '✦ 25.7';
+            position: absolute;
+            right: -4px;
+            top: -15px;
+            font-family: var(--fm);
+            font-size: 8px;
+            color: var(--gold);
+            white-space: nowrap;
+        }
+
+        .lbar-marks {
+            display: flex;
+            justify-content: space-between;
+            font-family: var(--fm);
+            font-size: 7px;
+            color: var(--muted);
+        }
+
+        .tbl {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .tbl th {
+            padding: 8px 10px;
+            text-align: left;
+            font-family: var(--fm);
+            font-size: 8px;
+            letter-spacing: .15em;
+            text-transform: uppercase;
+            background: var(--s2);
+            color: var(--muted);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .tbl td {
+            padding: 7px 10px;
+            font-size: 11px;
+            border-bottom: 1px solid rgba(30, 37, 53, .7);
+        }
+
+        .tbl tr:hover td {
+            background: rgba(255, 255, 255, .015);
+        }
+
+        .tbl tr:last-child td {
+            border-bottom: none;
+        }
+
+        .cbox {
+            background: var(--s1);
+            border: 1px solid var(--border);
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .cttl {
+            font-family: var(--fm);
+            font-size: 8px;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            color: var(--m2);
+            margin-bottom: 12px;
+        }
+
+        .cleg {
+            display: flex;
+            gap: 14px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+
+        .cli {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-family: var(--fm);
+            font-size: 8px;
+            color: var(--m2);
+        }
+
+        .cld {
+            width: 14px;
+            height: 2px;
+            border-radius: 1px;
+        }
+
+        .prow {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .pname {
+            font-family: var(--fm);
+            font-size: 10px;
+            color: var(--text);
+            min-width: 170px;
+        }
+
+        .ptrack {
+            flex: 1;
+            height: 5px;
+            background: var(--s3);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .pfill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width .5s ease;
+        }
+
+        .ppct {
+            font-family: var(--fm);
+            font-size: 9px;
+            color: var(--m2);
+            min-width: 30px;
+            text-align: right;
+        }
+
+        .hgrid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 7px;
+        }
+
+        .hcard {
+            background: var(--s1);
+            border: 1px solid var(--border);
+            padding: 12px;
+            transition: border-color .2s;
+        }
+
+        .hcard:hover {
+            border-color: var(--b2);
+        }
+
+        .hcard-top {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .hchk {
+            width: 18px;
+            height: 18px;
+            border: 1.5px solid var(--border);
+            border-radius: 3px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all .15s;
+        }
+
+        .hchk.on {
+            background: var(--teal);
+            border-color: var(--teal);
+        }
+
+        .hchk.on::after {
+            content: '✓';
+            color: #000;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .hcard-name {
+            font-size: 11px;
+            font-weight: 600;
+            flex: 1;
+        }
+
+        .hcard-freq {
+            font-family: var(--fm);
+            font-size: 7px;
+            color: var(--gold);
+            padding: 1px 6px;
+            border: 1px solid rgba(232, 196, 106, .25);
+            background: var(--gd);
+        }
+
+        .wdots {
+            display: flex;
+            gap: 3px;
+        }
+
+        .wdot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--s3);
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: all .15s;
+        }
+
+        .wdot.on {
+            border-color: var(--teal);
+            box-shadow: 0 0 4px var(--teal);
+        }
+
+        .streak {
+            font-family: var(--fm);
+            font-size: 7px;
+            color: var(--muted);
+            margin-top: 4px;
+        }
+
+        .streak span {
+            color: var(--gold);
+        }
+
+        .ms-list {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .ms-row {
+            display: grid;
+            grid-template-columns: 72px 13px 1fr;
+            gap: 0 14px;
+            align-items: start;
+        }
+
+        .ms-when {
+            font-family: var(--fm);
+            font-size: 8px;
+            color: var(--gold);
+            text-align: right;
+            padding-top: 14px;
+            line-height: 1.4;
+        }
+
+        .ms-spine {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 14px;
+        }
+
+        .ms-node {
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: all .2s;
+        }
+
+        .ms-node.done {
+            background: var(--teal);
+            box-shadow: 0 0 9px var(--teal);
+        }
+
+        .ms-node.now {
+            background: var(--gold);
+            box-shadow: 0 0 9px var(--gold);
+            animation: np 2s infinite;
+        }
+
+        @keyframes np {
+
+            0%,
+            100% {
+                box-shadow: 0 0 6px var(--gold);
+            }
+
+            50% {
+                box-shadow: 0 0 14px var(--gold);
+            }
+        }
+
+        .ms-node.soon {
+            background: var(--s3);
+            border: 1.5px solid var(--border);
+        }
+
+        .ms-wire {
+            width: 1px;
+            flex: 1;
+            min-height: 12px;
+        }
+
+        .ms-wire.done {
+            background: var(--teal);
+        }
+
+        .ms-wire.soon {
+            background: var(--border);
+        }
+
+        .ms-body {
+            background: var(--s1);
+            border: 1px solid var(--border);
+            border-left: 2px solid;
+            padding: 10px 12px;
+            margin: 5px 0 3px;
+            cursor: pointer;
+            transition: border-color .2s;
+        }
+
+        .ms-body.done {
+            border-left-color: var(--teal);
+        }
+
+        .ms-body.now {
+            border-left-color: var(--gold);
+        }
+
+        .ms-body.soon {
+            border-left-color: var(--border);
+        }
+
+        .ms-body:hover {
+            border-color: var(--b2);
+        }
+
+        .ms-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 7px;
+            margin-bottom: 4px;
+        }
+
+        .ms-ttl {
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .ms-badge {
+            font-family: var(--fm);
+            font-size: 7px;
+            padding: 2px 6px;
+            border: 1px solid;
+        }
+
+        .bd-done {
+            color: var(--teal);
+            border-color: rgba(45, 232, 196, .3);
+            background: var(--td);
+        }
+
+        .bd-now {
+            color: var(--gold);
+            border-color: rgba(232, 196, 106, .3);
+            background: var(--gd);
+        }
+
+        .bd-soon {
+            color: var(--m2);
+            border-color: var(--border);
+        }
+
+        .ms-desc {
+            font-family: var(--fm);
+            font-size: 8px;
+            color: var(--m2);
+            line-height: 1.6;
+        }
+
+        .pct-row {
+            margin-top: 6px;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .pct-bar {
+            flex: 1;
+            height: 2px;
+            background: var(--s3);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .pct-fill {
+            height: 100%;
+            border-radius: 2px;
+            background: linear-gradient(90deg, var(--teal), var(--gold));
+            transition: width .4s;
+        }
+
+        .pct-lbl {
+            font-family: var(--fm);
+            font-size: 8px;
+            color: var(--m2);
+            min-width: 24px;
+        }
+
+        .sboxes {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 9px;
+        }
+
+        .sbox {
+            background: var(--s1);
+            border: 1px solid var(--border);
+            padding: 14px;
+        }
+
+        .sbox-ttl {
+            font-family: var(--fm);
+            font-size: 8px;
+            letter-spacing: .15em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 7px;
+        }
+
+        .sbox-val {
+            font-family: var(--fu);
+            font-size: 24px;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 3px;
+        }
+
+        .sbox-sub {
+            font-family: var(--fm);
+            font-size: 8px;
+            color: var(--m2);
+        }
+
+        .sbox-bar {
+            height: 3px;
+            background: var(--s3);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 7px;
+        }
+
+        .sbox-fill {
+            height: 100%;
+            border-radius: 2px;
+        }
+
+        .logi {
+            background: var(--s1);
+            border: 1px solid var(--border);
+            border-left: 2px solid var(--teal);
+            padding: 8px 12px;
+            margin-bottom: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 9px;
+        }
+
+        .lt {
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .lm {
+            font-family: var(--fm);
+            font-size: 8px;
+            color: var(--m2);
+        }
+
+        .ld {
+            font-family: var(--fm);
+            font-size: 8px;
+            color: var(--gold);
+            white-space: nowrap;
+        }
+
+        textarea,
+        input[type=text],
+        select {
+            background: var(--s1);
+            border: 1px solid var(--border);
+            padding: 9px 12px;
+            font-family: var(--fm);
+            font-size: 11px;
+            color: var(--text);
+            outline: none;
+            transition: border-color .2s;
+        }
+
+        textarea {
+            width: 100%;
+            resize: vertical;
+        }
+
+        input[type=text] {
+            width: 100%;
+        }
+
+        select {
+            cursor: pointer;
+        }
+
+        textarea:focus,
+        input[type=text]:focus,
+        select:focus {
+            border-color: var(--teal);
+        }
+
+        textarea::placeholder,
+        input[type=text]::placeholder {
+            color: var(--muted);
+        }
+
+        .btn {
+            font-family: var(--fm);
+            font-size: 8px;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            padding: 8px 14px;
+            background: transparent;
+            border: 1px solid;
+            cursor: pointer;
+            transition: all .2s;
+        }
+
+        .bt {
+            border-color: var(--teal);
+            color: var(--teal);
+        }
+
+        .bt:hover {
+            background: var(--td);
+        }
+
+        .bg {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+
+        .bg:hover {
+            background: var(--gd);
+        }
+
+        .br {
+            border-color: var(--rose);
+            color: var(--rose);
+        }
+
+        .br:hover {
+            background: var(--rd);
+        }
+
+        .alrt {
+            padding: 10px 14px;
+            border-left: 3px solid;
+            font-family: var(--fm);
+            font-size: 10px;
+            line-height: 1.6;
+            margin-bottom: 9px;
+        }
+
+        .alt {
+            background: var(--td);
+            color: var(--t2);
+            border-color: var(--teal);
+        }
+
+        .alg {
+            background: var(--gd);
+            color: var(--g2);
+            border-color: var(--gold);
+        }
+
+        .step-item {
+            display: grid;
+            grid-template-columns: 28px 1fr auto;
+            gap: 10px;
+            align-items: start;
+            background: var(--s1);
+            border: 1px solid var(--border);
+            padding: 11px 13px;
+            margin-bottom: 5px;
+        }
+
+        .sn {
+            font-family: var(--fu);
+            font-size: 18px;
+            color: var(--gold);
+            line-height: 1;
+            text-align: center;
+        }
+
+        .si-ttl {
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .si-desc {
+            font-family: var(--fm);
+            font-size: 9px;
+            color: var(--m2);
+            line-height: 1.5;
+        }
+
+        .si-time {
+            font-family: var(--fm);
+            font-size: 8px;
+            color: var(--teal);
+            padding: 3px 7px;
+            border: 1px solid rgba(45, 232, 196, .3);
+            white-space: nowrap;
+            align-self: center;
+        }
+
+        @media(max-width:600px) {
+            .nav-tab {
+                padding: 12px 9px;
+            }
+
+            .wrap {
+                padding: 18px 10px 60px;
+            }
+
+            .ms-row {
+                grid-template-columns: 55px 11px 1fr;
+            }
+
+            .cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <input type="file" id="importFile" accept=".json" style="display:none" onchange="importJSON(event)">
+
+    <!-- MODAL JSON -->
+
+    <div class="modal-ov" id="mSync">
+        <div class="modal">
+            <button class="modal-x" onclick="cm('mSync')">✕</button>
+            <div class="modal-ttl">⇅ Exportar / Importar datos</div>
+            <div class="modal-sub">Exportá tu JSON → guardalo en Google Drive o iCloud → importalo en cualquier otro dispositivo. Así tus datos viajan con vos.</div>
+            <textarea id="jsonPrev" readonly placeholder="Tu JSON aparece acá..."></textarea>
+            <div class="modal-btns">
+                <button class="btn bt" onclick="exportJSON()">⬇ Descargar JSON</button>
+                <button class="btn bg" onclick="document.getElementById('importFile').click()">⬆ Importar JSON</button>
+                <button class="btn bt" onclick="copyJSON()">⧉ Copiar JSON</button>
+            </div>
+            <div style="margin-top:14px;font-family:var(--fm);font-size:9px;color:var(--muted);line-height:1.7;">
+                <strong style="color:var(--gold)">Flujo recomendado:</strong><br>
+                1. Hacés cambios en iPhone → ⇅ JSON → Descargar<br>
+                2. Subís el archivo a Google Drive (carpeta "Corina OS")<br>
+                3. Abrís en iPad/Laptop → ⇅ JSON → Importar → listo
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL GITHUB -->
+
+    <div class="modal-ov" id="mGuide">
+        <div class="modal modal-lg">
+            <button class="modal-x" onclick="cm('mGuide')">✕</button>
+            <div class="modal-ttl">🚀 Subir a GitHub Pages</div>
+            <div class="modal-sub">Una URL propia accesible desde cualquier dispositivo. Setup de 15 minutos, una sola vez.</div>
+            <div id="guideSteps"></div>
+            <div style="margin-top:14px;" class="alrt alg">
+                <strong>Tu URL final:</strong> https://TU_USUARIO.github.io/corina-os<br>
+                Guardala como favorito en iPhone, iPad y laptop. Cada vez que actualizás el HTML en GitHub, la URL se actualiza automáticamente.
+            </div>
+        </div>
+    </div>
+
+    <!-- NAV -->
+
+    <nav class="nav">
+        <div class="nav-inner">
+            <div class="nav-logo">CORINA <span>OS</span></div>
+            <div class="nav-tabs">
+                <button class="nav-tab active" onclick="gp('home',this)">🏠 Inicio</button>
+                <button class="nav-tab" onclick="gp('finanzas',this)">💰 Finanzas</button>
+                <button class="nav-tab" onclick="gp('habitos',this)">⚡ Hábitos</button>
+                <button class="nav-tab" onclick="gp('metas',this)">🎯 Metas</button>
+                <button class="nav-tab" onclick="gp('resumen',this)">📊 Resumen</button>
+                <button class="nav-tab" onclick="gp('bitacora',this)">📝 Bitácora</button>
+            </div>
+            <div class="nav-actions">
+                <button class="nbtn nb-t" onclick="saveAll()" id="saveBtn"><span class="sdot"></span>GUARDAR</button>
+                <button class="nbtn nb-g" onclick="om('mSync')">⇅ JSON</button>
+                <button class="nbtn nb-r" onclick="om('mGuide')">🚀 GITHUB</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HOME -->
+
+    <div class="page active" id="page-home">
+        <div class="wrap">
+            <div class="sec">
+                <div class="stag">// <span id="liveDate"></span></div>
+                <div style="font-family:var(--fu);font-size:clamp(32px,7vw,68px);font-weight:900;letter-spacing:-.02em;line-height:.9;margin-bottom:14px;">CORINA<br><span class="tc">LAZO</span> <span class="gc">OS</span></div>
+                <div style="font-family:var(--fm);font-size:10px;color:var(--m2);margin-bottom:22px;">Ing. Mecatrónica · PM · Creadora · Inversionista · 25.7 años · Lima</div>
+                <div class="lbar-wrap">
+                    <div class="lbar-hd"><span>PROGRESO DE VIDA</span><span>25.7 / 80 años · 32.1%</span></div>
+                    <div class="lbar">
+                        <div class="lbar-fill"></div>
+                    </div>
+                    <div class="lbar-marks"><span>25★</span><span>30</span><span>35</span><span>40</span><span>50</span><span>60</span><span>80</span></div>
+                </div>
+                <div class="cards">
+                    <div class="card ct">
+                        <div class="clbl">Patrimonio</div>
+                        <div class="cval" style="color:var(--teal)">S/115K</div>
+                        <div class="csub">+creciendo</div>
+                    </div>
+                    <div class="card cg">
+                        <div class="clbl">Ahorro real</div>
+                        <div class="cval" style="color:var(--gold)">38%</div>
+                        <div class="csub">Meta: 45%</div>
+                    </div>
+                    <div class="card cr">
+                        <div class="clbl">Airbnb</div>
+                        <div class="cval" style="color:var(--rose)">NOV</div>
+                        <div class="csub">S/2,600/mes</div>
+                    </div>
+                    <div class="card cs">
+                        <div class="clbl">ETF portafolio</div>
+                        <div class="cval" style="color:var(--sky)" id="etfHome">S/0</div>
+                        <div class="csub">Iniciar Renta4</div>
+                    </div>
+                    <div class="card cl">
+                        <div class="clbl">Inglés nivel</div>
+                        <div class="cval" style="color:var(--lav)">B1+</div>
+                        <div class="csub">Meta: C1</div>
+                    </div>
+                    <div class="card ct">
+                        <div class="clbl">Hábitos hoy</div>
+                        <div class="cval" style="color:var(--teal)" id="habitHome">0/13</div>
+                        <div class="csub">Marcar en Hábitos</div>
+                    </div>
+                </div>
+            </div>
+            <div class="alrt alg"><strong>Los pequeños fallos son datos, no fracasos.</strong> Cada vez que te re-encarrilás, el sistema se fortalece. La consistencia imperfecta siempre gana.</div>
+            <div class="sec">
+                <div class="stag">// acceso rápido</div>
+                <div style="display:flex;flex-wrap:wrap;gap:7px;">
+                    <button class="btn bt" onclick="gp('habitos',null)">⚡ Hábitos de hoy</button>
+                    <button class="btn bg" onclick="gp('finanzas',null)">💰 Finanzas</button>
+                    <button class="btn bt" onclick="gp('metas',null)">🎯 Metas</button>
+                    <button class="btn bg" onclick="gp('resumen',null)">📊 Resumen</button>
+                    <button class="btn bt" onclick="gp('bitacora',null)">📝 Bitácora</button>
+                </div>
+            </div>
+            <div class="alrt alt"><strong>📱 Sincronizar entre dispositivos:</strong> Usá ⇅ JSON para exportar e importar tus datos. Para URL fija accesible desde cualquier lugar, tocá 🚀 GITHUB.</div>
+        </div>
+    </div>
+
+    <!-- FINANZAS -->
+
+    <div class="page" id="page-finanzas">
+        <div class="wrap">
+            <div class="sec">
+                <div class="stag">// finanzas completas</div>
+                <div class="sttl">Finanzas <span class="gc">&amp; Activos</span></div>
+                <div class="cards" style="margin-bottom:18px;">
+                    <div class="card ct">
+                        <div class="clbl">Ingreso actual</div>
+                        <div class="cval" style="color:var(--teal)">S/6,002</div>
+                        <div class="csub">Trabajo+recurrentes</div>
+                    </div>
+                    <div class="card cr">
+                        <div class="clbl">Gastos fijos</div>
+                        <div class="cval" style="color:var(--rose)">S/4,817</div>
+                        <div class="csub">80% — reducir</div>
+                    </div>
+                    <div class="card cs">
+                        <div class="clbl">Ahorro real</div>
+                        <div class="cval" style="color:var(--sky)">S/735</div>
+                        <div class="csub">12% · meta: 45%</div>
+                    </div>
+                    <div class="card cg">
+                        <div class="clbl">Caja Agora</div>
+                        <div class="cval" style="color:var(--gold)">S/64K</div>
+                        <div class="csub">5% anual</div>
+                    </div>
+                    <div class="card cl">
+                        <div class="clbl">ETF portafolio</div>
+                        <div class="cval" style="color:var(--lav)" id="etfFin">S/0</div>
+                        <div class="csub">Meta S/15K</div>
+                    </div>
+                </div>
+            </div>
+            <div class="sec">
+                <div class="stag">// tracker ETF · registrá cada aporte el día 25</div>
+                <div class="sttl">Portafolio <span class="tc">ETF</span></div>
+                <div class="cards" style="margin-bottom:12px;" id="etfCards"></div>
+                <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px;">
+                    <input type="text" id="etfAmt" placeholder="Monto S/" style="max-width:160px;">
+                    <input type="text" id="etfNote" placeholder="Nota (ej: VOO cuota 1)" style="max-width:180px;">
+                    <button class="btn bg" onclick="addEtf()">+ REGISTRAR APORTE</button>
+                </div>
+                <div id="etfHist"></div>
+            </div>
+            <div class="sec">
+                <div class="stag">// curvas de proyección</div>
+                <div class="sttl">Curvas <span class="gc">estimadas</span></div>
+                <div class="cbox">
+                    <div class="cttl">INGRESOS PROYECTADOS — S/ MENSUAL (36 MESES)</div>
+                    <div style="position:relative;height:250px;"><canvas id="incChart" role="img" aria-label="Curva de ingresos proyectados de Corina a 36 meses">Ingresos proyectados S/6,002 hoy hasta S/25,000 en mes 36.</canvas></div>
+                    <div class="cleg">
+                        <div class="cli">
+                            <div class="cld" style="background:#e8c46a"></div>Total ingresos
+                        </div>
+                        <div class="cli">
+                            <div class="cld" style="background:#2de8c4"></div>Activos pasivos
+                        </div>
+                        <div class="cli">
+                            <div class="cld" style="background:#b07ef8"></div>Remoto USD
+                        </div>
+                    </div>
+                </div>
+                <div class="cbox">
+                    <div class="cttl">ETF VOO — S/15K + S/600/MES · 10% ANUAL vs AGORA 5%</div>
+                    <div style="position:relative;height:210px;"><canvas id="etfChart" role="img" aria-label="Proyección ETF vs Agora">ETF VOO a 10 años proyecta S/160K con S/15K inicial.</canvas></div>
+                    <div class="cleg">
+                        <div class="cli">
+                            <div class="cld" style="background:#2de8c4"></div>ETF 10%
+                        </div>
+                        <div class="cli">
+                            <div class="cld" style="background:#e8c46a"></div>Agora 5%
+                        </div>
+                        <div class="cli">
+                            <div class="cld" style="background:#2a3448"></div>Solo aportes
+                        </div>
+                    </div>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                    <div class="cbox">
+                        <div class="cttl">DISTRIBUCIÓN ACTUAL</div>
+                        <div style="position:relative;height:190px;"><canvas id="expNow" role="img" aria-label="Gastos actuales 80% fijos 12% ahorro 8% variables">Gastos 80%, Ahorro 12%, Variables 8%.</canvas></div>
+                    </div>
+                    <div class="cbox">
+                        <div class="cttl">META DISTRIBUCIÓN</div>
+                        <div style="position:relative;height:190px;"><canvas id="expMeta" role="img" aria-label="Meta gastos 50% ahorro 35% variables 15%">Meta Gastos 50%, Ahorro 35%, Variables 15%.</canvas></div>
+                    </div>
+                </div>
+            </div>
+            <div class="sec">
+                <div class="stag">// tabla de flujo de dinero</div>
+                <div class="sttl">Mapa de <span class="gc">ingresos</span></div>
+                <div style="overflow-x:auto;">
+                    <table class="tbl">
+                        <tr>
+                            <th>Fuente</th>
+                            <th>Tipo</th>
+                            <th>Actual S/</th>
+                            <th>Meta S/</th>
+                            <th>Cuándo</th>
+                            <th>Estado</th>
+                        </tr>
+                        <tr>
+                            <td>Trabajo Ate</td>
+                            <td>Fijo</td>
+                            <td style="color:var(--teal)">5,230</td>
+                            <td>10,000</td>
+                            <td>2027</td>
+                            <td style="color:var(--gold)">EN CURSO</td>
+                        </tr>
+                        <tr>
+                            <td>Airbnb La Victoria</td>
+                            <td>Pasivo</td>
+                            <td style="color:var(--m2)">0</td>
+                            <td>2,600</td>
+                            <td>Nov 2026</td>
+                            <td style="color:var(--rose)">NOV 2026</td>
+                        </tr>
+                        <tr>
+                            <td>ETF dividendos</td>
+                            <td>Pasivo</td>
+                            <td style="color:var(--m2)">0</td>
+                            <td>900</td>
+                            <td>2027</td>
+                            <td style="color:var(--rose)">INICIAR</td>
+                        </tr>
+                        <tr>
+                            <td>Freelance IA</td>
+                            <td>Variable</td>
+                            <td style="color:var(--m2)">0</td>
+                            <td>2,000</td>
+                            <td>Q3 2026</td>
+                            <td style="color:var(--m2)">PLANIF.</td>
+                        </tr>
+                        <tr>
+                            <td>Charlas + coaching</td>
+                            <td>Variable</td>
+                            <td style="color:var(--m2)">0</td>
+                            <td>1,900</td>
+                            <td>Q4 2026</td>
+                            <td style="color:var(--m2)">PLANIF.</td>
+                        </tr>
+                        <tr>
+                            <td>Remoto USD IA</td>
+                            <td>Remoto</td>
+                            <td style="color:var(--m2)">0</td>
+                            <td>11,400</td>
+                            <td>2027</td>
+                            <td style="color:var(--m2)">FUTURO</td>
+                        </tr>
+                        <tr style="background:rgba(232,196,106,.04)">
+                            <td><strong>TOTAL META</strong></td>
+                            <td></td>
+                            <td style="color:var(--teal)"><strong>6,002</strong></td>
+                            <td style="color:var(--gold)"><strong>25,000+</strong></td>
+                            <td>2028–29</td>
+                            <td style="color:var(--gold)"><strong>VISIÓN</strong></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HÁBITOS -->
+
+    <div class="page" id="page-habitos">
+        <div class="wrap">
+            <div class="sec">
+                <div class="stag">// tocá el check al terminar la actividad · 7 puntitos = lun a dom</div>
+                <div class="sttl" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+                    <span>Mi <span class="tc">rutina</span></span>
+                    <button class="btn br" onclick="resetDay()">↺ NUEVO DÍA</button>
+                </div>
+                <div class="hgrid" id="habitGrid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- METAS -->
+
+    <div class="page" id="page-metas">
+        <div class="wrap">
+            <div class="sec">
+                <div class="stag">// tocá el nodo: pendiente → en curso → hecho · slider para % avance</div>
+                <div class="sttl">Cronograma <span class="gc">2026–2029</span></div>
+                <div style="margin-bottom:24px;">
+                    <div class="stag" style="margin-bottom:9px;">// habilidades — mover slider para actualizar tu nivel</div>
+                    <div id="skillsBlock"></div>
+                </div>
+                <div class="ms-list" id="msBlock"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- RESUMEN -->
+
+    <div class="page" id="page-resumen">
+        <div class="wrap">
+            <div class="sec">
+                <div class="stag">// resumen financiero</div>
+                <div class="sttl">Resumen <span class="gc">financiero</span></div>
+                <div class="sboxes" id="finSum"></div>
+            </div>
+            <div class="sec">
+                <div class="stag">// patrimonio total</div>
+                <div class="cbox">
+                    <div class="cttl">PATRIMONIO POR CATEGORÍA</div>
+                    <div style="position:relative;height:210px;"><canvas id="patriChart" role="img" aria-label="Patrimonio de Corina por categoría">Caja S/64K, Inmuebles S/290K, Intangibles S/82K, ETF S/0.</canvas></div>
+                </div>
+            </div>
+            <div class="sec">
+                <div class="stag">// actividades de hoy</div>
+                <div class="sttl">Actividades <span class="tc">completadas</span></div>
+                <div id="actSum"></div>
+            </div>
+            <div class="sec">
+                <div class="stag">// progreso de todas las metas</div>
+                <div class="sttl">Avance de <span class="gc">metas</span></div>
+                <div id="metasSum"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BITÁCORA -->
+
+    <div class="page" id="page-bitacora">
+        <div class="wrap">
+            <div class="sec">
+                <div class="stag">// diario personal · exportable con JSON · nunca se pierde</div>
+                <div class="sttl">Mi <span class="tc">bitácora</span></div>
+                <div style="display:flex;gap:7px;margin-bottom:8px;flex-wrap:wrap;">
+                    <select id="noteTag">
+                        <option value="general">General</option>
+                        <option value="finanzas">Finanzas</option>
+                        <option value="estudio">Estudio / IA</option>
+                        <option value="habitos">Hábitos</option>
+                        <option value="contenido">Contenido</option>
+                        <option value="personal">Personal</option>
+                    </select>
+                </div>
+                <textarea id="noteInput" rows="5" placeholder="¿Qué avancé hoy? ¿Qué aprendí? ¿Dónde fallé y cómo me re-encarrilé? Los fallos también cuentan." style="margin-bottom:8px;"></textarea>
+                <div style="display:flex;gap:7px;margin-bottom:22px;"><button class="btn bt" onclick="addNote()">+ GUARDAR NOTA</button></div>
+                <div id="notesList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DATA
+        const HD = [{
+                id: 'gym',
+                name: 'Gym SmartFit',
+                freq: 'Lun/Mar/Jue',
+                c: 'teal'
+            },
+            {
+                id: 'pole',
+                name: 'Pole Dance',
+                freq: 'Miércoles',
+                c: 'rose'
+            },
+            {
+                id: 'pool',
+                name: 'Piscina Videna',
+                freq: 'Viernes',
+                c: 'sky'
+            },
+            {
+                id: 'dance',
+                name: 'Baile Centro Lima',
+                freq: 'Sáb/Dom',
+                c: 'lav'
+            },
+            {
+                id: 'anki',
+                name: 'Anki PMP/TOEFL',
+                freq: 'Diario',
+                c: 'gold'
+            },
+            {
+                id: 'ing',
+                name: 'Inglés activo',
+                freq: 'Lun–Vie',
+                c: 'teal'
+            },
+            {
+                id: 'py',
+                name: 'Python / IA 1h',
+                freq: 'Diario',
+                c: 'sky'
+            },
+            {
+                id: 'cont',
+                name: 'Crear contenido',
+                freq: '3x semana',
+                c: 'gold'
+            },
+            {
+                id: 'fin',
+                name: 'Rev. finanzas',
+                freq: 'Viernes',
+                c: 'lav'
+            },
+            {
+                id: 'misa',
+                name: 'Misa',
+                freq: 'Domingo',
+                c: 'rose'
+            },
+            {
+                id: 'meal',
+                name: 'Meal prep',
+                freq: 'Dom/Lun',
+                c: 'teal'
+            },
+            {
+                id: 'sleep',
+                name: 'Dormir 7.5h',
+                freq: 'Diario',
+                c: 'sky'
+            },
+            {
+                id: 'etf',
+                name: 'Aporte ETF',
+                freq: 'Día 25',
+                c: 'gold'
+            },
+        ];
+        const MD = [{
+                id: 'm0',
+                when: 'ABR–MAY 2026',
+                title: 'Base del sistema activa',
+                status: 'now',
+                pct: 15,
+                desc: 'Make.com + Buffer · Notion offline · Pagos automáticos · Renta4 abierta · CS50P iniciado'
+            },
+            {
+                id: 'm1',
+                when: 'JUN–JUL 2026',
+                title: 'ETF + 1K seguidores LinkedIn',
+                status: 'soon',
+                pct: 0,
+                desc: 'S/15K en VOO (DCA) · Google AI Essentials · 1,000 seg. LinkedIn · Shakira 500+ TikTok'
+            },
+            {
+                id: 'm2',
+                when: 'AGO–OCT 2026',
+                title: 'Maestría finalizada + charla',
+                status: 'soon',
+                pct: 0,
+                desc: 'Maestría ESAN completada · S/1,740 liberados · Primera charla · TOEFL programado'
+            },
+            {
+                id: 'm3',
+                when: 'NOV–DIC 2026',
+                title: 'Airbnb activo + S/10K/mes',
+                status: 'soon',
+                pct: 0,
+                desc: 'Depa La Victoria Airbnb → S/2,600 · Python intermedio · 5K seguidores'
+            },
+            {
+                id: 'm4',
+                when: '2027 Q1–Q2',
+                title: 'Primer ingreso remoto USD',
+                status: 'soon',
+                pct: 0,
+                desc: 'Contrato Upwork/Torre.co · Inglés B2 fluido · ETF S/30K+'
+            },
+            {
+                id: 'm5',
+                when: '2027 Q3–2028',
+                title: 'Remoto full-time + hacienda',
+                status: 'soon',
+                pct: 0,
+                desc: '$2,500–4,000 USD/mes · Dejar trabajo Ate · 10K seguidores · Starlink planificado'
+            },
+            {
+                id: 'm6',
+                when: '2028–2029',
+                title: 'Libertad total + hacienda',
+                status: 'soon',
+                pct: 0,
+                desc: 'Hacienda + Starlink · ETF S/80K+ · Airbnb doble · Italia/China · Shakira en hacienda 🐱'
+            },
+        ];
+        const SKD = [{
+                id: 'python',
+                name: 'Python / programación',
+                base: 45,
+                c: 'var(--teal)'
+            },
+            {
+                id: 'ingles',
+                name: 'Inglés (nivel actual)',
+                base: 55,
+                c: 'var(--gold)'
+            },
+            {
+                id: 'ia',
+                name: 'IA / ML conceptos',
+                base: 25,
+                c: 'var(--sky)'
+            },
+            {
+                id: 'make',
+                name: 'Make.com / automatiz',
+                base: 35,
+                c: 'var(--lav)'
+            },
+            {
+                id: 'pm',
+                name: 'Gestión proyectos PM',
+                base: 80,
+                c: 'var(--teal)'
+            },
+            {
+                id: 'mec',
+                name: 'Ing. mecatrónica',
+                base: 85,
+                c: 'var(--gold)'
+            },
+            {
+                id: 'cont',
+                name: 'Contenido / redes',
+                base: 30,
+                c: 'var(--rose)'
+            },
+            {
+                id: 'fin',
+                name: 'Finanzas/inversiones',
+                base: 40,
+                c: 'var(--sky)'
+            },
+            {
+                id: 'pr',
+                name: 'Prompt Engineering',
+                base: 20,
+                c: 'var(--lav)'
+            },
+        ];
+        const CC = {
+            teal: 'var(--teal)',
+            gold: 'var(--gold)',
+            rose: 'var(--rose)',
+            sky: 'var(--sky)',
+            lav: 'var(--lav)'
+        };
+        const TC = {
+            general: 'var(--m2)',
+            finanzas: 'var(--gold)',
+            estudio: 'var(--teal)',
+            habitos: 'var(--rose)',
+            contenido: 'var(--lav)',
+            personal: 'var(--sky)'
+        };
+
+        let ST = {
+            habits: {},
+            milestones: {},
+            skills: {},
+            etf: {
+                total: 0,
+                aportes: []
+            },
+            notes: []
+        };
+
+        function LS(k, v) {
+            try {
+                localStorage.setItem('corina_os_' + k, JSON.stringify(v));
+            } catch (e) {}
+        }
+
+        function LG(k, d) {
+            try {
+                const v = localStorage.getItem('corina_os_' + k);
+                return v ? JSON.parse(v) : d;
+            } catch (e) {
+                return d;
+            }
+        }
+
+        function loadAll() {
+            const s = LG('state', null);
+            if (s) ST = {
+                ...ST,
+                ...s
+            };
+        }
+
+        function saveAll() {
+            LS('state', ST);
+            const b = document.getElementById('saveBtn');
+            if (b) {
+                const o = b.innerHTML;
+                b.innerHTML = '✓ GUARDADO';
+                setTimeout(() => b.innerHTML = o, 2000);
+            }
+        }
+        setInterval(saveAll, 20000);
+
+        // NAV
+        function gp(id, btn) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            document.getElementById('page-' + id).classList.add('active');
+            if (btn) btn.classList.add('active');
+            else document.querySelectorAll('.nav-tab').forEach(t => {
+                if (t.getAttribute('onclick') && t.getAttribute('onclick').includes("'" + id + "'")) t.classList.add('active');
+            });
+            if (id === 'resumen') renderResumen();
+        }
+        document.getElementById('liveDate').textContent = new Date().toLocaleDateString('es-PE', {
+            weekday: 'long',
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+        });
+
+        // MODAL
+        function om(id) {
+            document.getElementById(id).classList.add('open');
+            if (id === 'mSync') refreshJSON();
+            if (id === 'mGuide') buildGuide();
+        }
+
+        function cm(id) {
+            document.getElementById(id).classList.remove('open');
+        }
+        document.querySelectorAll('.modal-ov').forEach(m => m.addEventListener('click', e => {
+            if (e.target === m) m.classList.remove('open');
+        }));
+
+        // JSON
+        function getJSON() {
+            return JSON.stringify(ST, null, 2);
+        }
+
+        function refreshJSON() {
+            document.getElementById('jsonPrev').value = getJSON();
+        }
+
+        function exportJSON() {
+            saveAll();
+            const b = new Blob([getJSON()], {
+                type: 'application/json'
+            });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(b);
+            a.download = 'corina_os_' + new Date().toISOString().slice(0, 10) + '.json';
+            a.click();
+        }
+
+        function copyJSON() {
+            navigator.clipboard.writeText(getJSON()).then(() => {
+                const btn = document.querySelector('#mSync .modal-btns .btn:nth-child(3)');
+                if (btn) {
+                    const o = btn.textContent;
+                    btn.textContent = '✓ COPIADO';
+                    setTimeout(() => btn.textContent = o, 2000);
+                }
+            });
+        }
+
+        function importJSON(e) {
+            const f = e.target.files[0];
+            if (!f) return;
+            const r = new FileReader();
+            r.onload = ev => {
+                try {
+                    const d = JSON.parse(ev.target.result);
+                    ST = {
+                        ...ST,
+                        ...d
+                    };
+                    saveAll();
+                    renderAll();
+                    cm('mSync');
+                    alert('✅ Datos importados. Todos tus avances están actualizados.');
+                } catch (err) {
+                    alert('Error al leer el archivo. Asegurate de que sea un JSON exportado desde este dashboard.');
+                }
+            };
+            r.readAsText(f);
+        }
+
+        // GITHUB GUIDE
+        function buildGuide() {
+            if (document.getElementById('guideSteps').innerHTML) return;
+            const steps = [{
+                    n: '1',
+                    t: 'Crear cuenta GitHub',
+                    d: 'Ir a github.com → Sign up → email principal → verificar. Una sola vez.',
+                    time: '2 MIN'
+                },
+                {
+                    n: '2',
+                    t: 'Nuevo repositorio',
+                    d: '"+" → "New repository" → Nombre: corina-os → marcar "Public" → marcar "Add a README file" → "Create repository".',
+                    time: '2 MIN'
+                },
+                {
+                    n: '3',
+                    t: 'Subir el HTML',
+                    d: 'Dentro del repo → "Add file" → "Upload files" → arrastrá el HTML → renombralo "index.html" → "Commit changes".',
+                    time: '3 MIN'
+                },
+                {
+                    n: '4',
+                    t: 'Activar Pages',
+                    d: '"Settings" → "Pages" → Source: "Deploy from a branch" → Branch: "main" → "/(root)" → "Save".',
+                    time: '2 MIN'
+                },
+                {
+                    n: '5',
+                    t: 'Tu URL lista',
+                    d: 'Esperá 2 minutos → https://TU_USUARIO.github.io/corina-os · Guardala como favorito en iPhone, iPad y laptop.',
+                    time: '2 MIN'
+                },
+                {
+                    n: '6',
+                    t: 'Sincronizar datos',
+                    d: 'Dispositivo A → ⇅ JSON → Descargar → subir a Google Drive. Dispositivo B → ⇅ JSON → Importar → seleccioná el archivo.',
+                    time: 'SIEMPRE'
+                },
+            ];
+            document.getElementById('guideSteps').innerHTML = steps.map(s => `
+    <div class="step-item">
+      <div class="sn">${s.n}</div>
+      <div><div class="si-ttl">${s.t}</div><div class="si-desc">${s.d}</div></div>
+      <div class="si-time">${s.time}</div>
+    </div>`).join('');
+        }
+
+        // HABITS
+        function renderHabits() {
+            const g = document.getElementById('habitGrid');
+            g.innerHTML = '';
+            let done = 0;
+            HD.forEach(h => {
+                if (!ST.habits[h.id]) ST.habits[h.id] = {
+                    today: false,
+                    week: [0, 0, 0, 0, 0, 0, 0],
+                    streak: 0
+                };
+                const hd = ST.habits[h.id];
+                if (hd.today) done++;
+                const col = CC[h.c];
+                const d = document.createElement('div');
+                d.className = 'hcard';
+                d.innerHTML = `<div class="hcard-top">
+      <div class="hchk${hd.today?' on':''}" onclick="togH('${h.id}')"></div>
+      <div class="hcard-name">${h.name}</div>
+      <div class="hcard-freq">${h.freq}</div>
+    </div>
+    <div class="wdots">${hd.week.map((v,i)=>`<div class="wdot${v?' on':''}" style="${v?`background:${col};border-color:${col};box-shadow:0 0 4px ${col}`:''}" onclick="togD('${h.id}',${i})"></div>`).join('')}</div>
+    <div class="streak">Racha: <span>${hd.streak}</span> días · L M X J V S D</div>`;
+                g.appendChild(d);
+            });
+            document.getElementById('habitHome').textContent = done + '/' + HD.length;
+        }
+
+        function togH(id) {
+            if (!ST.habits[id]) ST.habits[id] = {
+                today: false,
+                week: [0, 0, 0, 0, 0, 0, 0],
+                streak: 0
+            };
+            ST.habits[id].today = !ST.habits[id].today;
+            renderHabits();
+            saveAll();
+        }
+
+        function togD(id, i) {
+            if (!ST.habits[id]) ST.habits[id] = {
+                today: false,
+                week: [0, 0, 0, 0, 0, 0, 0],
+                streak: 0
+            };
+            ST.habits[id].week[i] = ST.habits[id].week[i] ? 0 : 1;
+            let s = 0;
+            const w = ST.habits[id].week;
+            for (let j = w.length - 1; j >= 0; j--) {
+                if (w[j]) s++;
+                else break;
+            }
+            ST.habits[id].streak = s;
+            renderHabits();
+            saveAll();
+        }
+
+        function resetDay() {
+            if (!confirm('¿Confirmar nuevo día? Los hábitos de hoy se guardan en el historial semanal.')) return;
+            HD.forEach(h => {
+                if (!ST.habits[h.id]) ST.habits[h.id] = {
+                    today: false,
+                    week: [0, 0, 0, 0, 0, 0, 0],
+                    streak: 0
+                };
+                const w = ST.habits[h.id].week;
+                w.shift();
+                w.push(ST.habits[h.id].today ? 1 : 0);
+                ST.habits[h.id].today = false;
+            });
+            renderHabits();
+            saveAll();
+        }
+
+        // MILESTONES
+        function renderMilestones() {
+            const bl = document.getElementById('msBlock');
+            bl.innerHTML = '';
+            MD.forEach((ms, i) => {
+                const d = ST.milestones[ms.id] || {
+                    status: ms.status,
+                    pct: ms.pct
+                };
+                const st = d.status,
+                    pct = d.pct,
+                    isLast = i === MD.length - 1;
+                const div = document.createElement('div');
+                div.className = 'ms-row';
+                div.innerHTML = `<div class="ms-when">${ms.when}</div>
+      <div class="ms-spine">
+        <div class="ms-node ${st}" onclick="cycMs('${ms.id}')"></div>
+        ${!isLast?`<div class="ms-wire ${st==='done'?'done':'soon'}"></div>`:''}
+      </div>
+      <div class="ms-body ${st}" onclick="cycMs('${ms.id}')">
+        <div class="ms-head">
+          <div class="ms-ttl">${ms.title}</div>
+          <span class="ms-badge ${st==='done'?'bd-done':st==='now'?'bd-now':'bd-soon'}">${st==='done'?'HECHO':st==='now'?'EN CURSO':'PENDIENTE'}</span>
+        </div>
+        <div class="ms-desc">${ms.desc}</div>
+        <div class="pct-row">
+          <div class="pct-bar"><div class="pct-fill" id="pf_${ms.id}" style="width:${pct}%"></div></div>
+          <input type="range" min="0" max="100" value="${pct}" style="width:60px;height:2px;cursor:pointer;accent-color:var(--gold);" oninput="updP('${ms.id}',this.value)" onclick="event.stopPropagation()">
+          <div class="pct-lbl" id="pl_${ms.id}">${pct}%</div>
+        </div>
+      </div>`;
+                bl.appendChild(div);
+            });
+        }
+
+        function cycMs(id) {
+            const d = ST.milestones[id] || {
+                status: 'soon',
+                pct: 0
+            };
+            d.status = d.status === 'soon' ? 'now' : d.status === 'now' ? 'done' : 'soon';
+            ST.milestones[id] = d;
+            renderMilestones();
+            saveAll();
+        }
+
+        function updP(id, val) {
+            if (!ST.milestones[id]) ST.milestones[id] = {
+                status: 'soon',
+                pct: 0
+            };
+            ST.milestones[id].pct = parseInt(val);
+            const pf = document.getElementById('pf_' + id);
+            const pl = document.getElementById('pl_' + id);
+            if (pf) pf.style.width = val + '%';
+            if (pl) pl.textContent = val + '%';
+            saveAll();
+        }
+
+        // SKILLS
+        function renderSkills() {
+            const bl = document.getElementById('skillsBlock');
+            bl.innerHTML = '';
+            SKD.forEach(sk => {
+                const val = ST.skills[sk.id] !== undefined ? ST.skills[sk.id] : sk.base;
+                const r = document.createElement('div');
+                r.className = 'prow';
+                r.innerHTML = `<div class="pname">${sk.name}</div>
+      <div class="ptrack"><div class="pfill" id="sf_${sk.id}" style="width:${val}%;background:${sk.c}"></div></div>
+      <input type="range" min="0" max="100" value="${val}" style="width:60px;height:2px;cursor:pointer;accent-color:var(--gold);" oninput="updSk('${sk.id}',this.value)">
+      <div class="ppct" id="sp_${sk.id}">${val}%</div>`;
+                bl.appendChild(r);
+            });
+        }
+
+        function updSk(id, val) {
+            ST.skills[id] = parseInt(val);
+            const sf = document.getElementById('sf_' + id);
+            const sp = document.getElementById('sp_' + id);
+            if (sf) sf.style.width = val + '%';
+            if (sp) sp.textContent = val + '%';
+            saveAll();
+        }
+
+        // ETF
+        function renderEtf() {
+            const t = ST.etf?.total || 0,
+                meta = 15000,
+                pct = Math.min(100, Math.round((t / meta) * 100));
+            ['etfHome', 'etfFin'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = 'S/' + t.toLocaleString('es-PE');
+            });
+            const c = document.getElementById('etfCards');
+            if (c) c.innerHTML = `
+    <div class="card cg"><div class="clbl">Total invertido</div><div class="cval" style="color:var(--gold)">S/${t.toLocaleString('es-PE')}</div><div class="csub">Meta S/15K · ${pct}%</div></div>
+    <div class="card ct"><div class="clbl">Aportes DCA</div><div class="cval" style="color:var(--teal)">${(ST.etf?.aportes||[]).length}</div><div class="csub">cuotas registradas</div></div>
+    <div class="card cs"><div class="clbl">Proyectado año 5</div><div class="cval" style="color:var(--sky)">S/65K</div><div class="csub">S/600/mes · 10%</div></div>`;
+            const h = document.getElementById('etfHist');
+            if (h) {
+                const ap = ST.etf?.aportes || [];
+                h.innerHTML = ap.length ? ap.slice().reverse().map(a => `
+      <div class="logi"><div><div class="lt">Aporte ETF VOO</div><div class="lm">${a.note||'VOO'}</div></div>
+      <div style="text-align:right"><div style="color:var(--gold);font-family:var(--fu);font-size:14px;">S/${a.amount.toLocaleString('es-PE')}</div><div class="ld">${a.date}</div></div></div>`).join('') :
+                    '<div style="font-family:var(--fm);font-size:9px;color:var(--muted);">Sin aportes aún. Registrá tu primera cuota el día 25.</div>';
+            }
+        }
+
+        function addEtf() {
+            const amt = document.getElementById('etfAmt'),
+                note = document.getElementById('etfNote');
+            const v = parseFloat(amt.value);
+            if (!v || v <= 0) return;
+            if (!ST.etf) ST.etf = {
+                total: 0,
+                aportes: []
+            };
+            if (!ST.etf.aportes) ST.etf.aportes = [];
+            ST.etf.total = (ST.etf.total || 0) + v;
+            ST.etf.aportes.push({
+                date: new Date().toLocaleDateString('es-PE'),
+                amount: v,
+                note: note.value || 'VOO'
+            });
+            amt.value = '';
+            note.value = '';
+            renderEtf();
+            saveAll();
+        }
+
+        // NOTES
+        function addNote() {
+            const txt = document.getElementById('noteInput').value.trim();
+            if (!txt) return;
+            const tag = document.getElementById('noteTag').value;
+            if (!ST.notes) ST.notes = [];
+            ST.notes.unshift({
+                date: new Date().toLocaleDateString('es-PE', {
+                    day: 'numeric',
+                    month: 'short',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                }),
+                text: txt,
+                tag
+            });
+            if (ST.notes.length > 100) ST.notes.pop();
+            document.getElementById('noteInput').value = '';
+            renderNotes();
+            saveAll();
+        }
+
+        function renderNotes() {
+            const d = document.getElementById('notesList');
+            if (!d) return;
+            const n = ST.notes || [];
+            d.innerHTML = n.length ? n.map(nt => `
+    <div class="logi" style="border-left-color:${TC[nt.tag]||'var(--teal)'}">
+      <div><div class="lt">${nt.text}</div><div class="lm" style="color:${TC[nt.tag]||'var(--m2)'}">${nt.tag.toUpperCase()}</div></div>
+      <div class="ld">${nt.date}</div></div>`).join('') :
+                '<div style="font-family:var(--fm);font-size:9px;color:var(--muted);">Sin notas aún.</div>';
+        }
+
+        // RESUMEN
+        function renderResumen() {
+            const doneMs = MD.filter(m => (ST.milestones[m.id] || {
+                status: m.status
+            }).status === 'done').length;
+            const nowMs = MD.filter(m => (ST.milestones[m.id] || {
+                status: m.status
+            }).status === 'now').length;
+            const doneH = HD.filter(h => ST.habits[h.id]?.today).length;
+            const totalStr = HD.reduce((a, h) => a + (ST.habits[h.id]?.streak || 0), 0);
+            const etfT = ST.etf?.total || 0;
+            const fs = document.getElementById('finSum');
+            if (fs) fs.innerHTML = `
+    <div class="sbox"><div class="sbox-ttl">Ingreso mensual</div><div class="sbox-val" style="color:var(--teal)">S/6,002</div><div class="sbox-sub">Meta S/25K · 24%</div><div class="sbox-bar"><div class="sbox-fill" style="width:24%;background:var(--teal)"></div></div></div>
+    <div class="sbox"><div class="sbox-ttl">Patrimonio</div><div class="sbox-val" style="color:var(--gold)">S/115K+</div><div class="sbox-sub">Caja+inmuebles+ETF</div><div class="sbox-bar"><div class="sbox-fill" style="width:35%;background:var(--gold)"></div></div></div>
+    <div class="sbox"><div class="sbox-ttl">ETF portafolio</div><div class="sbox-val" style="color:var(--sky)">S/${etfT.toLocaleString('es-PE')}</div><div class="sbox-sub">Meta S/15K · ${Math.min(100,Math.round((etfT/15000)*100))}%</div><div class="sbox-bar"><div class="sbox-fill" style="width:${Math.min(100,Math.round((etfT/15000)*100))}%;background:var(--sky)"></div></div></div>
+    <div class="sbox"><div class="sbox-ttl">Metas completadas</div><div class="sbox-val" style="color:var(--rose)">${doneMs}/${MD.length}</div><div class="sbox-sub">${nowMs} en curso</div><div class="sbox-bar"><div class="sbox-fill" style="width:${Math.round((doneMs/MD.length)*100)}%;background:var(--rose)"></div></div></div>
+    <div class="sbox"><div class="sbox-ttl">Hábitos hoy</div><div class="sbox-val" style="color:var(--lav)">${doneH}/${HD.length}</div><div class="sbox-sub">${Math.round((doneH/HD.length)*100)}% completado</div><div class="sbox-bar"><div class="sbox-fill" style="width:${Math.round((doneH/HD.length)*100)}%;background:var(--lav)"></div></div></div>
+    <div class="sbox"><div class="sbox-ttl">Racha acumulada</div><div class="sbox-val" style="color:var(--teal)">${totalStr}</div><div class="sbox-sub">días totales hábitos</div><div class="sbox-bar"><div class="sbox-fill" style="width:${Math.min(100,totalStr)}%;background:var(--teal)"></div></div></div>`;
+            const as = document.getElementById('actSum');
+            if (as) {
+                const dn = HD.filter(h => ST.habits[h.id]?.today);
+                const pn = HD.filter(h => !ST.habits[h.id]?.today);
+                as.innerHTML = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div><div style="font-family:var(--fm);font-size:7px;letter-spacing:.2em;color:var(--teal);margin-bottom:7px;">COMPLETADOS HOY ✓</div>
+        ${dn.length?dn.map(h=>`<div class="logi" style="border-left-color:var(--teal);margin-bottom:3px;"><div class="lt">${h.name}</div><div class="lm">${h.freq}</div></div>`).join(''):'<div style="font-family:var(--fm);font-size:9px;color:var(--muted);">Ir a ⚡ Hábitos para marcar</div>'}
+      </div>
+      <div><div style="font-family:var(--fm);font-size:7px;letter-spacing:.2em;color:var(--rose);margin-bottom:7px;">PENDIENTES HOY</div>
+        ${pn.slice(0,6).map(h=>`<div class="logi" style="border-left-color:var(--border);margin-bottom:3px;opacity:.45;"><div class="lt">${h.name}</div><div class="lm">${h.freq}</div></div>`).join('')}
+        ${pn.length>6?`<div style="font-family:var(--fm);font-size:8px;color:var(--muted);margin-top:3px;">+${pn.length-6} más...</div>`:''}
+      </div></div>`;
+            }
+            const mp = document.getElementById('metasSum');
+            if (mp) mp.innerHTML = MD.map(ms => {
+                const d = ST.milestones[ms.id] || {
+                    status: ms.status,
+                    pct: ms.pct
+                };
+                return `<div class="prow"><div class="pname" style="min-width:190px;">${ms.title}</div>
+      <div class="ptrack"><div class="pfill" style="width:${d.pct}%;background:${d.status==='done'?'var(--teal)':d.status==='now'?'var(--gold)':'var(--border)'}"></div></div>
+      <div class="ppct">${d.pct}%</div></div>`;
+            }).join('');
+            buildPatri();
+        }
+
+        // CHARTS
+        const CB = {};
+
+        function bc(id, cfg) {
+            if (CB[id]) return;
+            const el = document.getElementById(id);
+            if (!el) return;
+            CB[id] = new Chart(el, cfg);
+        }
+
+        function buildCharts() {
+            // Income projection
+            bc('incChart', {
+                type: 'line',
+                data: {
+                    labels: ['Hoy', 'M3', 'M6', 'M9', 'M12', 'M18', 'M24', 'M30', 'M36'],
+                    datasets: [{
+                            data: [6002, 6300, 7500, 10000, 13000, 17000, 22000, 25000, 28000],
+                            borderColor: '#e8c46a',
+                            backgroundColor: 'rgba(232,196,106,.05)',
+                            tension: .4,
+                            fill: true,
+                            pointRadius: 3,
+                            borderWidth: 2
+                        },
+                        {
+                            data: [0, 0, 0, 2600, 3500, 5500, 8000, 10000, 12000],
+                            borderColor: '#2de8c4',
+                            backgroundColor: 'rgba(45,232,196,.03)',
+                            tension: .4,
+                            fill: true,
+                            pointRadius: 2,
+                            borderWidth: 1.5,
+                            borderDash: [4, 3]
+                        },
+                        {
+                            data: [0, 0, 0, 0, 1500, 6500, 9500, 11000, 14000],
+                            borderColor: '#b07ef8',
+                            backgroundColor: 'rgba(176,126,248,.03)',
+                            tension: .4,
+                            fill: true,
+                            pointRadius: 2,
+                            borderWidth: 1.5,
+                            borderDash: [2, 4]
+                        },
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            ticks: {
+                                callback: v => 'S/' + Math.round(v / 1000) + 'K',
+                                color: '#4a5a7a'
+                            },
+                            grid: {
+                                color: 'rgba(30,37,53,.5)'
+                            },
+                            border: {
+                                color: 'transparent'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#4a5a7a'
+                            },
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+            // ETF
+            const yr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+            function g(ini, m, r, y) {
+                let v = ini;
+                const rt = r / 12 / 100;
+                for (let i = 0; i < y * 12; i++) v = v * (1 + rt) + m;
+                return Math.round(v);
+            }
+            bc('etfChart', {
+                type: 'line',
+                data: {
+                    labels: yr.map(y => 'Año ' + y),
+                    datasets: [{
+                            data: yr.map(y => g(15000, 600, 10, y)),
+                            borderColor: '#2de8c4',
+                            backgroundColor: 'rgba(45,232,196,.04)',
+                            tension: .4,
+                            fill: true,
+                            pointRadius: 3
+                        },
+                        {
+                            data: yr.map(y => g(15000, 600, 5, y)),
+                            borderColor: '#e8c46a',
+                            backgroundColor: 'rgba(232,196,106,.03)',
+                            tension: .4,
+                            fill: false,
+                            pointRadius: 2,
+                            borderDash: [4, 3]
+                        },
+                        {
+                            data: yr.map(y => 15000 + 600 * 12 * y),
+                            borderColor: '#2a3448',
+                            tension: 0,
+                            fill: false,
+                            pointRadius: 2,
+                            borderDash: [2, 5]
+                        },
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            ticks: {
+                                callback: v => 'S/' + Math.round(v / 1000) + 'K',
+                                color: '#4a5a7a'
+                            },
+                            grid: {
+                                color: 'rgba(30,37,53,.5)'
+                            },
+                            border: {
+                                color: 'transparent'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#4a5a7a'
+                            },
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+            // Donut charts
+            const do1 = document.getElementById('expNow');
+            const do2 = document.getElementById('expMeta');
+            const dOpt = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            };
+            if (do1 && !CB.expNow) {
+                CB.expNow = new Chart(do1, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Gastos fijos', 'Ahorro', 'Variables'],
+                        datasets: [{
+                            data: [80, 12, 8],
+                            backgroundColor: ['rgba(240,90,126,.7)', 'rgba(90,180,245,.7)', 'rgba(176,126,248,.6)'],
+                            borderColor: ['#f05a7e', '#5ab4f5', '#b07ef8'],
+                            borderWidth: 1.5
+                        }]
+                    },
+                    options: dOpt
+                });
+            }
+            if (do2 && !CB.expMeta) {
+                CB.expMeta = new Chart(do2, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Gastos', 'Ahorro/Inv.', 'Variables'],
+                        datasets: [{
+                            data: [50, 35, 15],
+                            backgroundColor: ['rgba(45,232,196,.2)', 'rgba(232,196,106,.7)', 'rgba(176,126,248,.5)'],
+                            borderColor: ['#2de8c4', '#e8c46a', '#b07ef8'],
+                            borderWidth: 1.5
+                        }]
+                    },
+                    options: dOpt
+                });
+            }
+        }
+
+        function buildPatri() {
+            if (CB.patri) return;
+            const el = document.getElementById('patriChart');
+            if (!el) return;
+            CB.patri = new Chart(el, {
+                type: 'bar',
+                data: {
+                    labels: ['Caja/Agora', 'Inmuebles', 'Intangibles', 'ETF', 'Dólares'],
+                    datasets: [{
+                        data: [65705, 290000, 82558, ST.etf?.total || 0, 1360],
+                        backgroundColor: ['rgba(45,232,196,.5)', 'rgba(232,196,106,.5)', 'rgba(176,126,248,.5)', 'rgba(90,180,245,.5)', 'rgba(240,90,126,.5)'],
+                        borderColor: ['#2de8c4', '#e8c46a', '#b07ef8', '#5ab4f5', '#f05a7e'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            ticks: {
+                                callback: v => 'S/' + Math.round(v / 1000) + 'K',
+                                color: '#4a5a7a'
+                            },
+                            grid: {
+                                color: 'rgba(30,37,53,.4)'
+                            },
+                            border: {
+                                color: 'transparent'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#8898b8'
+                            },
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderAll() {
+            renderHabits();
+            renderMilestones();
+            renderSkills();
+            renderEtf();
+            renderNotes();
+            buildCharts();
+        }
+
+        // INIT
+        loadAll();
+        renderAll();
+    </script>
+
+</body>
+
+</html>5
