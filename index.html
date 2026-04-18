@@ -1,2386 +1,1456 @@
 <!DOCTYPE html>
 
 <html lang="es">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Corina OS — Sistema de Vida</title>
-    <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;900&family=Figtree:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
-    <style>
-        :root {
-            --bg: #07090f;
-            --s1: #0e1018;
-            --s2: #141820;
-            --s3: #1c2230;
-            --border: #1e2535;
-            --b2: #2a3448;
-            --gold: #e8c46a;
-            --g2: #f5dfa0;
-            --gd: rgba(232, 196, 106, .09);
-            --teal: #2de8c4;
-            --t2: #90f5e4;
-            --td: rgba(45, 232, 196, .09);
-            --rose: #f05a7e;
-            --rd: rgba(240, 90, 126, .09);
-            --sky: #5ab4f5;
-            --skd: rgba(90, 180, 245, .09);
-            --lav: #b07ef8;
-            --ld: rgba(176, 126, 248, .09);
-            --text: #dce6f5;
-            --muted: #4a5a7a;
-            --m2: #8898b8;
-            --fh: 'Figtree', sans-serif;
-            --fm: 'Fira Code', monospace;
-            --fu: 'Unbounded', sans-serif;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Corina OS v4 🐉</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Nunito:wght@300;400;500;600;700;800&family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+:root{
+  --bg:#06080e;--s1:#0b0d16;--s2:#10131e;--s3:#161928;
+  --border:#1e2438;--b2:#2a3050;
+  --gold:#d4a843;--g2:#f0cc80;--gd:rgba(212,168,67,.1);
+  --jade:#2ecfa0;--jd:rgba(46,207,160,.1);
+  --crimson:#e04060;--cd:rgba(224,64,96,.1);
+  --sky:#4090e8;--skd:rgba(64,144,232,.1);
+  --violet:#9060e0;--vd:rgba(144,96,224,.1);
+  --fire:#f06820;
+  --text:#e0e8f8;--muted:#404870;--m2:#8090b8;
+  --fh:'Nunito',sans-serif;--fm:'Fira Code',monospace;--fd:'Cinzel',serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--fh);overflow-x:hidden;cursor:none;}
+::-webkit-scrollbar{width:3px;}::-webkit-scrollbar-thumb{background:var(--gold);}
+
+/* CURSOR */
+#cur{position:fixed;pointer-events:none;z-index:9999;font-size:22px;transform:translate(-50%,-60%);filter:drop-shadow(0 0 8px var(–gold));}
+#dragonCanvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
+
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(6,8,14,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(–border);}
+.nav-inner{max-width:1300px;margin:0 auto;padding:0 12px;display:flex;align-items:center;min-height:50px;gap:0;}
+.nav-logo{font-family:var(–fd);font-size:12px;font-weight:700;color:var(–gold);margin-right:16px;white-space:nowrap;letter-spacing:.06em;}
+.nav-logo span{color:var(–jade);}
+.nav-tabs{display:flex;gap:0;flex:1;overflow-x:auto;scrollbar-width:none;}
+.nav-tabs::-webkit-scrollbar{display:none;}
+.nav-tab{font-family:var(–fm);font-size:8px;letter-spacing:.08em;text-transform:uppercase;padding:13px 10px;cursor:pointer;color:var(–muted);border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap;background:transparent;border-top:none;border-left:none;border-right:none;}
+.nav-tab:hover{color:var(–m2);}
+.nav-tab.active{color:var(–gold);border-bottom-color:var(–gold);}
+.nav-acts{display:flex;gap:4px;margin-left:auto;flex-shrink:0;align-items:center;}
+.nb{font-family:var(–fm);font-size:7.5px;letter-spacing:.08em;text-transform:uppercase;padding:5px 9px;background:transparent;border:1px solid;cursor:pointer;transition:all .2s;white-space:nowrap;}
+.nb-j{border-color:rgba(46,207,160,.4);color:var(–jade);}.nb-j:hover{background:var(–jd);}
+.nb-g{border-color:rgba(212,168,67,.4);color:var(–gold);}.nb-g:hover{background:var(–gd);}
+.nb-r{border-color:rgba(224,64,96,.4);color:var(–crimson);}.nb-r:hover{background:var(–cd);}
+.nb-v{border-color:rgba(144,96,224,.4);color:var(–violet);}.nb-v:hover{background:var(–vd);}
+.sdot{width:5px;height:5px;border-radius:50%;background:var(–jade);display:inline-block;margin-right:4px;animation:bl 2s infinite;}
+@keyframes bl{0%,100%{opacity:1;}50%{opacity:.1;}}
+
+/* MODALS */
+.mo{position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:500;display:none;align-items:center;justify-content:center;backdrop-filter:blur(6px);}
+.mo.open{display:flex;}
+.modal{background:var(–s1);border:1px solid var(–b2);padding:22px;width:92%;max-width:560px;position:relative;max-height:90vh;overflow-y:auto;}
+.modal-xl{max-width:780px;}
+.mttl{font-family:var(–fd);font-size:14px;font-weight:700;color:var(–gold);margin-bottom:4px;letter-spacing:.04em;}
+.msub{font-family:var(–fm);font-size:9px;color:var(–m2);margin-bottom:14px;line-height:1.6;}
+.mx{position:absolute;top:10px;right:12px;cursor:pointer;color:var(–muted);font-size:15px;background:none;border:none;font-family:var(–fh);}
+.mx:hover{color:var(–text);}
+
+/* PAGES */
+.page{display:none;padding-top:50px;min-height:100vh;position:relative;z-index:1;}
+.page.active{display:block;}
+.wrap{max-width:1300px;margin:0 auto;padding:24px 14px 80px;}
+
+/* SHARED ELEMENTS */
+.stag{font-family:var(–fm);font-size:8px;letter-spacing:.28em;text-transform:uppercase;color:var(–muted);margin-bottom:5px;}
+.sttl{font-family:var(–fd);font-size:clamp(17px,2.8vw,26px);font-weight:700;line-height:1.05;letter-spacing:.02em;margin-bottom:13px;}
+.tc{color:var(–jade);}.gc{color:var(–gold);}.rc{color:var(–crimson);}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(125px,1fr));gap:8px;}
+.card{background:var(–s1);border:1px solid var(–border);padding:13px;position:relative;overflow:hidden;transition:all .2s;}
+.card:hover{border-color:var(–b2);transform:translateY(-1px);}
+.card::before{content:’’;position:absolute;top:0;left:0;right:0;height:2px;}
+.cj::before{background:var(–jade);}.cg::before{background:var(–gold);}
+.cr::before{background:var(–crimson);}.cs::before{background:var(–sky);}.cv::before{background:var(–violet);}
+.clbl{font-family:var(–fm);font-size:7.5px;letter-spacing:.12em;text-transform:uppercase;color:var(–muted);margin-bottom:6px;}
+.cval{font-family:var(–fd);font-size:19px;font-weight:700;line-height:1;margin-bottom:3px;}
+.csub{font-family:var(–fm);font-size:7.5px;color:var(–m2);}
+
+/* LIFE BAR */
+.lbar-wrap{margin-bottom:22px;}
+.lbar-hd{display:flex;justify-content:space-between;font-family:var(–fm);font-size:8px;color:var(–muted);margin-bottom:6px;}
+.lbar-hd span:last-child{color:var(–gold);}
+.lbar{height:5px;background:var(–s3);border-radius:3px;position:relative;margin-bottom:5px;}
+.lbar-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(–jade),var(–gold));width:32.1%;position:relative;}
+.lbar-fill::after{content:‘🐉 25.7’;position:absolute;right:-6px;top:-15px;font-family:var(–fm);font-size:8px;color:var(–gold);white-space:nowrap;}
+.lbar-marks{display:flex;justify-content:space-between;font-family:var(–fm);font-size:7px;color:var(–muted);}
+
+/* LAST UPDATED */
+.last-upd{font-family:var(–fm);font-size:8px;color:var(–muted);display:flex;align-items:center;gap:5px;margin-bottom:18px;}
+.upd-dot{width:5px;height:5px;border-radius:50%;background:var(–jade);box-shadow:0 0 7px var(–jade);}
+
+/* ── DAILY PHRASE ── */
+.phrase-card{background:linear-gradient(135deg,var(–s1) 0%,var(–s2) 100%);border:1px solid var(–b2);border-left:3px solid var(–gold);padding:20px 22px;margin-bottom:18px;position:relative;overflow:hidden;}
+.phrase-card::after{content:‘🐉’;position:absolute;bottom:-8px;right:10px;font-size:48px;opacity:.06;pointer-events:none;}
+.phrase-day{font-family:var(–fm);font-size:8px;color:var(–muted);letter-spacing:.2em;text-transform:uppercase;margin-bottom:8px;}
+.phrase-cat{font-family:var(–fm);font-size:8px;color:var(–gold);letter-spacing:.15em;padding:1px 8px;border:1px solid rgba(212,168,67,.3);background:var(–gd);display:inline-block;margin-bottom:10px;}
+.phrase-text{font-family:var(–fd);font-size:clamp(14px,2.5vw,20px);font-style:italic;color:var(–g2);line-height:1.45;margin-bottom:12px;}
+.phrase-author{font-family:var(–fm);font-size:9px;color:var(–m2);}
+.phrase-own{margin-top:12px;border-top:1px solid var(–border);padding-top:12px;}
+.phrase-own-input{width:100%;background:transparent;border:none;border-bottom:1px solid var(–border);padding:6px 0;font-family:var(–fd);font-size:13px;font-style:italic;color:var(–g2);outline:none;transition:border-color .2s;}
+.phrase-own-input:focus{border-bottom-color:var(–gold);}
+.phrase-own-input::placeholder{color:var(–muted);}
+
+/* ── HABITS ── */
+.hgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:7px;}
+.hcard{background:var(–s1);border:1px solid var(–border);padding:11px;transition:border-color .2s;}
+.hcard:hover{border-color:var(–b2);}
+.hcard-top{display:flex;align-items:center;gap:7px;margin-bottom:7px;}
+.hchk{width:17px;height:17px;border:1.5px solid var(–border);border-radius:3px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;}
+.hchk.on{background:var(–jade);border-color:var(–jade);}
+.hchk.on::after{content:‘✓’;color:#000;font-size:9px;font-weight:700;}
+.hcard-name{font-size:11px;font-weight:600;flex:1;}
+.hcard-time{font-family:var(–fm);font-size:7.5px;color:var(–m2);}
+.hcard-freq{font-family:var(–fm);font-size:7px;color:var(–gold);padding:1px 5px;border:1px solid rgba(212,168,67,.25);background:var(–gd);}
+.hcard-comment{font-family:var(–fm);font-size:8.5px;color:var(–m2);font-style:italic;margin-top:4px;padding:4px 7px;background:var(–s2);border-left:2px solid var(–border);line-height:1.4;}
+.wdots{display:flex;gap:3px;margin-top:4px;}
+.wdot{width:7px;height:7px;border-radius:50%;background:var(–s3);border:1px solid var(–border);cursor:pointer;transition:all .15s;}
+.wdot.on{border-color:var(–jade);box-shadow:0 0 4px var(–jade);}
+.hstreak{font-family:var(–fm);font-size:7px;color:var(–muted);margin-top:3px;}
+.hstreak span{color:var(–gold);}
+.hcard-btns{display:flex;gap:4px;margin-top:6px;}
+.hbtn{font-family:var(–fm);font-size:7.5px;padding:2px 7px;border:1px solid var(–border);cursor:pointer;background:transparent;color:var(–m2);transition:all .15s;}
+.hbtn:hover{border-color:var(–gold);color:var(–gold);}
+
+/* ── PLANNER ── */
+.planner-grid{display:grid;grid-template-columns:72px repeat(7,1fr);border:1px solid var(–border);font-size:8.5px;}
+.ph{padding:7px 3px;text-align:center;font-family:var(–fm);font-size:7.5px;letter-spacing:.07em;text-transform:uppercase;background:var(–s2);color:var(–muted);border-right:1px solid var(–border);border-bottom:1px solid var(–border);}
+.pt{padding:3px 6px;background:var(–s2);font-family:var(–fm);font-size:7px;color:var(–muted);display:flex;align-items:center;border-right:1px solid var(–border);border-bottom:1px solid rgba(30,37,56,.5);}
+.pb{padding:2px 4px;font-size:8px;font-weight:600;line-height:1.2;display:flex;align-items:center;min-height:26px;cursor:pointer;transition:opacity .2s;border-right:1px solid var(–border);border-bottom:1px solid rgba(30,37,56,.4);position:relative;}
+.pb.done::after{content:‘✓’;position:absolute;top:1px;right:2px;font-size:7px;color:var(–jade);}
+.pw{background:rgba(46,207,160,.12);color:var(–jade);border-left:2px solid var(–jade);}
+.pg{background:rgba(212,168,67,.12);color:var(–gold);border-left:2px solid var(–gold);}
+.pr{background:rgba(224,64,96,.12);color:var(–crimson);border-left:2px solid var(–crimson);}
+.pb2{background:rgba(64,144,232,.12);color:var(–sky);border-left:2px solid var(–sky);}
+.pv{background:rgba(144,96,224,.12);color:var(–violet);border-left:2px solid var(–violet);}
+.ps{background:rgba(30,37,53,.8);color:var(–m2);font-size:7px;}
+.pe{background:transparent;}
+.pb-batch{background:rgba(212,168,67,.2);color:#b08000;border-left:2px solid var(–gold);font-weight:800;}
+
+/* ── BOLETAS ── */
+.scan-zone{background:var(–s2);border:2px dashed var(–border);padding:24px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:12px;border-radius:0;}
+.scan-zone:hover,.scan-zone.drag{border-color:var(–gold);background:var(–gd);}
+.scan-icon{font-size:32px;margin-bottom:8px;}
+.scan-txt{font-family:var(–fm);font-size:11px;color:var(–m2);margin-bottom:4px;}
+.scan-sub{font-family:var(–fm);font-size:8px;color:var(–muted);}
+.ai-load{display:none;text-align:center;padding:16px;font-family:var(–fm);font-size:10px;color:var(–jade);}
+.ai-result{background:var(–s1);border:1px solid var(–b2);border-left:3px solid var(–jade);padding:14px;margin-bottom:10px;display:none;}
+.ar-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(30,37,56,.6);font-size:11px;}
+.ar-row:last-child{border-bottom:none;}
+.ar-lbl{font-family:var(–fm);font-size:8px;color:var(–muted);}
+.ar-val{font-weight:700;}
+
+/* ── GITHUB UPLOAD STATUS ── */
+.gh-status{background:var(–s2);border:1px solid var(–border);padding:12px;margin-top:10px;font-family:var(–fm);font-size:10px;display:none;}
+.gh-step{display:flex;align-items:center;gap:8px;padding:4px 0;color:var(–m2);}
+.gh-step.done{color:var(–jade);}
+.gh-step.active{color:var(–gold);}
+.gh-step.error{color:var(–crimson);}
+.gh-step-dot{width:7px;height:7px;border-radius:50%;background:currentColor;flex-shrink:0;}
+
+/* ── CONTENT PLANNER ── */
+.cp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;}
+.cp-card{background:var(–s1);border:1px solid var(–border);overflow:hidden;transition:border-color .2s;}
+.cp-card:hover{border-color:var(–b2);}
+.cp-head{padding:10px 13px;border-bottom:1px solid var(–border);display:flex;justify-content:space-between;align-items:center;}
+.cp-platform{font-family:var(–fm);font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(–gold);}
+.cp-status{font-family:var(–fm);font-size:7px;padding:2px 7px;border:1px solid;}
+.st-draft{color:var(–m2);border-color:var(–border);}
+.st-sched{color:var(–sky);border-color:rgba(64,144,232,.3);background:var(–skd);}
+.st-pub{color:var(–jade);border-color:rgba(46,207,160,.3);background:var(–jd);}
+.cp-body{padding:12px 13px;}
+.cp-title{font-size:12px;font-weight:700;margin-bottom:5px;}
+.cp-desc{font-family:var(–fm);font-size:9px;color:var(–m2);line-height:1.5;margin-bottom:8px;}
+.cp-date{font-family:var(–fm);font-size:8px;color:var(–gold);margin-bottom:6px;}
+.cp-metrics{display:flex;gap:10px;margin-top:8px;padding-top:8px;border-top:1px solid var(–border);}
+.cp-metric{text-align:center;flex:1;}
+.cp-metric-val{font-family:var(–fd);font-size:15px;font-weight:700;color:var(–jade);line-height:1;}
+.cp-metric-lbl{font-family:var(–fm);font-size:7px;color:var(–muted);margin-top:2px;}
+.cp-btns{display:flex;gap:5px;margin-top:8px;}
+
+/* PLATFORM BADGE */
+.pbadge{font-family:var(–fm);font-size:7px;padding:1px 6px;border:1px solid;margin-right:3px;}
+.p-li{color:#0077b5;border-color:rgba(0,119,181,.4);background:rgba(0,119,181,.1);}
+.p-ig{color:#e1306c;border-color:rgba(225,48,108,.4);background:rgba(225,48,108,.1);}
+.p-tt{color:#69c9d0;border-color:rgba(105,201,208,.4);background:rgba(105,201,208,.1);}
+.p-yt{color:#ff0000;border-color:rgba(255,0,0,.4);background:rgba(255,0,0,.1);}
+
+/* FINANZAS */
+.cbox{background:var(–s1);border:1px solid var(–border);padding:15px;margin-bottom:11px;}
+.cttl{font-family:var(–fm);font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(–m2);margin-bottom:11px;}
+.logi{background:var(–s1);border:1px solid var(–border);border-left:2px solid var(–jade);padding:7px 11px;margin-bottom:4px;display:flex;justify-content:space-between;align-items:flex-start;gap:8px;}
+.lt{font-size:11px;font-weight:600;margin-bottom:2px;}.lm{font-family:var(–fm);font-size:7.5px;color:var(–m2);}.ld{font-family:var(–fm);font-size:7.5px;color:var(–gold);white-space:nowrap;}
+
+/* MILESTONES */
+.ms-list{display:flex;flex-direction:column;}
+.ms-row{display:grid;grid-template-columns:68px 12px 1fr;gap:0 12px;align-items:start;}
+.ms-when{font-family:var(–fm);font-size:7.5px;color:var(–gold);text-align:right;padding-top:13px;line-height:1.4;}
+.ms-spine{display:flex;flex-direction:column;align-items:center;padding-top:13px;}
+.ms-node{width:10px;height:10px;border-radius:50%;cursor:pointer;flex-shrink:0;transition:all .2s;}
+.ms-node.done{background:var(–jade);box-shadow:0 0 9px var(–jade);}
+.ms-node.now{background:var(–gold);box-shadow:0 0 9px var(–gold);animation:np 2s infinite;}
+@keyframes np{0%,100%{box-shadow:0 0 5px var(–gold);}50%{box-shadow:0 0 14px var(–gold);}}
+.ms-node.soon{background:var(–s3);border:1.5px solid var(–border);}
+.ms-wire{width:1px;flex:1;min-height:11px;}
+.ms-wire.done{background:var(–jade);}.ms-wire.soon{background:var(–border);}
+.ms-body{background:var(–s1);border:1px solid var(–border);border-left:2px solid;padding:9px 11px;margin:5px 0 3px;cursor:pointer;transition:border-color .2s;}
+.ms-body.done{border-left-color:var(–jade);}.ms-body.now{border-left-color:var(–gold);}.ms-body.soon{border-left-color:var(–border);}
+.ms-head{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:3px;}
+.ms-ttl{font-size:11px;font-weight:700;}
+.ms-badge{font-family:var(–fm);font-size:7px;padding:1px 5px;border:1px solid;}
+.bd-done{color:var(–jade);border-color:rgba(46,207,160,.3);background:var(–jd);}
+.bd-now{color:var(–gold);border-color:rgba(212,168,67,.3);background:var(–gd);}
+.bd-soon{color:var(–m2);border-color:var(–border);}
+.ms-desc{font-family:var(–fm);font-size:8px;color:var(–m2);line-height:1.5;}
+.pct-row{margin-top:5px;display:flex;align-items:center;gap:6px;}
+.pct-bar{flex:1;height:2px;background:var(–s3);border-radius:1px;overflow:hidden;}
+.pct-fill{height:100%;border-radius:1px;background:linear-gradient(90deg,var(–jade),var(–gold));transition:width .4s;}
+.pct-lbl{font-family:var(–fm);font-size:7.5px;color:var(–m2);min-width:22px;}
+
+/* PROGRESS SKILLS */
+.prow{display:flex;align-items:center;gap:9px;margin-bottom:7px;}
+.pname{font-family:var(–fm);font-size:9.5px;color:var(–text);min-width:160px;}
+.ptrack{flex:1;height:4px;background:var(–s3);border-radius:2px;overflow:hidden;}
+.pfill{height:100%;border-radius:2px;transition:width .5s ease;}
+.ppct{font-family:var(–fm);font-size:8px;color:var(–m2);min-width:28px;text-align:right;}
+
+/* INPUTS */
+textarea,input[type=text],input[type=number],input[type=date],input[type=url],select{background:var(–s1);border:1px solid var(–border);padding:8px 11px;font-family:var(–fm);font-size:10px;color:var(–text);outline:none;transition:border-color .2s;}
+textarea{width:100%;resize:vertical;}
+input[type=text],input[type=number],input[type=date],input[type=url]{width:100%;}
+select{cursor:pointer;}
+textarea:focus,input:focus,select:focus{border-color:var(–jade);}
+textarea::placeholder,input::placeholder{color:var(–muted);}
+.btn{font-family:var(–fm);font-size:7.5px;letter-spacing:.1em;text-transform:uppercase;padding:7px 13px;background:transparent;border:1px solid;cursor:pointer;transition:all .2s;}
+.bj{border-color:var(–jade);color:var(–jade);}.bj:hover{background:var(–jd);}
+.bg{border-color:var(–gold);color:var(–gold);}.bg:hover{background:var(–gd);}
+.br{border-color:var(–crimson);color:var(–crimson);}.br:hover{background:var(–cd);}
+.bv{border-color:var(–violet);color:var(–violet);}.bv:hover{background:var(–vd);}
+.alrt{padding:9px 13px;border-left:3px solid;font-family:var(–fm);font-size:9.5px;line-height:1.6;margin-bottom:8px;}
+.alj{background:var(–jd);color:rgba(46,207,160,.9);border-color:var(–jade);}
+.alg{background:var(–gd);color:rgba(212,168,67,.9);border-color:var(–gold);}
+.alr{background:var(–cd);color:rgba(224,64,96,.9);border-color:var(–crimson);}
+
+@media(max-width:600px){.nav-tab{padding:12px 8px;}.wrap{padding:14px 8px 60px;}.planner-grid{grid-template-columns:46px repeat(7,1fr);}.pb{font-size:6.5px;padding:2px 2px;}.cards{grid-template-columns:repeat(2,1fr);}}
+</style>
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            background: var(--bg);
-            color: var(--text);
-            font-family: var(--fh);
-            overflow-x: hidden;
-        }
-
-        ::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--bg);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--border);
-        }
-
-        .nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 200;
-            background: rgba(7, 9, 15, .96);
-            backdrop-filter: blur(16px);
-            border-bottom: 1px solid var(--border);
-        }
-
-        .nav-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 16px;
-            display: flex;
-            align-items: center;
-            min-height: 52px;
-            gap: 0;
-        }
-
-        .nav-logo {
-            font-family: var(--fu);
-            font-size: 12px;
-            font-weight: 700;
-            color: var(--teal);
-            margin-right: 20px;
-            white-space: nowrap;
-        }
-
-        .nav-logo span {
-            color: var(--gold);
-        }
-
-        .nav-tabs {
-            display: flex;
-            gap: 0;
-            flex: 1;
-            overflow-x: auto;
-            scrollbar-width: none;
-        }
-
-        .nav-tabs::-webkit-scrollbar {
-            display: none;
-        }
-
-        .nav-tab {
-            font-family: var(--fm);
-            font-size: 9px;
-            letter-spacing: .1em;
-            text-transform: uppercase;
-            padding: 14px 12px;
-            cursor: pointer;
-            color: var(--muted);
-            border-bottom: 2px solid transparent;
-            transition: all .2s;
-            white-space: nowrap;
-            background: transparent;
-            border-top: none;
-            border-left: none;
-            border-right: none;
-        }
-
-        .nav-tab:hover {
-            color: var(--m2);
-        }
-
-        .nav-tab.active {
-            color: var(--teal);
-            border-bottom-color: var(--teal);
-        }
-
-        .nav-actions {
-            display: flex;
-            gap: 5px;
-            margin-left: auto;
-            align-items: center;
-            flex-shrink: 0;
-        }
-
-        .nbtn {
-            font-family: var(--fm);
-            font-size: 8px;
-            letter-spacing: .1em;
-            text-transform: uppercase;
-            padding: 6px 10px;
-            background: transparent;
-            border: 1px solid;
-            cursor: pointer;
-            transition: all .2s;
-            white-space: nowrap;
-        }
-
-        .nb-t {
-            border-color: rgba(45, 232, 196, .4);
-            color: var(--teal);
-        }
-
-        .nb-t:hover {
-            background: var(--td);
-        }
-
-        .nb-g {
-            border-color: rgba(232, 196, 106, .4);
-            color: var(--gold);
-        }
-
-        .nb-g:hover {
-            background: var(--gd);
-        }
-
-        .nb-r {
-            border-color: rgba(240, 90, 126, .4);
-            color: var(--rose);
-        }
-
-        .nb-r:hover {
-            background: var(--rd);
-        }
-
-        .sdot {
-            width: 5px;
-            height: 5px;
-            border-radius: 50%;
-            background: var(--teal);
-            display: inline-block;
-            margin-right: 4px;
-            animation: blink 2s infinite;
-        }
-
-        @keyframes blink {
-
-            0%,
-            100% {
-                opacity: 1;
-            }
-
-            50% {
-                opacity: .2;
-            }
-        }
-
-        .modal-ov {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, .75);
-            z-index: 500;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(4px);
-        }
-
-        .modal-ov.open {
-            display: flex;
-        }
-
-        .modal {
-            background: var(--s1);
-            border: 1px solid var(--b2);
-            padding: 24px;
-            width: 90%;
-            max-width: 560px;
-            position: relative;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .modal-lg {
-            max-width: 700px;
-        }
-
-        .modal-ttl {
-            font-family: var(--fu);
-            font-size: 15px;
-            font-weight: 700;
-            color: var(--gold);
-            margin-bottom: 5px;
-        }
-
-        .modal-sub {
-            font-family: var(--fm);
-            font-size: 10px;
-            color: var(--m2);
-            margin-bottom: 16px;
-            line-height: 1.6;
-        }
-
-        .modal-x {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            cursor: pointer;
-            color: var(--muted);
-            font-size: 16px;
-            background: none;
-            border: none;
-            font-family: var(--fh);
-            line-height: 1;
-        }
-
-        .modal-x:hover {
-            color: var(--text);
-        }
-
-        .modal textarea {
-            width: 100%;
-            height: 130px;
-            background: var(--s2);
-            border: 1px solid var(--border);
-            padding: 10px 12px;
-            font-family: var(--fm);
-            font-size: 9px;
-            color: var(--text);
-            outline: none;
-            resize: none;
-            line-height: 1.6;
-        }
-
-        .modal textarea:focus {
-            border-color: var(--teal);
-        }
-
-        .modal-btns {
-            display: flex;
-            gap: 7px;
-            margin-top: 10px;
-            flex-wrap: wrap;
-        }
-
-        .page {
-            display: none;
-            padding-top: 52px;
-            min-height: 100vh;
-        }
-
-        .page.active {
-            display: block;
-        }
-
-        .wrap {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 28px 16px 80px;
-        }
-
-        .sec {
-            margin-bottom: 40px;
-        }
-
-        .stag {
-            font-family: var(--fm);
-            font-size: 8px;
-            letter-spacing: .3em;
-            text-transform: uppercase;
-            color: var(--muted);
-            margin-bottom: 5px;
-        }
-
-        .sttl {
-            font-family: var(--fu);
-            font-size: clamp(16px, 2.8vw, 26px);
-            font-weight: 700;
-            line-height: 1.05;
-            letter-spacing: -.01em;
-            margin-bottom: 14px;
-        }
-
-        .tc {
-            color: var(--teal);
-        }
-
-        .gc {
-            color: var(--gold);
-        }
-
-        .cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-            gap: 9px;
-        }
-
-        .card {
-            background: var(--s1);
-            border: 1px solid var(--border);
-            padding: 14px;
-            position: relative;
-            overflow: hidden;
-            transition: border-color .2s;
-        }
-
-        .card:hover {
-            border-color: var(--b2);
-        }
-
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-        }
-
-        .ct::before {
-            background: var(--teal);
-        }
-
-        .cg::before {
-            background: var(--gold);
-        }
-
-        .cr::before {
-            background: var(--rose);
-        }
-
-        .cs::before {
-            background: var(--sky);
-        }
-
-        .cl::before {
-            background: var(--lav);
-        }
-
-        .clbl {
-            font-family: var(--fm);
-            font-size: 8px;
-            letter-spacing: .12em;
-            text-transform: uppercase;
-            color: var(--muted);
-            margin-bottom: 7px;
-        }
-
-        .cval {
-            font-family: var(--fu);
-            font-size: 20px;
-            font-weight: 700;
-            line-height: 1;
-            margin-bottom: 3px;
-        }
-
-        .csub {
-            font-family: var(--fm);
-            font-size: 8px;
-            color: var(--m2);
-        }
-
-        .lbar-wrap {
-            margin-bottom: 24px;
-        }
-
-        .lbar-hd {
-            display: flex;
-            justify-content: space-between;
-            font-family: var(--fm);
-            font-size: 8px;
-            color: var(--muted);
-            margin-bottom: 7px;
-        }
-
-        .lbar-hd span:last-child {
-            color: var(--gold);
-        }
-
-        .lbar {
-            height: 5px;
-            background: var(--s3);
-            border-radius: 3px;
-            position: relative;
-            margin-bottom: 5px;
-        }
-
-        .lbar-fill {
-            height: 100%;
-            border-radius: 3px;
-            background: linear-gradient(90deg, var(--teal), var(--gold));
-            width: 32.1%;
-            position: relative;
-        }
-
-        .lbar-fill::after {
-            content: '✦ 25.7';
-            position: absolute;
-            right: -4px;
-            top: -15px;
-            font-family: var(--fm);
-            font-size: 8px;
-            color: var(--gold);
-            white-space: nowrap;
-        }
-
-        .lbar-marks {
-            display: flex;
-            justify-content: space-between;
-            font-family: var(--fm);
-            font-size: 7px;
-            color: var(--muted);
-        }
-
-        .tbl {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .tbl th {
-            padding: 8px 10px;
-            text-align: left;
-            font-family: var(--fm);
-            font-size: 8px;
-            letter-spacing: .15em;
-            text-transform: uppercase;
-            background: var(--s2);
-            color: var(--muted);
-            border-bottom: 1px solid var(--border);
-        }
-
-        .tbl td {
-            padding: 7px 10px;
-            font-size: 11px;
-            border-bottom: 1px solid rgba(30, 37, 53, .7);
-        }
-
-        .tbl tr:hover td {
-            background: rgba(255, 255, 255, .015);
-        }
-
-        .tbl tr:last-child td {
-            border-bottom: none;
-        }
-
-        .cbox {
-            background: var(--s1);
-            border: 1px solid var(--border);
-            padding: 16px;
-            margin-bottom: 12px;
-        }
-
-        .cttl {
-            font-family: var(--fm);
-            font-size: 8px;
-            letter-spacing: .2em;
-            text-transform: uppercase;
-            color: var(--m2);
-            margin-bottom: 12px;
-        }
-
-        .cleg {
-            display: flex;
-            gap: 14px;
-            margin-top: 8px;
-            flex-wrap: wrap;
-        }
-
-        .cli {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-family: var(--fm);
-            font-size: 8px;
-            color: var(--m2);
-        }
-
-        .cld {
-            width: 14px;
-            height: 2px;
-            border-radius: 1px;
-        }
-
-        .prow {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 8px;
-        }
-
-        .pname {
-            font-family: var(--fm);
-            font-size: 10px;
-            color: var(--text);
-            min-width: 170px;
-        }
-
-        .ptrack {
-            flex: 1;
-            height: 5px;
-            background: var(--s3);
-            border-radius: 3px;
-            overflow: hidden;
-        }
-
-        .pfill {
-            height: 100%;
-            border-radius: 3px;
-            transition: width .5s ease;
-        }
-
-        .ppct {
-            font-family: var(--fm);
-            font-size: 9px;
-            color: var(--m2);
-            min-width: 30px;
-            text-align: right;
-        }
-
-        .hgrid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 7px;
-        }
-
-        .hcard {
-            background: var(--s1);
-            border: 1px solid var(--border);
-            padding: 12px;
-            transition: border-color .2s;
-        }
-
-        .hcard:hover {
-            border-color: var(--b2);
-        }
-
-        .hcard-top {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 8px;
-        }
-
-        .hchk {
-            width: 18px;
-            height: 18px;
-            border: 1.5px solid var(--border);
-            border-radius: 3px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            transition: all .15s;
-        }
-
-        .hchk.on {
-            background: var(--teal);
-            border-color: var(--teal);
-        }
-
-        .hchk.on::after {
-            content: '✓';
-            color: #000;
-            font-size: 10px;
-            font-weight: 700;
-        }
-
-        .hcard-name {
-            font-size: 11px;
-            font-weight: 600;
-            flex: 1;
-        }
-
-        .hcard-freq {
-            font-family: var(--fm);
-            font-size: 7px;
-            color: var(--gold);
-            padding: 1px 6px;
-            border: 1px solid rgba(232, 196, 106, .25);
-            background: var(--gd);
-        }
-
-        .wdots {
-            display: flex;
-            gap: 3px;
-        }
-
-        .wdot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--s3);
-            border: 1px solid var(--border);
-            cursor: pointer;
-            transition: all .15s;
-        }
-
-        .wdot.on {
-            border-color: var(--teal);
-            box-shadow: 0 0 4px var(--teal);
-        }
-
-        .streak {
-            font-family: var(--fm);
-            font-size: 7px;
-            color: var(--muted);
-            margin-top: 4px;
-        }
-
-        .streak span {
-            color: var(--gold);
-        }
-
-        .ms-list {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .ms-row {
-            display: grid;
-            grid-template-columns: 72px 13px 1fr;
-            gap: 0 14px;
-            align-items: start;
-        }
-
-        .ms-when {
-            font-family: var(--fm);
-            font-size: 8px;
-            color: var(--gold);
-            text-align: right;
-            padding-top: 14px;
-            line-height: 1.4;
-        }
-
-        .ms-spine {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding-top: 14px;
-        }
-
-        .ms-node {
-            width: 11px;
-            height: 11px;
-            border-radius: 50%;
-            cursor: pointer;
-            flex-shrink: 0;
-            transition: all .2s;
-        }
-
-        .ms-node.done {
-            background: var(--teal);
-            box-shadow: 0 0 9px var(--teal);
-        }
-
-        .ms-node.now {
-            background: var(--gold);
-            box-shadow: 0 0 9px var(--gold);
-            animation: np 2s infinite;
-        }
-
-        @keyframes np {
-
-            0%,
-            100% {
-                box-shadow: 0 0 6px var(--gold);
-            }
-
-            50% {
-                box-shadow: 0 0 14px var(--gold);
-            }
-        }
-
-        .ms-node.soon {
-            background: var(--s3);
-            border: 1.5px solid var(--border);
-        }
-
-        .ms-wire {
-            width: 1px;
-            flex: 1;
-            min-height: 12px;
-        }
-
-        .ms-wire.done {
-            background: var(--teal);
-        }
-
-        .ms-wire.soon {
-            background: var(--border);
-        }
-
-        .ms-body {
-            background: var(--s1);
-            border: 1px solid var(--border);
-            border-left: 2px solid;
-            padding: 10px 12px;
-            margin: 5px 0 3px;
-            cursor: pointer;
-            transition: border-color .2s;
-        }
-
-        .ms-body.done {
-            border-left-color: var(--teal);
-        }
-
-        .ms-body.now {
-            border-left-color: var(--gold);
-        }
-
-        .ms-body.soon {
-            border-left-color: var(--border);
-        }
-
-        .ms-body:hover {
-            border-color: var(--b2);
-        }
-
-        .ms-head {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 7px;
-            margin-bottom: 4px;
-        }
-
-        .ms-ttl {
-            font-size: 11px;
-            font-weight: 700;
-        }
-
-        .ms-badge {
-            font-family: var(--fm);
-            font-size: 7px;
-            padding: 2px 6px;
-            border: 1px solid;
-        }
-
-        .bd-done {
-            color: var(--teal);
-            border-color: rgba(45, 232, 196, .3);
-            background: var(--td);
-        }
-
-        .bd-now {
-            color: var(--gold);
-            border-color: rgba(232, 196, 106, .3);
-            background: var(--gd);
-        }
-
-        .bd-soon {
-            color: var(--m2);
-            border-color: var(--border);
-        }
-
-        .ms-desc {
-            font-family: var(--fm);
-            font-size: 8px;
-            color: var(--m2);
-            line-height: 1.6;
-        }
-
-        .pct-row {
-            margin-top: 6px;
-            display: flex;
-            align-items: center;
-            gap: 7px;
-        }
-
-        .pct-bar {
-            flex: 1;
-            height: 2px;
-            background: var(--s3);
-            border-radius: 2px;
-            overflow: hidden;
-        }
-
-        .pct-fill {
-            height: 100%;
-            border-radius: 2px;
-            background: linear-gradient(90deg, var(--teal), var(--gold));
-            transition: width .4s;
-        }
-
-        .pct-lbl {
-            font-family: var(--fm);
-            font-size: 8px;
-            color: var(--m2);
-            min-width: 24px;
-        }
-
-        .sboxes {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 9px;
-        }
-
-        .sbox {
-            background: var(--s1);
-            border: 1px solid var(--border);
-            padding: 14px;
-        }
-
-        .sbox-ttl {
-            font-family: var(--fm);
-            font-size: 8px;
-            letter-spacing: .15em;
-            text-transform: uppercase;
-            color: var(--muted);
-            margin-bottom: 7px;
-        }
-
-        .sbox-val {
-            font-family: var(--fu);
-            font-size: 24px;
-            font-weight: 700;
-            line-height: 1;
-            margin-bottom: 3px;
-        }
-
-        .sbox-sub {
-            font-family: var(--fm);
-            font-size: 8px;
-            color: var(--m2);
-        }
-
-        .sbox-bar {
-            height: 3px;
-            background: var(--s3);
-            border-radius: 2px;
-            overflow: hidden;
-            margin-top: 7px;
-        }
-
-        .sbox-fill {
-            height: 100%;
-            border-radius: 2px;
-        }
-
-        .logi {
-            background: var(--s1);
-            border: 1px solid var(--border);
-            border-left: 2px solid var(--teal);
-            padding: 8px 12px;
-            margin-bottom: 4px;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 9px;
-        }
-
-        .lt {
-            font-size: 11px;
-            font-weight: 600;
-            margin-bottom: 2px;
-        }
-
-        .lm {
-            font-family: var(--fm);
-            font-size: 8px;
-            color: var(--m2);
-        }
-
-        .ld {
-            font-family: var(--fm);
-            font-size: 8px;
-            color: var(--gold);
-            white-space: nowrap;
-        }
-
-        textarea,
-        input[type=text],
-        select {
-            background: var(--s1);
-            border: 1px solid var(--border);
-            padding: 9px 12px;
-            font-family: var(--fm);
-            font-size: 11px;
-            color: var(--text);
-            outline: none;
-            transition: border-color .2s;
-        }
-
-        textarea {
-            width: 100%;
-            resize: vertical;
-        }
-
-        input[type=text] {
-            width: 100%;
-        }
-
-        select {
-            cursor: pointer;
-        }
-
-        textarea:focus,
-        input[type=text]:focus,
-        select:focus {
-            border-color: var(--teal);
-        }
-
-        textarea::placeholder,
-        input[type=text]::placeholder {
-            color: var(--muted);
-        }
-
-        .btn {
-            font-family: var(--fm);
-            font-size: 8px;
-            letter-spacing: .12em;
-            text-transform: uppercase;
-            padding: 8px 14px;
-            background: transparent;
-            border: 1px solid;
-            cursor: pointer;
-            transition: all .2s;
-        }
-
-        .bt {
-            border-color: var(--teal);
-            color: var(--teal);
-        }
-
-        .bt:hover {
-            background: var(--td);
-        }
-
-        .bg {
-            border-color: var(--gold);
-            color: var(--gold);
-        }
-
-        .bg:hover {
-            background: var(--gd);
-        }
-
-        .br {
-            border-color: var(--rose);
-            color: var(--rose);
-        }
-
-        .br:hover {
-            background: var(--rd);
-        }
-
-        .alrt {
-            padding: 10px 14px;
-            border-left: 3px solid;
-            font-family: var(--fm);
-            font-size: 10px;
-            line-height: 1.6;
-            margin-bottom: 9px;
-        }
-
-        .alt {
-            background: var(--td);
-            color: var(--t2);
-            border-color: var(--teal);
-        }
-
-        .alg {
-            background: var(--gd);
-            color: var(--g2);
-            border-color: var(--gold);
-        }
-
-        .step-item {
-            display: grid;
-            grid-template-columns: 28px 1fr auto;
-            gap: 10px;
-            align-items: start;
-            background: var(--s1);
-            border: 1px solid var(--border);
-            padding: 11px 13px;
-            margin-bottom: 5px;
-        }
-
-        .sn {
-            font-family: var(--fu);
-            font-size: 18px;
-            color: var(--gold);
-            line-height: 1;
-            text-align: center;
-        }
-
-        .si-ttl {
-            font-size: 12px;
-            font-weight: 700;
-            margin-bottom: 2px;
-        }
-
-        .si-desc {
-            font-family: var(--fm);
-            font-size: 9px;
-            color: var(--m2);
-            line-height: 1.5;
-        }
-
-        .si-time {
-            font-family: var(--fm);
-            font-size: 8px;
-            color: var(--teal);
-            padding: 3px 7px;
-            border: 1px solid rgba(45, 232, 196, .3);
-            white-space: nowrap;
-            align-self: center;
-        }
-
-        @media(max-width:600px) {
-            .nav-tab {
-                padding: 12px 9px;
-            }
-
-            .wrap {
-                padding: 18px 10px 60px;
-            }
-
-            .ms-row {
-                grid-template-columns: 55px 11px 1fr;
-            }
-
-            .cards {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-    </style>
 </head>
-
 <body>
-    <input type="file" id="importFile" accept=".json" style="display:none" onchange="importJSON(event)">
 
-    <!-- MODAL JSON -->
+<div id="cur">🐉</div>
+<canvas id="dragonCanvas"></canvas>
 
-    <div class="modal-ov" id="mSync">
-        <div class="modal">
-            <button class="modal-x" onclick="cm('mSync')">✕</button>
-            <div class="modal-ttl">⇅ Exportar / Importar datos</div>
-            <div class="modal-sub">Exportá tu JSON → guardalo en Google Drive o iCloud → importalo en cualquier otro dispositivo. Así tus datos viajan con vos.</div>
-            <textarea id="jsonPrev" readonly placeholder="Tu JSON aparece acá..."></textarea>
-            <div class="modal-btns">
-                <button class="btn bt" onclick="exportJSON()">⬇ Descargar JSON</button>
-                <button class="btn bg" onclick="document.getElementById('importFile').click()">⬆ Importar JSON</button>
-                <button class="btn bt" onclick="copyJSON()">⧉ Copiar JSON</button>
-            </div>
-            <div style="margin-top:14px;font-family:var(--fm);font-size:9px;color:var(--muted);line-height:1.7;">
-                <strong style="color:var(--gold)">Flujo recomendado:</strong><br>
-                1. Hacés cambios en iPhone → ⇅ JSON → Descargar<br>
-                2. Subís el archivo a Google Drive (carpeta "Corina OS")<br>
-                3. Abrís en iPad/Laptop → ⇅ JSON → Importar → listo
-            </div>
-        </div>
+<!-- FILE INPUTS -->
+
+<input type="file" id="importFile" accept=".json" style="display:none" onchange="importJSON(event)">
+<input type="file" id="receiptFile" accept="image/*" style="display:none" onchange="scanReceipt(event)">
+
+<!-- ══ MODALS ══ -->
+
+<!-- JSON SYNC -->
+
+<div class="mo" id="mSync">
+  <div class="modal">
+    <button class="mx" onclick="cm('mSync')">✕</button>
+    <div class="mttl">⇅ Sincronizar datos</div>
+    <div class="msub">Exportá JSON → Google Drive → importá en cualquier dispositivo.</div>
+    <textarea id="jsonPrev" readonly style="height:110px;font-size:8px;" placeholder="JSON acá..."></textarea>
+    <div style="display:flex;gap:6px;margin-top:9px;flex-wrap:wrap;">
+      <button class="btn bj" onclick="exportJSON()">⬇ Descargar JSON</button>
+      <button class="btn bg" onclick="document.getElementById('importFile').click()">⬆ Importar JSON</button>
+      <button class="btn bj" onclick="copyJSON()">⧉ Copiar</button>
     </div>
-
-    <!-- MODAL GITHUB -->
-
-    <div class="modal-ov" id="mGuide">
-        <div class="modal modal-lg">
-            <button class="modal-x" onclick="cm('mGuide')">✕</button>
-            <div class="modal-ttl">🚀 Subir a GitHub Pages</div>
-            <div class="modal-sub">Una URL propia accesible desde cualquier dispositivo. Setup de 15 minutos, una sola vez.</div>
-            <div id="guideSteps"></div>
-            <div style="margin-top:14px;" class="alrt alg">
-                <strong>Tu URL final:</strong> https://TU_USUARIO.github.io/corina-os<br>
-                Guardala como favorito en iPhone, iPad y laptop. Cada vez que actualizás el HTML en GitHub, la URL se actualiza automáticamente.
-            </div>
-        </div>
+    <div style="margin-top:11px;" class="alrt alg">
+      <strong>Historial mensual en GitHub:</strong><br>
+      Exportá → renombrá como <code>2026-04.json</code> → subilo a la carpeta <code>data/</code> de tu repo.<br>
+      Tu perfil público leerá automáticamente los datos históricos.
     </div>
+  </div>
+</div>
 
-    <!-- NAV -->
+<!-- GITHUB SETUP -->
 
-    <nav class="nav">
-        <div class="nav-inner">
-            <div class="nav-logo">CORINA <span>OS</span></div>
-            <div class="nav-tabs">
-                <button class="nav-tab active" onclick="gp('home',this)">🏠 Inicio</button>
-                <button class="nav-tab" onclick="gp('finanzas',this)">💰 Finanzas</button>
-                <button class="nav-tab" onclick="gp('habitos',this)">⚡ Hábitos</button>
-                <button class="nav-tab" onclick="gp('metas',this)">🎯 Metas</button>
-                <button class="nav-tab" onclick="gp('resumen',this)">📊 Resumen</button>
-                <button class="nav-tab" onclick="gp('bitacora',this)">📝 Bitácora</button>
-            </div>
-            <div class="nav-actions">
-                <button class="nbtn nb-t" onclick="saveAll()" id="saveBtn"><span class="sdot"></span>GUARDAR</button>
-                <button class="nbtn nb-g" onclick="om('mSync')">⇅ JSON</button>
-                <button class="nbtn nb-r" onclick="om('mGuide')">🚀 GITHUB</button>
-            </div>
-        </div>
-    </nav>
-
-    <!-- HOME -->
-
-    <div class="page active" id="page-home">
-        <div class="wrap">
-            <div class="sec">
-                <div class="stag">// <span id="liveDate"></span></div>
-                <div style="font-family:var(--fu);font-size:clamp(32px,7vw,68px);font-weight:900;letter-spacing:-.02em;line-height:.9;margin-bottom:14px;">CORINA<br><span class="tc">LAZO</span> <span class="gc">OS</span></div>
-                <div style="font-family:var(--fm);font-size:10px;color:var(--m2);margin-bottom:22px;">Ing. Mecatrónica · PM · Creadora · Inversionista · 25.7 años · Lima</div>
-                <div class="lbar-wrap">
-                    <div class="lbar-hd"><span>PROGRESO DE VIDA</span><span>25.7 / 80 años · 32.1%</span></div>
-                    <div class="lbar">
-                        <div class="lbar-fill"></div>
-                    </div>
-                    <div class="lbar-marks"><span>25★</span><span>30</span><span>35</span><span>40</span><span>50</span><span>60</span><span>80</span></div>
-                </div>
-                <div class="cards">
-                    <div class="card ct">
-                        <div class="clbl">Patrimonio</div>
-                        <div class="cval" style="color:var(--teal)">S/115K</div>
-                        <div class="csub">+creciendo</div>
-                    </div>
-                    <div class="card cg">
-                        <div class="clbl">Ahorro real</div>
-                        <div class="cval" style="color:var(--gold)">38%</div>
-                        <div class="csub">Meta: 45%</div>
-                    </div>
-                    <div class="card cr">
-                        <div class="clbl">Airbnb</div>
-                        <div class="cval" style="color:var(--rose)">NOV</div>
-                        <div class="csub">S/2,600/mes</div>
-                    </div>
-                    <div class="card cs">
-                        <div class="clbl">ETF portafolio</div>
-                        <div class="cval" style="color:var(--sky)" id="etfHome">S/0</div>
-                        <div class="csub">Iniciar Renta4</div>
-                    </div>
-                    <div class="card cl">
-                        <div class="clbl">Inglés nivel</div>
-                        <div class="cval" style="color:var(--lav)">B1+</div>
-                        <div class="csub">Meta: C1</div>
-                    </div>
-                    <div class="card ct">
-                        <div class="clbl">Hábitos hoy</div>
-                        <div class="cval" style="color:var(--teal)" id="habitHome">0/13</div>
-                        <div class="csub">Marcar en Hábitos</div>
-                    </div>
-                </div>
-            </div>
-            <div class="alrt alg"><strong>Los pequeños fallos son datos, no fracasos.</strong> Cada vez que te re-encarrilás, el sistema se fortalece. La consistencia imperfecta siempre gana.</div>
-            <div class="sec">
-                <div class="stag">// acceso rápido</div>
-                <div style="display:flex;flex-wrap:wrap;gap:7px;">
-                    <button class="btn bt" onclick="gp('habitos',null)">⚡ Hábitos de hoy</button>
-                    <button class="btn bg" onclick="gp('finanzas',null)">💰 Finanzas</button>
-                    <button class="btn bt" onclick="gp('metas',null)">🎯 Metas</button>
-                    <button class="btn bg" onclick="gp('resumen',null)">📊 Resumen</button>
-                    <button class="btn bt" onclick="gp('bitacora',null)">📝 Bitácora</button>
-                </div>
-            </div>
-            <div class="alrt alt"><strong>📱 Sincronizar entre dispositivos:</strong> Usá ⇅ JSON para exportar e importar tus datos. Para URL fija accesible desde cualquier lugar, tocá 🚀 GITHUB.</div>
-        </div>
+<div class="mo" id="mGH">
+  <div class="modal">
+    <button class="mx" onclick="cm('mGH')">✕</button>
+    <div class="mttl">🐙 Configurar GitHub para boletas</div>
+    <div class="msub">Ingresá tu token de GitHub para que las boletas escaneadas se suban automáticamente a tu repositorio.</div>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px;">
+      <input type="text" id="ghToken" placeholder="Token GitHub (ghp_xxxxxx)">
+      <input type="text" id="ghUser" placeholder="Tu usuario GitHub (ej: 920052859)">
+      <input type="text" id="ghRepo" placeholder="Nombre del repo (ej: corina-os)">
     </div>
-
-    <!-- FINANZAS -->
-
-    <div class="page" id="page-finanzas">
-        <div class="wrap">
-            <div class="sec">
-                <div class="stag">// finanzas completas</div>
-                <div class="sttl">Finanzas <span class="gc">&amp; Activos</span></div>
-                <div class="cards" style="margin-bottom:18px;">
-                    <div class="card ct">
-                        <div class="clbl">Ingreso actual</div>
-                        <div class="cval" style="color:var(--teal)">S/6,002</div>
-                        <div class="csub">Trabajo+recurrentes</div>
-                    </div>
-                    <div class="card cr">
-                        <div class="clbl">Gastos fijos</div>
-                        <div class="cval" style="color:var(--rose)">S/4,817</div>
-                        <div class="csub">80% — reducir</div>
-                    </div>
-                    <div class="card cs">
-                        <div class="clbl">Ahorro real</div>
-                        <div class="cval" style="color:var(--sky)">S/735</div>
-                        <div class="csub">12% · meta: 45%</div>
-                    </div>
-                    <div class="card cg">
-                        <div class="clbl">Caja Agora</div>
-                        <div class="cval" style="color:var(--gold)">S/64K</div>
-                        <div class="csub">5% anual</div>
-                    </div>
-                    <div class="card cl">
-                        <div class="clbl">ETF portafolio</div>
-                        <div class="cval" style="color:var(--lav)" id="etfFin">S/0</div>
-                        <div class="csub">Meta S/15K</div>
-                    </div>
-                </div>
-            </div>
-            <div class="sec">
-                <div class="stag">// tracker ETF · registrá cada aporte el día 25</div>
-                <div class="sttl">Portafolio <span class="tc">ETF</span></div>
-                <div class="cards" style="margin-bottom:12px;" id="etfCards"></div>
-                <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px;">
-                    <input type="text" id="etfAmt" placeholder="Monto S/" style="max-width:160px;">
-                    <input type="text" id="etfNote" placeholder="Nota (ej: VOO cuota 1)" style="max-width:180px;">
-                    <button class="btn bg" onclick="addEtf()">+ REGISTRAR APORTE</button>
-                </div>
-                <div id="etfHist"></div>
-            </div>
-            <div class="sec">
-                <div class="stag">// curvas de proyección</div>
-                <div class="sttl">Curvas <span class="gc">estimadas</span></div>
-                <div class="cbox">
-                    <div class="cttl">INGRESOS PROYECTADOS — S/ MENSUAL (36 MESES)</div>
-                    <div style="position:relative;height:250px;"><canvas id="incChart" role="img" aria-label="Curva de ingresos proyectados de Corina a 36 meses">Ingresos proyectados S/6,002 hoy hasta S/25,000 en mes 36.</canvas></div>
-                    <div class="cleg">
-                        <div class="cli">
-                            <div class="cld" style="background:#e8c46a"></div>Total ingresos
-                        </div>
-                        <div class="cli">
-                            <div class="cld" style="background:#2de8c4"></div>Activos pasivos
-                        </div>
-                        <div class="cli">
-                            <div class="cld" style="background:#b07ef8"></div>Remoto USD
-                        </div>
-                    </div>
-                </div>
-                <div class="cbox">
-                    <div class="cttl">ETF VOO — S/15K + S/600/MES · 10% ANUAL vs AGORA 5%</div>
-                    <div style="position:relative;height:210px;"><canvas id="etfChart" role="img" aria-label="Proyección ETF vs Agora">ETF VOO a 10 años proyecta S/160K con S/15K inicial.</canvas></div>
-                    <div class="cleg">
-                        <div class="cli">
-                            <div class="cld" style="background:#2de8c4"></div>ETF 10%
-                        </div>
-                        <div class="cli">
-                            <div class="cld" style="background:#e8c46a"></div>Agora 5%
-                        </div>
-                        <div class="cli">
-                            <div class="cld" style="background:#2a3448"></div>Solo aportes
-                        </div>
-                    </div>
-                </div>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-                    <div class="cbox">
-                        <div class="cttl">DISTRIBUCIÓN ACTUAL</div>
-                        <div style="position:relative;height:190px;"><canvas id="expNow" role="img" aria-label="Gastos actuales 80% fijos 12% ahorro 8% variables">Gastos 80%, Ahorro 12%, Variables 8%.</canvas></div>
-                    </div>
-                    <div class="cbox">
-                        <div class="cttl">META DISTRIBUCIÓN</div>
-                        <div style="position:relative;height:190px;"><canvas id="expMeta" role="img" aria-label="Meta gastos 50% ahorro 35% variables 15%">Meta Gastos 50%, Ahorro 35%, Variables 15%.</canvas></div>
-                    </div>
-                </div>
-            </div>
-            <div class="sec">
-                <div class="stag">// tabla de flujo de dinero</div>
-                <div class="sttl">Mapa de <span class="gc">ingresos</span></div>
-                <div style="overflow-x:auto;">
-                    <table class="tbl">
-                        <tr>
-                            <th>Fuente</th>
-                            <th>Tipo</th>
-                            <th>Actual S/</th>
-                            <th>Meta S/</th>
-                            <th>Cuándo</th>
-                            <th>Estado</th>
-                        </tr>
-                        <tr>
-                            <td>Trabajo Ate</td>
-                            <td>Fijo</td>
-                            <td style="color:var(--teal)">5,230</td>
-                            <td>10,000</td>
-                            <td>2027</td>
-                            <td style="color:var(--gold)">EN CURSO</td>
-                        </tr>
-                        <tr>
-                            <td>Airbnb La Victoria</td>
-                            <td>Pasivo</td>
-                            <td style="color:var(--m2)">0</td>
-                            <td>2,600</td>
-                            <td>Nov 2026</td>
-                            <td style="color:var(--rose)">NOV 2026</td>
-                        </tr>
-                        <tr>
-                            <td>ETF dividendos</td>
-                            <td>Pasivo</td>
-                            <td style="color:var(--m2)">0</td>
-                            <td>900</td>
-                            <td>2027</td>
-                            <td style="color:var(--rose)">INICIAR</td>
-                        </tr>
-                        <tr>
-                            <td>Freelance IA</td>
-                            <td>Variable</td>
-                            <td style="color:var(--m2)">0</td>
-                            <td>2,000</td>
-                            <td>Q3 2026</td>
-                            <td style="color:var(--m2)">PLANIF.</td>
-                        </tr>
-                        <tr>
-                            <td>Charlas + coaching</td>
-                            <td>Variable</td>
-                            <td style="color:var(--m2)">0</td>
-                            <td>1,900</td>
-                            <td>Q4 2026</td>
-                            <td style="color:var(--m2)">PLANIF.</td>
-                        </tr>
-                        <tr>
-                            <td>Remoto USD IA</td>
-                            <td>Remoto</td>
-                            <td style="color:var(--m2)">0</td>
-                            <td>11,400</td>
-                            <td>2027</td>
-                            <td style="color:var(--m2)">FUTURO</td>
-                        </tr>
-                        <tr style="background:rgba(232,196,106,.04)">
-                            <td><strong>TOTAL META</strong></td>
-                            <td></td>
-                            <td style="color:var(--teal)"><strong>6,002</strong></td>
-                            <td style="color:var(--gold)"><strong>25,000+</strong></td>
-                            <td>2028–29</td>
-                            <td style="color:var(--gold)"><strong>VISIÓN</strong></td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-        </div>
+    <button class="btn bj" onclick="saveGHConfig()">GUARDAR CONFIGURACIÓN</button>
+    <div style="margin-top:11px;" class="alrt alj">
+      <strong>Cómo obtener el token:</strong><br>
+      GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic) → Generate new token → marcá "repo" → Generate.<br>
+      Copiá el token y pegalo arriba.
     </div>
+  </div>
+</div>
 
-    <!-- HÁBITOS -->
+<!-- HABIT COMMENT -->
 
-    <div class="page" id="page-habitos">
-        <div class="wrap">
-            <div class="sec">
-                <div class="stag">// tocá el check al terminar la actividad · 7 puntitos = lun a dom</div>
-                <div class="sttl" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
-                    <span>Mi <span class="tc">rutina</span></span>
-                    <button class="btn br" onclick="resetDay()">↺ NUEVO DÍA</button>
-                </div>
-                <div class="hgrid" id="habitGrid"></div>
-            </div>
-        </div>
+<div class="mo" id="mHComment">
+  <div class="modal">
+    <button class="mx" onclick="cm('mHComment')">✕</button>
+    <div class="mttl" id="mHCTtl">💬 Comentario del hábito</div>
+    <div class="msub" id="mHCSub">Agregá una nota sobre cómo te fue hoy con este hábito.</div>
+    <textarea id="hCommentInput" rows="4" placeholder="¿Cómo te fue? ¿Qué aprendiste? ¿Algo a mejorar?"></textarea>
+    <div style="display:flex;gap:7px;margin-top:9px;">
+      <button class="btn bj" onclick="saveHComment()">GUARDAR COMENTARIO</button>
     </div>
+    <input type="hidden" id="hCommentId">
+  </div>
+</div>
 
-    <!-- METAS -->
+<!-- ADD/EDIT HABIT -->
 
-    <div class="page" id="page-metas">
-        <div class="wrap">
-            <div class="sec">
-                <div class="stag">// tocá el nodo: pendiente → en curso → hecho · slider para % avance</div>
-                <div class="sttl">Cronograma <span class="gc">2026–2029</span></div>
-                <div style="margin-bottom:24px;">
-                    <div class="stag" style="margin-bottom:9px;">// habilidades — mover slider para actualizar tu nivel</div>
-                    <div id="skillsBlock"></div>
-                </div>
-                <div class="ms-list" id="msBlock"></div>
-            </div>
-        </div>
+<div class="mo" id="mHabit">
+  <div class="modal">
+    <button class="mx" onclick="cm('mHabit')">✕</button>
+    <div class="mttl" id="mHabitTtl">+ Agregar hábito</div>
+    <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:11px;">
+      <input type="text" id="hName" placeholder="Nombre del hábito">
+      <input type="text" id="hTime" placeholder="Horario (ej: 6:00–7:00am)">
+      <select id="hFreq">
+        <option value="Diario">Diario</option>
+        <option value="Lun–Vie">Lun–Vie</option>
+        <option value="Lun/Mar/Jue">Lun/Mar/Jue</option>
+        <option value="Miércoles">Miércoles</option>
+        <option value="Viernes">Viernes</option>
+        <option value="Sáb/Dom">Sáb/Dom</option>
+        <option value="Domingo">Domingo</option>
+        <option value="Semanal">Semanal</option>
+      </select>
+      <select id="hColor">
+        <option value="jade">Verde jade</option>
+        <option value="gold">Dorado</option>
+        <option value="crimson">Rojo</option>
+        <option value="sky">Azul</option>
+        <option value="violet">Violeta</option>
+        <option value="fire">Fuego</option>
+      </select>
+      <input type="hidden" id="hEditId">
     </div>
-
-    <!-- RESUMEN -->
-
-    <div class="page" id="page-resumen">
-        <div class="wrap">
-            <div class="sec">
-                <div class="stag">// resumen financiero</div>
-                <div class="sttl">Resumen <span class="gc">financiero</span></div>
-                <div class="sboxes" id="finSum"></div>
-            </div>
-            <div class="sec">
-                <div class="stag">// patrimonio total</div>
-                <div class="cbox">
-                    <div class="cttl">PATRIMONIO POR CATEGORÍA</div>
-                    <div style="position:relative;height:210px;"><canvas id="patriChart" role="img" aria-label="Patrimonio de Corina por categoría">Caja S/64K, Inmuebles S/290K, Intangibles S/82K, ETF S/0.</canvas></div>
-                </div>
-            </div>
-            <div class="sec">
-                <div class="stag">// actividades de hoy</div>
-                <div class="sttl">Actividades <span class="tc">completadas</span></div>
-                <div id="actSum"></div>
-            </div>
-            <div class="sec">
-                <div class="stag">// progreso de todas las metas</div>
-                <div class="sttl">Avance de <span class="gc">metas</span></div>
-                <div id="metasSum"></div>
-            </div>
-        </div>
+    <div style="display:flex;gap:6px;">
+      <button class="btn bj" onclick="saveHabit()">GUARDAR</button>
+      <button class="btn br" id="delHBtn" onclick="deleteHabit()" style="display:none">ELIMINAR</button>
     </div>
+  </div>
+</div>
 
-    <!-- BITÁCORA -->
+<!-- ADD POST -->
 
-    <div class="page" id="page-bitacora">
-        <div class="wrap">
-            <div class="sec">
-                <div class="stag">// diario personal · exportable con JSON · nunca se pierde</div>
-                <div class="sttl">Mi <span class="tc">bitácora</span></div>
-                <div style="display:flex;gap:7px;margin-bottom:8px;flex-wrap:wrap;">
-                    <select id="noteTag">
-                        <option value="general">General</option>
-                        <option value="finanzas">Finanzas</option>
-                        <option value="estudio">Estudio / IA</option>
-                        <option value="habitos">Hábitos</option>
-                        <option value="contenido">Contenido</option>
-                        <option value="personal">Personal</option>
-                    </select>
-                </div>
-                <textarea id="noteInput" rows="5" placeholder="¿Qué avancé hoy? ¿Qué aprendí? ¿Dónde fallé y cómo me re-encarrilé? Los fallos también cuentan." style="margin-bottom:8px;"></textarea>
-                <div style="display:flex;gap:7px;margin-bottom:22px;"><button class="btn bt" onclick="addNote()">+ GUARDAR NOTA</button></div>
-                <div id="notesList"></div>
-            </div>
-        </div>
+<div class="mo" id="mPost">
+  <div class="modal modal-xl">
+    <button class="mx" onclick="cm('mPost')">✕</button>
+    <div class="mttl" id="mPostTtl">+ Nueva publicación</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:11px;">
+      <select id="pPlat" style="grid-column:span 2">
+        <option value="linkedin">LinkedIn</option>
+        <option value="instagram">Instagram</option>
+        <option value="tiktok">TikTok</option>
+        <option value="youtube">YouTube</option>
+        <option value="multi">Multiplataforma</option>
+      </select>
+      <input type="text" id="pTitle" placeholder="Título / tema del post" style="grid-column:span 2">
+      <textarea id="pDesc" rows="3" placeholder="Caption / descripción del contenido" style="grid-column:span 2"></textarea>
+      <input type="text" id="pHook" placeholder="Hook / primera línea (lo más importante)">
+      <input type="text" id="pHashtags" placeholder="#hashtags separados por espacio">
+      <input type="date" id="pDate" placeholder="Fecha programada">
+      <select id="pStatus">
+        <option value="draft">Borrador</option>
+        <option value="scheduled">Programado</option>
+        <option value="published">Publicado</option>
+      </select>
+      <input type="url" id="pLink" placeholder="Link del post (cuando esté publicado)">
+      <input type="hidden" id="pEditId">
     </div>
+    <div style="margin-bottom:11px;">
+      <div class="stag" style="margin-bottom:6px;">Métricas (completar cuando esté publicado)</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:7px;">
+        <input type="number" id="pLikes" placeholder="❤ Likes">
+        <input type="number" id="pComments" placeholder="💬 Comentarios">
+        <input type="number" id="pShares" placeholder="↗ Compartidos">
+        <input type="number" id="pReach" placeholder="👁 Alcance">
+      </div>
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;">
+      <button class="btn bj" onclick="savePost()">GUARDAR POST</button>
+      <button class="btn br" id="delPostBtn" onclick="deletePost()" style="display:none">ELIMINAR</button>
+    </div>
+  </div>
+</div>
 
-    <script>
-        // DATA
-        const HD = [{
-                id: 'gym',
-                name: 'Gym SmartFit',
-                freq: 'Lun/Mar/Jue',
-                c: 'teal'
-            },
-            {
-                id: 'pole',
-                name: 'Pole Dance',
-                freq: 'Miércoles',
-                c: 'rose'
-            },
-            {
-                id: 'pool',
-                name: 'Piscina Videna',
-                freq: 'Viernes',
-                c: 'sky'
-            },
-            {
-                id: 'dance',
-                name: 'Baile Centro Lima',
-                freq: 'Sáb/Dom',
-                c: 'lav'
-            },
-            {
-                id: 'anki',
-                name: 'Anki PMP/TOEFL',
-                freq: 'Diario',
-                c: 'gold'
-            },
-            {
-                id: 'ing',
-                name: 'Inglés activo',
-                freq: 'Lun–Vie',
-                c: 'teal'
-            },
-            {
-                id: 'py',
-                name: 'Python / IA 1h',
-                freq: 'Diario',
-                c: 'sky'
-            },
-            {
-                id: 'cont',
-                name: 'Crear contenido',
-                freq: '3x semana',
-                c: 'gold'
-            },
-            {
-                id: 'fin',
-                name: 'Rev. finanzas',
-                freq: 'Viernes',
-                c: 'lav'
-            },
-            {
-                id: 'misa',
-                name: 'Misa',
-                freq: 'Domingo',
-                c: 'rose'
-            },
-            {
-                id: 'meal',
-                name: 'Meal prep',
-                freq: 'Dom/Lun',
-                c: 'teal'
-            },
-            {
-                id: 'sleep',
-                name: 'Dormir 7.5h',
-                freq: 'Diario',
-                c: 'sky'
-            },
-            {
-                id: 'etf',
-                name: 'Aporte ETF',
-                freq: 'Día 25',
-                c: 'gold'
-            },
-        ];
-        const MD = [{
-                id: 'm0',
-                when: 'ABR–MAY 2026',
-                title: 'Base del sistema activa',
-                status: 'now',
-                pct: 15,
-                desc: 'Make.com + Buffer · Notion offline · Pagos automáticos · Renta4 abierta · CS50P iniciado'
-            },
-            {
-                id: 'm1',
-                when: 'JUN–JUL 2026',
-                title: 'ETF + 1K seguidores LinkedIn',
-                status: 'soon',
-                pct: 0,
-                desc: 'S/15K en VOO (DCA) · Google AI Essentials · 1,000 seg. LinkedIn · Shakira 500+ TikTok'
-            },
-            {
-                id: 'm2',
-                when: 'AGO–OCT 2026',
-                title: 'Maestría finalizada + charla',
-                status: 'soon',
-                pct: 0,
-                desc: 'Maestría ESAN completada · S/1,740 liberados · Primera charla · TOEFL programado'
-            },
-            {
-                id: 'm3',
-                when: 'NOV–DIC 2026',
-                title: 'Airbnb activo + S/10K/mes',
-                status: 'soon',
-                pct: 0,
-                desc: 'Depa La Victoria Airbnb → S/2,600 · Python intermedio · 5K seguidores'
-            },
-            {
-                id: 'm4',
-                when: '2027 Q1–Q2',
-                title: 'Primer ingreso remoto USD',
-                status: 'soon',
-                pct: 0,
-                desc: 'Contrato Upwork/Torre.co · Inglés B2 fluido · ETF S/30K+'
-            },
-            {
-                id: 'm5',
-                when: '2027 Q3–2028',
-                title: 'Remoto full-time + hacienda',
-                status: 'soon',
-                pct: 0,
-                desc: '$2,500–4,000 USD/mes · Dejar trabajo Ate · 10K seguidores · Starlink planificado'
-            },
-            {
-                id: 'm6',
-                when: '2028–2029',
-                title: 'Libertad total + hacienda',
-                status: 'soon',
-                pct: 0,
-                desc: 'Hacienda + Starlink · ETF S/80K+ · Airbnb doble · Italia/China · Shakira en hacienda 🐱'
-            },
-        ];
-        const SKD = [{
-                id: 'python',
-                name: 'Python / programación',
-                base: 45,
-                c: 'var(--teal)'
-            },
-            {
-                id: 'ingles',
-                name: 'Inglés (nivel actual)',
-                base: 55,
-                c: 'var(--gold)'
-            },
-            {
-                id: 'ia',
-                name: 'IA / ML conceptos',
-                base: 25,
-                c: 'var(--sky)'
-            },
-            {
-                id: 'make',
-                name: 'Make.com / automatiz',
-                base: 35,
-                c: 'var(--lav)'
-            },
-            {
-                id: 'pm',
-                name: 'Gestión proyectos PM',
-                base: 80,
-                c: 'var(--teal)'
-            },
-            {
-                id: 'mec',
-                name: 'Ing. mecatrónica',
-                base: 85,
-                c: 'var(--gold)'
-            },
-            {
-                id: 'cont',
-                name: 'Contenido / redes',
-                base: 30,
-                c: 'var(--rose)'
-            },
-            {
-                id: 'fin',
-                name: 'Finanzas/inversiones',
-                base: 40,
-                c: 'var(--sky)'
-            },
-            {
-                id: 'pr',
-                name: 'Prompt Engineering',
-                base: 20,
-                c: 'var(--lav)'
-            },
-        ];
-        const CC = {
-            teal: 'var(--teal)',
-            gold: 'var(--gold)',
-            rose: 'var(--rose)',
-            sky: 'var(--sky)',
-            lav: 'var(--lav)'
-        };
-        const TC = {
-            general: 'var(--m2)',
-            finanzas: 'var(--gold)',
-            estudio: 'var(--teal)',
-            habitos: 'var(--rose)',
-            contenido: 'var(--lav)',
-            personal: 'var(--sky)'
-        };
+<!-- ADD GASTO -->
 
-        let ST = {
-            habits: {},
-            milestones: {},
-            skills: {},
-            etf: {
-                total: 0,
-                aportes: []
-            },
-            notes: []
-        };
+<div class="mo" id="mGasto">
+  <div class="modal">
+    <button class="mx" onclick="cm('mGasto')">✕</button>
+    <div class="mttl">+ Registrar movimiento</div>
+    <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:11px;">
+      <select id="gTipo"><option value="egreso">Egreso</option><option value="ingreso">Ingreso</option></select>
+      <select id="gCat">
+        <option value="hormiga">Gasto hormiga</option>
+        <option value="comida">Comida</option>
+        <option value="transporte">Transporte</option>
+        <option value="salud">Salud/belleza</option>
+        <option value="entretenimiento">Entretenimiento</option>
+        <option value="educacion">Educación</option>
+        <option value="ropa">Ropa</option>
+        <option value="servicios">Servicios</option>
+        <option value="trabajo">Ingreso laboral</option>
+        <option value="pasivo">Ingreso pasivo</option>
+        <option value="otro">Otro</option>
+      </select>
+      <input type="text" id="gDesc" placeholder="Descripción">
+      <input type="number" id="gMonto" placeholder="Monto S/" step="0.01">
+      <input type="text" id="gFecha" placeholder="Fecha">
+    </div>
+    <button class="btn bj" onclick="saveGasto()">GUARDAR</button>
+  </div>
+</div>
 
-        function LS(k, v) {
-            try {
-                localStorage.setItem('corina_os_' + k, JSON.stringify(v));
-            } catch (e) {}
-        }
+<!-- NAV -->
 
-        function LG(k, d) {
-            try {
-                const v = localStorage.getItem('corina_os_' + k);
-                return v ? JSON.parse(v) : d;
-            } catch (e) {
-                return d;
-            }
-        }
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-logo">CORINA <span>OS</span> 🐉</div>
+    <div class="nav-tabs">
+      <button class="nav-tab active" onclick="gp('home',this)">🏠 Inicio</button>
+      <button class="nav-tab" onclick="gp('frase',this)">✨ Frase del día</button>
+      <button class="nav-tab" onclick="gp('habitos',this)">⚡ Hábitos</button>
+      <button class="nav-tab" onclick="gp('planner',this)">📅 Planner</button>
+      <button class="nav-tab" onclick="gp('contenido',this)">📱 Contenido</button>
+      <button class="nav-tab" onclick="gp('finanzas',this)">💰 Finanzas</button>
+      <button class="nav-tab" onclick="gp('boletas',this)">🧾 Boletas IA</button>
+      <button class="nav-tab" onclick="gp('metas',this)">🎯 Metas</button>
+      <button class="nav-tab" onclick="gp('bitacora',this)">📝 Bitácora</button>
+    </div>
+    <div class="nav-acts">
+      <button class="nb nb-j" onclick="saveAll()" id="saveBtn"><span class="sdot"></span>GUARDAR</button>
+      <button class="nb nb-g" onclick="om('mSync')">⇅ JSON</button>
+      <button class="nb nb-v" onclick="om('mGH')">🐙 GitHub</button>
+    </div>
+  </div>
+</nav>
 
-        function loadAll() {
-            const s = LG('state', null);
-            if (s) ST = {
-                ...ST,
-                ...s
-            };
-        }
+<!-- ═══ HOME ═══ -->
 
-        function saveAll() {
-            LS('state', ST);
-            const b = document.getElementById('saveBtn');
-            if (b) {
-                const o = b.innerHTML;
-                b.innerHTML = '✓ GUARDADO';
-                setTimeout(() => b.innerHTML = o, 2000);
-            }
-        }
-        setInterval(saveAll, 20000);
+<div class="page active" id="page-home"><div class="wrap">
+  <div class="stag">// <span id="liveDate"></span></div>
+  <div style="font-family:var(--fd);font-size:clamp(28px,6vw,58px);font-weight:900;letter-spacing:-.01em;line-height:.9;margin-bottom:11px;">CORINA<br><span class="tc">LAZO</span> <span class="gc">OS</span></div>
+  <div class="last-upd"><div class="upd-dot"></div><span>Última actualización: <strong id="lastUpd" style="color:var(--jade)">—</strong></span></div>
+  <div class="lbar-wrap">
+    <div class="lbar-hd"><span>PROGRESO DE VIDA</span><span>25.7 / 80 años · 32.1%</span></div>
+    <div class="lbar"><div class="lbar-fill"></div></div>
+    <div class="lbar-marks"><span>25★</span><span>30</span><span>35</span><span>40</span><span>50</span><span>60</span><span>80</span></div>
+  </div>
+  <!-- Daily phrase preview on home -->
+  <div id="homePhrase" style="margin-bottom:18px;"></div>
+  <div class="cards">
+    <div class="card cj"><div class="clbl">Patrimonio</div><div class="cval" style="color:var(--jade)">S/115K</div><div class="csub">+creciendo</div></div>
+    <div class="card cg"><div class="clbl">Ahorro</div><div class="cval" style="color:var(--gold)">38%</div><div class="csub">Meta: 45%</div></div>
+    <div class="card cr"><div class="clbl">Airbnb</div><div class="cval" style="color:var(--crimson)">NOV</div><div class="csub">S/2,600/mes</div></div>
+    <div class="card cs"><div class="clbl">ETF</div><div class="cval" style="color:var(--sky)" id="etfHome">S/0</div><div class="csub">Renta4 SAB</div></div>
+    <div class="card cv"><div class="clbl">Hábitos hoy</div><div class="cval" style="color:var(--violet)" id="habitHome">0</div><div class="csub">completados</div></div>
+    <div class="card cj"><div class="clbl">Posts mes</div><div class="cval" style="color:var(--jade)" id="postsHome">0</div><div class="csub">publicados</div></div>
+  </div>
+  <div class="alrt alg" style="margin-top:14px;"><strong>🐉</strong> La constancia imperfecta siempre vence a la perfección que nunca empieza.</div>
+</div></div>
 
-        // NAV
-        function gp(id, btn) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-            document.getElementById('page-' + id).classList.add('active');
-            if (btn) btn.classList.add('active');
-            else document.querySelectorAll('.nav-tab').forEach(t => {
-                if (t.getAttribute('onclick') && t.getAttribute('onclick').includes("'" + id + "'")) t.classList.add('active');
-            });
-            if (id === 'resumen') renderResumen();
-        }
-        document.getElementById('liveDate').textContent = new Date().toLocaleDateString('es-PE', {
-            weekday: 'long',
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric'
-        });
+<!-- ═══ FRASE DEL DÍA ═══ -->
 
-        // MODAL
-        function om(id) {
-            document.getElementById(id).classList.add('open');
-            if (id === 'mSync') refreshJSON();
-            if (id === 'mGuide') buildGuide();
-        }
+<div class="page" id="page-frase"><div class="wrap">
+  <div class="stag">// frase diaria hasta 2027 · matemática · filosófica · de alto nivel</div>
+  <div class="sttl">Frase del <span class="gc">Día</span></div>
+  <div id="phraseMain"></div>
+  <div style="margin-top:24px;">
+    <div class="stag" style="margin-bottom:10px;">// tus frases guardadas</div>
+    <div id="savedPhrases"></div>
+  </div>
+</div></div>
 
-        function cm(id) {
-            document.getElementById(id).classList.remove('open');
-        }
-        document.querySelectorAll('.modal-ov').forEach(m => m.addEventListener('click', e => {
-            if (e.target === m) m.classList.remove('open');
-        }));
+<!-- ═══ HÁBITOS ATÓMICOS ═══ -->
 
-        // JSON
-        function getJSON() {
-            return JSON.stringify(ST, null, 2);
-        }
+<div class="page" id="page-habitos"><div class="wrap">
+  <div class="stag">// hábitos atómicos · check diario · comentario por hábito · guardado automático</div>
+  <div class="sttl" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+    <span>Hábitos <span class="gc">Atómicos</span></span>
+    <div style="display:flex;gap:5px;">
+      <button class="btn bj" onclick="openAddHabit()">+ NUEVO</button>
+      <button class="btn br" onclick="resetDay()">↺ NUEVO DÍA</button>
+    </div>
+  </div>
+  <div class="hgrid" id="habitGrid"></div>
+</div></div>
 
-        function refreshJSON() {
-            document.getElementById('jsonPrev').value = getJSON();
-        }
+<!-- ═══ PLANNER ═══ -->
 
-        function exportJSON() {
-            saveAll();
-            const b = new Blob([getJSON()], {
-                type: 'application/json'
-            });
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(b);
-            a.download = 'corina_os_' + new Date().toISOString().slice(0, 10) + '.json';
-            a.click();
-        }
+<div class="page" id="page-planner"><div class="wrap">
+  <div class="stag">// planner semanal · clic = completado</div>
+  <div class="sttl">Mi <span class="gc">Semana</span></div>
+  <div style="overflow-x:auto;margin-bottom:18px;">
+    <div class="planner-grid" id="plannerGrid"></div>
+  </div>
+  <div class="alrt alj">Tocá cualquier bloque para marcarlo como completado ✓</div>
+</div></div>
 
-        function copyJSON() {
-            navigator.clipboard.writeText(getJSON()).then(() => {
-                const btn = document.querySelector('#mSync .modal-btns .btn:nth-child(3)');
-                if (btn) {
-                    const o = btn.textContent;
-                    btn.textContent = '✓ COPIADO';
-                    setTimeout(() => btn.textContent = o, 2000);
-                }
-            });
-        }
+<!-- ═══ CONTENIDO ═══ -->
 
-        function importJSON(e) {
-            const f = e.target.files[0];
-            if (!f) return;
-            const r = new FileReader();
-            r.onload = ev => {
-                try {
-                    const d = JSON.parse(ev.target.result);
-                    ST = {
-                        ...ST,
-                        ...d
-                    };
-                    saveAll();
-                    renderAll();
-                    cm('mSync');
-                    alert('✅ Datos importados. Todos tus avances están actualizados.');
-                } catch (err) {
-                    alert('Error al leer el archivo. Asegurate de que sea un JSON exportado desde este dashboard.');
-                }
-            };
-            r.readAsText(f);
-        }
+<div class="page" id="page-contenido"><div class="wrap">
+  <div class="stag">// planificador de contenido · programar · seguimiento · métricas</div>
+  <div class="sttl" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+    <span>Planner de <span class="gc">Contenido</span></span>
+    <button class="btn bj" onclick="openAddPost()">+ NUEVA PUBLICACIÓN</button>
+  </div>
 
-        // GITHUB GUIDE
-        function buildGuide() {
-            if (document.getElementById('guideSteps').innerHTML) return;
-            const steps = [{
-                    n: '1',
-                    t: 'Crear cuenta GitHub',
-                    d: 'Ir a github.com → Sign up → email principal → verificar. Una sola vez.',
-                    time: '2 MIN'
-                },
-                {
-                    n: '2',
-                    t: 'Nuevo repositorio',
-                    d: '"+" → "New repository" → Nombre: corina-os → marcar "Public" → marcar "Add a README file" → "Create repository".',
-                    time: '2 MIN'
-                },
-                {
-                    n: '3',
-                    t: 'Subir el HTML',
-                    d: 'Dentro del repo → "Add file" → "Upload files" → arrastrá el HTML → renombralo "index.html" → "Commit changes".',
-                    time: '3 MIN'
-                },
-                {
-                    n: '4',
-                    t: 'Activar Pages',
-                    d: '"Settings" → "Pages" → Source: "Deploy from a branch" → Branch: "main" → "/(root)" → "Save".',
-                    time: '2 MIN'
-                },
-                {
-                    n: '5',
-                    t: 'Tu URL lista',
-                    d: 'Esperá 2 minutos → https://TU_USUARIO.github.io/corina-os · Guardala como favorito en iPhone, iPad y laptop.',
-                    time: '2 MIN'
-                },
-                {
-                    n: '6',
-                    t: 'Sincronizar datos',
-                    d: 'Dispositivo A → ⇅ JSON → Descargar → subir a Google Drive. Dispositivo B → ⇅ JSON → Importar → seleccioná el archivo.',
-                    time: 'SIEMPRE'
-                },
-            ];
-            document.getElementById('guideSteps').innerHTML = steps.map(s => `
-    <div class="step-item">
-      <div class="sn">${s.n}</div>
-      <div><div class="si-ttl">${s.t}</div><div class="si-desc">${s.d}</div></div>
-      <div class="si-time">${s.time}</div>
-    </div>`).join('');
-        }
+  <!-- Filtros -->
 
-        // HABITS
-        function renderHabits() {
-            const g = document.getElementById('habitGrid');
-            g.innerHTML = '';
-            let done = 0;
-            HD.forEach(h => {
-                if (!ST.habits[h.id]) ST.habits[h.id] = {
-                    today: false,
-                    week: [0, 0, 0, 0, 0, 0, 0],
-                    streak: 0
-                };
-                const hd = ST.habits[h.id];
-                if (hd.today) done++;
-                const col = CC[h.c];
-                const d = document.createElement('div');
-                d.className = 'hcard';
-                d.innerHTML = `<div class="hcard-top">
+  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;" id="postFilters">
+    <button class="btn bj" onclick="filterPosts('all',this)" style="border-color:var(--jade)">TODOS</button>
+    <button class="btn" style="border-color:var(--border);color:var(--m2)" onclick="filterPosts('draft',this)">BORRADORES</button>
+    <button class="btn" style="border-color:var(--border);color:var(--m2)" onclick="filterPosts('scheduled',this)">PROGRAMADOS</button>
+    <button class="btn" style="border-color:var(--border);color:var(--m2)" onclick="filterPosts('published',this)">PUBLICADOS</button>
+  </div>
+
+  <div class="cp-grid" id="postsGrid"></div>
+
+  <!-- METRICS SUMMARY -->
+
+  <div style="margin-top:24px;">
+    <div class="stag" style="margin-bottom:10px;">// resumen de métricas</div>
+    <div class="cards" id="metricsCards"></div>
+  </div>
+
+  <div style="margin-top:20px;">
+    <div class="cbox">
+      <div class="cttl">ENGAGEMENT POR PLATAFORMA</div>
+      <div style="position:relative;height:200px;"><canvas id="engChart" role="img" aria-label="Engagement por plataforma">Engagement por plataforma.</canvas></div>
+    </div>
+  </div>
+</div></div>
+
+<!-- ═══ FINANZAS ═══ -->
+
+<div class="page" id="page-finanzas"><div class="wrap">
+  <div class="stag">// finanzas con gastos hormiga</div>
+  <div class="sttl">Finanzas <span class="gc">&amp; Gastos</span></div>
+  <div class="cards" style="margin-bottom:16px;">
+    <div class="card cj"><div class="clbl">Ingreso actual</div><div class="cval" style="color:var(--jade)">S/6,002</div><div class="csub">mes</div></div>
+    <div class="card cr"><div class="clbl">Gastos fijos</div><div class="cval" style="color:var(--crimson)">S/4,817</div><div class="csub">80%</div></div>
+    <div class="card cs"><div class="clbl">Hormiga mes</div><div class="cval" style="color:var(--sky)" id="hormiTotal">S/0</div><div class="csub">gastos chicos</div></div>
+    <div class="card cg"><div class="clbl">ETF portafolio</div><div class="cval" style="color:var(--gold)" id="etfFin">S/0</div><div class="csub">Renta4</div></div>
+  </div>
+  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;">
+    <button class="btn bj" onclick="om('mGasto')">+ MOVIMIENTO</button>
+    <button class="btn bg" onclick="gp('boletas',null)">🧾 ESCANEAR BOLETA IA</button>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
+    <div class="cbox"><div class="cttl">DISTRIBUCIÓN ACTUAL</div><div style="position:relative;height:170px;"><canvas id="expNow" role="img" aria-label="Distribución gastos actual">80% fijos, 12% ahorro, 8% variables.</canvas></div></div>
+    <div class="cbox"><div class="cttl">HORMIGA POR CATEGORÍA</div><div style="position:relative;height:170px;"><canvas id="hormiChart" role="img" aria-label="Gastos hormiga por categoría">Distribución gastos hormiga.</canvas></div></div>
+  </div>
+  <div id="gastosList"></div>
+</div></div>
+
+<!-- ═══ BOLETAS IA ═══ -->
+
+<div class="page" id="page-boletas"><div class="wrap">
+  <div class="stag">// foto → IA detecta monto → se guarda en finanzas + sube a GitHub automáticamente</div>
+  <div class="sttl">Boletas con <span class="tc">IA + GitHub</span></div>
+
+  <div class="alrt alj">
+    <strong>Flujo automático:</strong> Subís foto → IA detecta monto, fecha, tipo → confirmás → se guarda en tus finanzas → sube automáticamente al repositorio GitHub en <code>boletas/YYYY-MM/</code>.
+    <br>Para activar la subida automática configurá tu token en <strong>🐙 GitHub</strong> arriba.
+  </div>
+
+  <div class="scan-zone" id="scanZone" onclick="document.getElementById('receiptFile').click()"
+    ondragover="event.preventDefault();this.classList.add('drag')"
+    ondragleave="this.classList.remove('drag')"
+    ondrop="dropReceipt(event)">
+    <div class="scan-icon">📸</div>
+    <div class="scan-txt">Tocá para subir foto de boleta</div>
+    <div class="scan-sub">JPG, PNG · supermercado, servicios, recibos de empresa</div>
+  </div>
+
+  <div class="ai-load" id="aiLoad">🐉 Analizando con IA... <span id="aiDots"></span></div>
+
+  <div class="ai-result" id="aiResult">
+    <div class="stag" style="margin-bottom:8px;">// resultado del análisis</div>
+    <div class="ar-row"><span class="ar-lbl">TIPO</span><span class="ar-val" id="arTipo">—</span></div>
+    <div class="ar-row"><span class="ar-lbl">DESCRIPCIÓN</span><span class="ar-val" id="arDesc">—</span></div>
+    <div class="ar-row"><span class="ar-lbl">MONTO</span><span class="ar-val" id="arMonto">—</span></div>
+    <div class="ar-row"><span class="ar-lbl">FECHA</span><span class="ar-val" id="arFecha">—</span></div>
+    <div class="ar-row"><span class="ar-lbl">CATEGORÍA</span><span class="ar-val" id="arCat">—</span></div>
+    <div style="display:flex;gap:7px;margin-top:11px;">
+      <button class="btn bj" onclick="confirmReceipt()">✓ CONFIRMAR Y GUARDAR</button>
+      <button class="btn br" onclick="cancelReceipt()">✕ DESCARTAR</button>
+    </div>
+  </div>
+
+  <div class="gh-status" id="ghStatus">
+    <div class="gh-step" id="ghs1"><div class="gh-step-dot"></div>Preparando imagen...</div>
+    <div class="gh-step" id="ghs2"><div class="gh-step-dot"></div>Conectando con GitHub...</div>
+    <div class="gh-step" id="ghs3"><div class="gh-step-dot"></div>Subiendo archivo...</div>
+    <div class="gh-step" id="ghs4"><div class="gh-step-dot"></div>¡Listo!</div>
+  </div>
+
+  <div style="margin-top:18px;">
+    <div class="stag" style="margin-bottom:8px;">// boletas escaneadas este mes</div>
+    <div id="boletasList"></div>
+  </div>
+</div></div>
+
+<!-- ═══ METAS ═══ -->
+
+<div class="page" id="page-metas"><div class="wrap">
+  <div class="stag">// roadmap 2026–2029</div>
+  <div class="sttl">Cronograma <span class="gc">2026–2029</span></div>
+  <div style="margin-bottom:22px;">
+    <div class="stag" style="margin-bottom:8px;">// habilidades — slider para actualizar</div>
+    <div id="skillsBlock"></div>
+  </div>
+  <div class="ms-list" id="msBlock"></div>
+</div></div>
+
+<!-- ═══ BITÁCORA ═══ -->
+
+<div class="page" id="page-bitacora"><div class="wrap">
+  <div class="stag">// diario · guardado en JSON · historial permanente</div>
+  <div class="sttl">Mi <span class="tc">Bitácora</span></div>
+  <select id="noteTag" style="margin-bottom:7px;">
+    <option value="general">General</option>
+    <option value="finanzas">Finanzas</option>
+    <option value="estudio">Estudio / IA</option>
+    <option value="habitos">Hábitos</option>
+    <option value="contenido">Contenido</option>
+    <option value="personal">Personal</option>
+  </select>
+  <textarea id="noteInput" rows="5" placeholder="¿Qué avancé? ¿Qué aprendí? ¿Cómo me re-encarrilé?" style="margin-bottom:7px;"></textarea>
+  <div style="margin-bottom:20px;"><button class="btn bj" onclick="addNote()">+ GUARDAR NOTA</button></div>
+  <div id="notesList"></div>
+</div></div>
+
+<script>
+// ═══ DRAGON CURSOR ═══
+const cur=document.getElementById('cur');
+const canvas=document.getElementById('dragonCanvas');
+const ctx2=canvas.getContext('2d');
+canvas.width=window.innerWidth;canvas.height=window.innerHeight;
+window.addEventListener('resize',()=>{canvas.width=window.innerWidth;canvas.height=window.innerHeight;});
+let mx=window.innerWidth/2,my=window.innerHeight/2;
+const pts=[];
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX;my=e.clientY;
+  cur.style.left=mx+'px';cur.style.top=my+'px';
+  if(Math.random()>.55){pts.push({x:mx+(Math.random()-.5)*18,y:my+(Math.random()-.5)*18,vx:(Math.random()-.5)*1.8,vy:-Math.random()*2.5-.5,life:1,size:Math.random()*3.5+.8,type:Math.random()>.5?'fire':'spark'});}
+});
+document.addEventListener('touchmove',e=>{const t=e.touches[0];mx=t.clientX;my=t.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';},{passive:true});
+(function animPts(){
+  ctx2.clearRect(0,0,canvas.width,canvas.height);
+  for(let i=pts.length-1;i>=0;i--){
+    const p=pts[i];p.x+=p.vx;p.y+=p.vy;p.life-=.025;p.vy+=.04;
+    if(p.life<=0){pts.splice(i,1);continue;}
+    ctx2.globalAlpha=p.life*.75;
+    if(p.type==='fire'){const g=ctx2.createRadialGradient(p.x,p.y,0,p.x,p.y,p.size*2);g.addColorStop(0,'rgba(240,168,32,.9)');g.addColorStop(1,'rgba(240,80,32,0)');ctx2.fillStyle=g;}
+    else ctx2.fillStyle=`rgba(212,168,67,${p.life})`;
+    ctx2.beginPath();ctx2.arc(p.x,p.y,p.size,0,Math.PI*2);ctx2.fill();
+  }
+  ctx2.globalAlpha=1;
+  requestAnimationFrame(animPts);
+})();
+
+// ═══ DATA ═══
+const HABITS_DEF=[
+  {id:'wake',  name:'Despertar + higiene',  time:'5:30–5:50am', freq:'Diario',      c:'jade'},
+  {id:'run',   name:'Correr / ejercicio',   time:'5:50–6:45am', freq:'Lun–Vie',     c:'gold'},
+  {id:'bkfast',name:'Desayuno saludable',   time:'6:45–7:00am', freq:'Diario',      c:'jade'},
+  {id:'icpna', name:'Clases ICPNA inglés',  time:'7:00–8:00am', freq:'Lun–Vie',     c:'sky'},
+  {id:'work',  name:'Trabajo en Ate',       time:'8:00am–5pm',  freq:'Lun–Vie',     c:'jade'},
+  {id:'anki',  name:'Anki PMP/TOEFL/GRE',  time:'Transporte',  freq:'Diario',      c:'gold'},
+  {id:'snack', name:'Snack + descanso',     time:'5:00–5:15pm', freq:'Diario',      c:'jade'},
+  {id:'gym',   name:'Gym SmartFit',         time:'6:00–7:00pm', freq:'Lun/Mar/Jue', c:'crimson'},
+  {id:'pole',  name:'Pole Dance',           time:'8:00–10:00pm',freq:'Miércoles',   c:'crimson'},
+  {id:'pool',  name:'Piscina Videna',       time:'9:00–10:00pm',freq:'Viernes',     c:'sky'},
+  {id:'dance', name:'Baile / Folklore',     time:'3:00–8:00pm', freq:'Sáb/Dom',     c:'gold'},
+  {id:'toefl', name:'Estudio TOEFL',        time:'1:00–2:00pm', freq:'Diario',      c:'sky'},
+  {id:'pmp',   name:'Estudio PMP',          time:'10:00–11am',  freq:'Sáb/Dom',     c:'gold'},
+  {id:'gre',   name:'Estudio GRE',          time:'1:00–2:30pm', freq:'Lun/Mié/Jue', c:'violet'},
+  {id:'maestria',name:'Maestría ESAN',      time:'7:00–10:30pm',freq:'Lun/Jue',     c:'violet'},
+  {id:'read',  name:'Leer 10 páginas',      time:'5:15–5:30pm', freq:'Diario',      c:'jade'},
+  {id:'meal',  name:'Meal prep',            time:'10am–12pm',   freq:'Dom/Lun',     c:'jade'},
+  {id:'misa',  name:'Misa',                time:'8:00–9:00am', freq:'Domingo',     c:'gold'},
+  {id:'plan',  name:'Planificar semana',    time:'10:00–11pm',  freq:'Semanal',     c:'gold'},
+  {id:'etfinv',name:'Aporte ETF',           time:'Día 25',      freq:'Día 25',      c:'sky'},
+  {id:'sleep', name:'Dormir 7.5h',          time:'10:30–11pm',  freq:'Diario',      c:'jade'},
+];
+const MS_DEF=[
+  {id:'m0',when:'ABR–MAY 2026',title:'Base del sistema activa',status:'now',pct:15,desc:'Make.com + Buffer · Notion offline · Pagos automáticos · Renta4 abierta · CS50P iniciado'},
+  {id:'m1',when:'JUN–JUL 2026',title:'ETF + 1K seguidores LinkedIn',status:'soon',pct:0,desc:'S/15K en VOO (DCA) · Google AI Essentials · 1,000 seg. LinkedIn'},
+  {id:'m2',when:'AGO–OCT 2026',title:'Maestría finalizada + charla',status:'soon',pct:0,desc:'Maestría ESAN · S/1,740 liberados · Primera charla pagada'},
+  {id:'m3',when:'NOV–DIC 2026',title:'Airbnb activo + S/10K/mes',status:'soon',pct:0,desc:'Depa La Victoria Airbnb → S/2,600/mes · 5K seguidores'},
+  {id:'m4',when:'2027 Q1–Q2',title:'Primer ingreso remoto USD',status:'soon',pct:0,desc:'Upwork/Torre.co · Inglés B2 · ETF S/30K+'},
+  {id:'m5',when:'2027 Q3–2028',title:'Remoto full-time + hacienda',status:'soon',pct:0,desc:'$2,500–4,000 USD/mes · Starlink · 10K seguidores'},
+  {id:'m6',when:'2028–2029',title:'Libertad total + hacienda',status:'soon',pct:0,desc:'Hacienda + Starlink · ETF S/80K+ · Airbnb doble · Italia/China · Shakira 🐱'},
+];
+const SK_DEF=[
+  {id:'python',name:'Python / programación',base:45,c:'var(--jade)'},
+  {id:'ingles',name:'Inglés (nivel actual)',base:55,c:'var(--gold)'},
+  {id:'ia',    name:'IA / ML conceptos',   base:25,c:'var(--sky)'},
+  {id:'make',  name:'Make.com / automatiz',base:35,c:'var(--violet)'},
+  {id:'pm',    name:'Gestión proyectos PM',base:80,c:'var(--jade)'},
+  {id:'mec',   name:'Ing. mecatrónica',    base:85,c:'var(--gold)'},
+  {id:'cont',  name:'Contenido / redes',   base:30,c:'var(--crimson)'},
+  {id:'fin',   name:'Finanzas/inversiones',base:40,c:'var(--sky)'},
+];
+const PLANNER=[
+  {t:'5:30',d:['🌅 Despertar','🌅 Despertar','🌅 Despertar','🌅 Despertar','🌅 Despertar','😴 +1h','⛪ Misa'],c:['pw','pw','pw','pw','pw','ps','pg']},
+  {t:'6:00',d:['🏃 Correr','🏃 Correr','🏃 Correr','🏃 Correr','🏃 Correr','🏃 Gym','🏃 Gym'],c:['pw','pw','pw','pw','pw','pw','pw']},
+  {t:'7:00',d:['📚 ICPNA','📚 ICPNA','📚 ICPNA','📚 ICPNA','📚 ICPNA','📖 TOEFL','📅 Planif.'],c:['pv','pv','pv','pv','pv','pv','pb-batch']},
+  {t:'8:00',d:['⚙️ WORK','⚙️ WORK','⚙️ WORK','⚙️ WORK','⚙️ WORK','📖 PMP','📖 GRE'],c:['pw','pw','pw','pw','pw','pg','pv']},
+  {t:'12:00',d:['📹 Grabar','📹 Grabar','📹 Grabar','📹 Grabar','📹 Grabar','🍽 Almuerzo','🍽 Almuerzo'],c:['pw','pw','pw','pw','pw','ps','ps']},
+  {t:'1:00',d:['📖 TOEFL','📖 TOEFL','📖 PMP','📖 GRE','📖 PMP','🇮🇹 Italiano','📋 Negocio'],c:['pv','pv','pg','pv','pg','pw','pb2']},
+  {t:'5:00',d:['🍎 Snack','🍎 Snack','🍎 Snack','🍎 Snack','🍎 Snack','💃 Folklore','💃 Folklore'],c:['pw','pw','pw','pw','pw','pg','pg']},
+  {t:'6:00',d:['🏋️ Gym','🏋️ Gym','🏋️ Gym→','🏋️ Gym','🎨 Editar','💃 Baile','💃 Baile'],c:['pr','pr','pr','pr','pg','pg','pg']},
+  {t:'7:00',d:['🎓 Maestría','📖 GRE','🎪 Pole','🎓 Maestría','📖 GRE','💻 Influencer','pe'],c:['pv','pv','pr','pv','pv','pb2','pe']},
+  {t:'9:00',d:['🎓 Maestría','📖 PMP','🎪 Pole','🎓 Maestría','🏊 Piscina','📖 PMP','🀄 Chino'],c:['pv','pg','pr','pv','ps','pg','pb2']},
+  {t:'10:00',d:['📋 Plan','💻 Influencer','pe','📋 Plan','🏊 Piscina','📚 Leer','📚 Leer'],c:['pg','pb2','pe','pg','ps','pw','pw']},
+];
+const DAYS=['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
+const CC={jade:'var(--jade)',gold:'var(--gold)',crimson:'var(--crimson)',sky:'var(--sky)',violet:'var(--violet)',fire:'var(--fire)'};
+const TC={general:'var(--m2)',finanzas:'var(--gold)',estudio:'var(--jade)',habitos:'var(--crimson)',contenido:'var(--violet)',personal:'var(--sky)'};
+const PLAT_C={linkedin:'p-li',instagram:'p-ig',tiktok:'p-tt',youtube:'p-yt',multi:'p-li'};
+const PLAT_NAMES={linkedin:'LinkedIn',instagram:'Instagram',tiktok:'TikTok',youtube:'YouTube',multi:'Multi'};
+
+// ═══ 365 DAILY PHRASES (sampled — full set generated deterministically by day) ═══
+const PHRASE_BANK=[
+  {cat:'Matemática',text:'E = mc² no es solo física — es la comprensión de que energía y materia son intercambiables. Tu identidad y tu realidad también.',author:'Einstein (reinterpretado)'},
+  {cat:'Filosofía',text:'No puedes bañarte dos veces en el mismo río, porque nuevas aguas fluyen siempre. Tú tampoco eres la misma persona que empezó este camino.',author:'Heráclito'},
+  {cat:'Autorrealización',text:'La persona que piensas que eres limita lo que puedes llegar a ser. Reescribe la historia.',author:'Carol Dweck'},
+  {cat:'Matemática',text:'El interés compuesto es la octava maravilla del mundo. Quien lo entiende, lo gana. Quien no, lo paga.',author:'Albert Einstein'},
+  {cat:'Estoicismo',text:'No es lo que te sucede lo que te define, sino cómo respondes. El espacio entre estímulo y respuesta es tu libertad.',author:'Viktor Frankl'},
+  {cat:'Lógica',text:'Si A implica B, y B implica libertad, entonces perseguir A no es opcional — es lógica de vida.',author:'Corina OS'},
+  {cat:'Física',text:'Un objeto en movimiento tiende a permanecer en movimiento. La inercia aplica tanto a la física como a los hábitos.',author:'Newton'},
+  {cat:'Autorrealización',text:'Maslow no puso la seguridad financiera en la cima porque la cima es donde se auto-actualiza quien ya resolvió la base.',author:'A. Maslow'},
+  {cat:'Filosofía',text:'El conocimiento es la única riqueza que, al compartirse, se multiplica.',author:'Francis Bacon'},
+  {cat:'Matemática',text:'P(éxito) = esfuerzo × tiempo × dirección. Cambiar cualquier variable cambia el resultado.',author:'Corina OS'},
+  {cat:'Estoicismo',text:'Divide el día en lo que controlas y lo que no. Enfoca toda tu energía en lo primero.',author:'Marco Aurelio'},
+  {cat:'Ciencias',text:'La entropía siempre aumenta en sistemas cerrados. Pero vos no sos un sistema cerrado — podés agregar energía.',author:'2° Ley Termodinámica'},
+  {cat:'Autorrealización',text:'El propósito no se encuentra — se construye, un pequeño acto diario a la vez.',author:'Viktor Frankl'},
+  {cat:'Filosofía',text:'Primero domina el arte del silencio, luego aprende a hablar. La mayoría lo hace al revés.',author:'Pitágoras'},
+  {cat:'Matemática',text:'Fibonacci encontró belleza en la secuencia que generamos cuando cada paso suma los dos anteriores. Así es el crecimiento real.',author:'Leonardo Fibonacci'},
+  {cat:'Física',text:'La luz viaja sola, pero no por eso avanza menos. La solidaridad es elegida, no necesaria.',author:'Corina OS'},
+  {cat:'Autorrealización',text:'No necesitás permiso de nadie para empezar. La única autorización que cuenta es la tuya.',author:'Brené Brown'},
+  {cat:'Estoicismo',text:'Memento mori: recuerda que morirás. No como amenaza — como liberación de lo trivial.',author:'Séneca'},
+  {cat:'Matemática',text:'La probabilidad de un evento improbable aumenta con cada intento. No abandonés antes de que la curva cambie.',author:'Corina OS'},
+  {cat:'Filosofía',text:'La diferencia entre quien eres y quien podés ser es lo que hacés en el presente.',author:'Aristóteles (reinterpretado)'},
+  {cat:'Ciencias',text:'La resistencia no es el enemigo del músculo — es el estímulo que lo hace crecer. En finanzas, en vida, aplica igual.',author:'Fisiología del ejercicio'},
+  {cat:'Autorrealización',text:'La hacienda tranquila que imaginás no es un destino — es el resultado natural de quien te estás convirtiendo hoy.',author:'Corina OS'},
+  {cat:'Matemática',text:'Convergencia: una serie puede tener infinitos términos y aún sumar un valor finito. Tus pequeños esfuerzos no son ruido — son convergencia.',author:'Análisis matemático'},
+  {cat:'Filosofía',text:'Virtud no es lo que haces cuando alguien mira. Es lo que haces cuando nadie lo sabrá nunca.',author:'Kant'},
+  {cat:'Estoicismo',text:'El tiempo perdido no puede recuperarse. Pero el tiempo que resta puede invertirse con mayor sabiduría.',author:'Marco Aurelio'},
+  {cat:'Física',text:'La gravedad no discrimina. Actúa igual sobre el hierro y el oro. La constancia tampoco discrimina — actúa igual sobre quien se esfuerza.',author:'Corina OS'},
+  {cat:'Autorrealización',text:'Tus neuronas se reconfiguran con cada nuevo hábito. Literalmente, te estás reconstruyendo célula a célula.',author:'Neuroplasticidad'},
+  {cat:'Matemática',text:'El número áureo φ ≈ 1.618 aparece en la naturaleza, en el arte, en la arquitectura. La belleza tiene estructura matemática.',author:'Luca Pacioli'},
+  {cat:'Filosofía',text:'El sufrimiento no es lo que te hace fuerte — es cómo eliges procesar ese sufrimiento lo que te transforma.',author:'Nietzsche (reinterpretado)'},
+  {cat:'Ciencias',text:'Los sistemas complejos emergen de reglas simples repetidas. Tu vida compleja emerge de tus hábitos simples de hoy.',author:'Teoría de sistemas'},
+];
+
+// Deterministic phrase by day
+function getPhraseForDate(d){
+  const start=new Date('2026-01-01');
+  const diff=Math.floor((d-start)/(1000*60*60*24));
+  const idx=((diff%PHRASE_BANK.length)+PHRASE_BANK.length)%PHRASE_BANK.length;
+  return PHRASE_BANK[idx];
+}
+
+// ═══ STATE ═══
+let ST={
+  habits:{},habitsDef:null,
+  milestones:{},skills:{},
+  etf:{total:0,aportes:[]},
+  gastos:[],boletas:[],
+  notes:[],plannerDone:{},
+  posts:[],
+  phrases:{},// {dateKey: myPhrase}
+  ghConfig:{token:'',user:'',repo:''},
+  lastUpdated:null,
+  currentReceipt:null,
+  currentReceiptB64:null
+};
+let postFilter='all';
+
+function LS(k,v){try{localStorage.setItem('corina_v4_'+k,JSON.stringify(v));}catch(e){}}
+function LG(k,d){try{const v=localStorage.getItem('corina_v4_'+k);return v?JSON.parse(v):d;}catch(e){return d;}}
+function loadAll(){const s=LG('state',null);if(s)ST={...ST,...s};}
+function saveAll(){
+  ST.lastUpdated=new Date().toLocaleString('es-PE',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+  LS('state',ST);
+  const el=document.getElementById('lastUpd');if(el&&ST.lastUpdated)el.textContent=ST.lastUpdated;
+  const b=document.getElementById('saveBtn');
+  if(b){const o=b.innerHTML;b.innerHTML='✓ GUARDADO';setTimeout(()=>b.innerHTML=o,2000);}
+}
+setInterval(saveAll,15000);
+
+// ═══ NAV ═══
+function gp(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  if(btn)btn.classList.add('active');
+  else document.querySelectorAll('.nav-tab').forEach(t=>{
+    if(t.getAttribute('onclick')&&t.getAttribute('onclick').includes("'"+id+"'"))t.classList.add('active');
+  });
+}
+
+// ═══ MODAL ═══
+function om(id){
+  document.getElementById(id).classList.add('open');
+  if(id==='mSync')refreshJSON();
+}
+function cm(id){document.getElementById(id).classList.remove('open');}
+document.querySelectorAll('.mo').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');}));
+
+// ═══ JSON ═══
+function getJSON(){return JSON.stringify(ST,null,2);}
+function refreshJSON(){document.getElementById('jsonPrev').value=getJSON();}
+function exportJSON(){
+  saveAll();
+  const b=new Blob([getJSON()],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(b);
+  a.download='corina_os_'+new Date().toISOString().slice(0,7)+'.json';
+  a.click();
+}
+function copyJSON(){
+  navigator.clipboard.writeText(getJSON()).then(()=>{
+    const btn=document.querySelector('#mSync .btn:nth-child(3)');
+    if(btn){const o=btn.textContent;btn.textContent='✓';setTimeout(()=>btn.textContent=o,2000);}
+  });
+}
+function importJSON(e){
+  const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=ev=>{
+    try{const d=JSON.parse(ev.target.result);ST={...ST,...d};saveAll();renderAll();cm('mSync');alert('✅ Datos importados.');}
+    catch(err){alert('Error al leer el JSON.');}
+  };
+  r.readAsText(f);
+}
+
+// ═══ GITHUB CONFIG ═══
+function saveGHConfig(){
+  ST.ghConfig={
+    token:document.getElementById('ghToken').value.trim(),
+    user:document.getElementById('ghUser').value.trim(),
+    repo:document.getElementById('ghRepo').value.trim()
+  };
+  saveAll();cm('mGH');
+  alert('✅ GitHub configurado. Las boletas se subirán automáticamente.');
+}
+
+// ═══ GITHUB UPLOAD ═══
+async function uploadToGitHub(filename, content, isBase64=false){
+  const {token,user,repo}=ST.ghConfig;
+  if(!token||!user||!repo)return {ok:false,msg:'GitHub no configurado'};
+  const url=`https://api.github.com/repos/${user}/${repo}/contents/${filename}`;
+  const body={
+    message:`Boleta auto-upload: ${filename}`,
+    content: isBase64?content:btoa(unescape(encodeURIComponent(content)))
+  };
+  try{
+    const r=await fetch(url,{method:'PUT',headers:{'Authorization':`token ${token}`,'Content-Type':'application/json'},body:JSON.stringify(body)});
+    return {ok:r.ok,status:r.status};
+  }catch(e){return {ok:false,msg:e.message};}
+}
+
+function setGHStep(stepId, state){
+  const el=document.getElementById(stepId);
+  if(!el)return;
+  el.className='gh-step '+state;
+}
+
+// ═══ DAILY PHRASE ═══
+function renderPhrase(container, showForm=true){
+  if(!container)return;
+  const today=new Date();
+  const dateKey=today.toISOString().slice(0,10);
+  const phrase=getPhraseForDate(today);
+  const myPhrase=ST.phrases?.[dateKey]||'';
+  const dayNum=Math.floor((today-new Date('2026-01-01'))/(1000*60*60*24))+1;
+  container.innerHTML=`
+    <div class="phrase-card">
+      <div class="phrase-day">Día ${dayNum} de 2026 · ${today.toLocaleDateString('es-PE',{weekday:'long',day:'numeric',month:'long'})}</div>
+      <span class="phrase-cat">${phrase.cat}</span>
+      <div class="phrase-text">"${phrase.text}"</div>
+      <div class="phrase-author">— ${phrase.author}</div>
+      ${showForm?`<div class="phrase-own">
+        <div style="font-family:var(--fm);font-size:8px;color:var(--muted);margin-bottom:5px;letter-spacing:.15em;">TU FRASE DE HOY</div>
+        <input class="phrase-own-input" type="text" id="myPhraseInput_${dateKey}" placeholder="Escribí tu frase o pensamiento de hoy..." value="${myPhrase}" oninput="saveMyPhrase('${dateKey}',this.value)">
+      </div>`:''}
+    </div>`;
+}
+
+function renderPhrasePage(){
+  renderPhrase(document.getElementById('phraseMain'), true);
+  // Saved phrases
+  const sp=document.getElementById('savedPhrases');
+  const phrases=Object.entries(ST.phrases||{}).filter(([,v])=>v.trim()).sort((a,b)=>b[0].localeCompare(a[0]));
+  sp.innerHTML=phrases.length?phrases.slice(0,20).map(([date,text])=>`
+    <div class="logi" style="border-left-color:var(--gold)">
+      <div><div class="lt">${text}</div><div class="lm">Mi frase</div></div>
+      <div class="ld">${date}</div>
+    </div>`).join('')
+    :'<div style="font-family:var(--fm);font-size:9px;color:var(--muted);">Aún no guardaste frases propias. Escribí tu primera hoy.</div>';
+}
+
+function saveMyPhrase(dateKey, val){
+  if(!ST.phrases)ST.phrases={};
+  ST.phrases[dateKey]=val;
+  saveAll();
+}
+
+// ═══ HABITS ═══
+function getHDef(){return ST.habitsDef||HABITS_DEF;}
+function renderHabits(){
+  const g=document.getElementById('habitGrid');if(!g)return;
+  g.innerHTML='';
+  const defs=getHDef();
+  let done=0;
+  defs.forEach(h=>{
+    if(!ST.habits[h.id])ST.habits[h.id]={today:false,week:[0,0,0,0,0,0,0],streak:0,comments:{}};
+    const hd=ST.habits[h.id];
+    if(hd.today)done++;
+    const col=CC[h.c]||'var(--jade)';
+    const todayKey=new Date().toISOString().slice(0,10);
+    const comment=hd.comments?.[todayKey]||'';
+    const d=document.createElement('div');d.className='hcard';
+    d.innerHTML=`<div class="hcard-top">
       <div class="hchk${hd.today?' on':''}" onclick="togH('${h.id}')"></div>
-      <div class="hcard-name">${h.name}</div>
+      <div style="flex:1"><div class="hcard-name">${h.name}</div><div class="hcard-time">${h.time||''}</div></div>
       <div class="hcard-freq">${h.freq}</div>
     </div>
+    ${comment?`<div class="hcard-comment">💬 ${comment}</div>`:''}
     <div class="wdots">${hd.week.map((v,i)=>`<div class="wdot${v?' on':''}" style="${v?`background:${col};border-color:${col};box-shadow:0 0 4px ${col}`:''}" onclick="togD('${h.id}',${i})"></div>`).join('')}</div>
-    <div class="streak">Racha: <span>${hd.streak}</span> días · L M X J V S D</div>`;
-                g.appendChild(d);
-            });
-            document.getElementById('habitHome').textContent = done + '/' + HD.length;
-        }
+    <div class="hstreak">Racha: <span>${hd.streak}</span> días · L M X J V S D</div>
+    <div class="hcard-btns">
+      <div class="hbtn" onclick="openHComment('${h.id}')">💬 ${comment?'Editar nota':'Agregar nota'}</div>
+      <div class="hbtn" onclick="editHabit('${h.id}')">✏️ Editar</div>
+    </div>`;
+    g.appendChild(d);
+  });
+  document.getElementById('habitHome').textContent=done+'/'+defs.length;
+}
 
-        function togH(id) {
-            if (!ST.habits[id]) ST.habits[id] = {
-                today: false,
-                week: [0, 0, 0, 0, 0, 0, 0],
-                streak: 0
-            };
-            ST.habits[id].today = !ST.habits[id].today;
-            renderHabits();
-            saveAll();
-        }
+function togH(id){
+  if(!ST.habits[id])ST.habits[id]={today:false,week:[0,0,0,0,0,0,0],streak:0,comments:{}};
+  ST.habits[id].today=!ST.habits[id].today;
+  renderHabits();saveAll();
+}
+function togD(id,i){
+  if(!ST.habits[id])ST.habits[id]={today:false,week:[0,0,0,0,0,0,0],streak:0,comments:{}};
+  ST.habits[id].week[i]=ST.habits[id].week[i]?0:1;
+  let s=0;const w=ST.habits[id].week;
+  for(let j=w.length-1;j>=0;j--){if(w[j])s++;else break;}
+  ST.habits[id].streak=s;renderHabits();saveAll();
+}
+function resetDay(){
+  if(!confirm('¿Nuevo día? Los checks de hoy se guardan en el historial semanal.'))return;
+  getHDef().forEach(h=>{
+    if(!ST.habits[h.id])ST.habits[h.id]={today:false,week:[0,0,0,0,0,0,0],streak:0,comments:{}};
+    const w=ST.habits[h.id].week;w.shift();w.push(ST.habits[h.id].today?1:0);
+    ST.habits[h.id].today=false;
+  });
+  renderHabits();saveAll();
+}
+function openHComment(id){
+  const hd=ST.habits[id];
+  const h=getHDef().find(x=>x.id===id);
+  const todayKey=new Date().toISOString().slice(0,10);
+  document.getElementById('mHCTtl').textContent='💬 '+( h?.name||id);
+  document.getElementById('mHCSub').textContent='Nota del '+todayKey;
+  document.getElementById('hCommentInput').value=hd?.comments?.[todayKey]||'';
+  document.getElementById('hCommentId').value=id;
+  om('mHComment');
+}
+function saveHComment(){
+  const id=document.getElementById('hCommentId').value;
+  const txt=document.getElementById('hCommentInput').value.trim();
+  const todayKey=new Date().toISOString().slice(0,10);
+  if(!ST.habits[id])ST.habits[id]={today:false,week:[0,0,0,0,0,0,0],streak:0,comments:{}};
+  if(!ST.habits[id].comments)ST.habits[id].comments={};
+  ST.habits[id].comments[todayKey]=txt;
+  cm('mHComment');renderHabits();saveAll();
+}
+function openAddHabit(){
+  document.getElementById('hName').value='';
+  document.getElementById('hTime').value='';
+  document.getElementById('hEditId').value='';
+  document.getElementById('mHabitTtl').textContent='+ Agregar hábito';
+  document.getElementById('delHBtn').style.display='none';
+  om('mHabit');
+}
+function editHabit(id){
+  const h=getHDef().find(x=>x.id===id);if(!h)return;
+  document.getElementById('hName').value=h.name;
+  document.getElementById('hTime').value=h.time||'';
+  document.getElementById('hFreq').value=h.freq;
+  document.getElementById('hColor').value=h.c;
+  document.getElementById('hEditId').value=id;
+  document.getElementById('mHabitTtl').textContent='✏️ Editar hábito';
+  document.getElementById('delHBtn').style.display='inline-block';
+  om('mHabit');
+}
+function saveHabit(){
+  const name=document.getElementById('hName').value.trim();if(!name)return;
+  const id=document.getElementById('hEditId').value;
+  let defs=[...getHDef()];
+  const hab={id:id||'h_'+Date.now(),name,time:document.getElementById('hTime').value,freq:document.getElementById('hFreq').value,c:document.getElementById('hColor').value};
+  if(id){const idx=defs.findIndex(x=>x.id===id);if(idx>=0)defs[idx]=hab;}else defs.push(hab);
+  ST.habitsDef=defs;cm('mHabit');renderHabits();saveAll();
+}
+function deleteHabit(){
+  const id=document.getElementById('hEditId').value;
+  if(!id||!confirm('¿Eliminar este hábito?'))return;
+  ST.habitsDef=getHDef().filter(x=>x.id!==id);
+  cm('mHabit');renderHabits();saveAll();
+}
 
-        function togD(id, i) {
-            if (!ST.habits[id]) ST.habits[id] = {
-                today: false,
-                week: [0, 0, 0, 0, 0, 0, 0],
-                streak: 0
-            };
-            ST.habits[id].week[i] = ST.habits[id].week[i] ? 0 : 1;
-            let s = 0;
-            const w = ST.habits[id].week;
-            for (let j = w.length - 1; j >= 0; j--) {
-                if (w[j]) s++;
-                else break;
-            }
-            ST.habits[id].streak = s;
-            renderHabits();
-            saveAll();
-        }
+// ═══ PLANNER ═══
+function renderPlanner(){
+  const g=document.getElementById('plannerGrid');if(!g)return;
+  let html='<div class="ph">HORA</div>';
+  DAYS.forEach(d=>html+=`<div class="ph">${d}</div>`);
+  PLANNER.forEach((row,ri)=>{
+    html+=`<div class="pt">${row.t}</div>`;
+    row.d.forEach((txt,di)=>{
+      const key=`${ri}_${di}`;
+      const done=ST.plannerDone?.[key];
+      const cl=row.c[di]||'pe';
+      html+=`<div class="pb ${cl}${done?' done':''}" onclick="togPlanner('${key}')">${txt}</div>`;
+    });
+  });
+  g.innerHTML=html;
+}
+function togPlanner(k){
+  if(!ST.plannerDone)ST.plannerDone={};
+  ST.plannerDone[k]=!ST.plannerDone[k];
+  renderPlanner();saveAll();
+}
 
-        function resetDay() {
-            if (!confirm('¿Confirmar nuevo día? Los hábitos de hoy se guardan en el historial semanal.')) return;
-            HD.forEach(h => {
-                if (!ST.habits[h.id]) ST.habits[h.id] = {
-                    today: false,
-                    week: [0, 0, 0, 0, 0, 0, 0],
-                    streak: 0
-                };
-                const w = ST.habits[h.id].week;
-                w.shift();
-                w.push(ST.habits[h.id].today ? 1 : 0);
-                ST.habits[h.id].today = false;
-            });
-            renderHabits();
-            saveAll();
-        }
+// ═══ CONTENT PLANNER ═══
+function filterPosts(filter, btn){
+  postFilter=filter;
+  document.querySelectorAll('#postFilters .btn').forEach(b=>{b.style.borderColor='var(--border)';b.style.color='var(--m2)';});
+  if(btn){btn.style.borderColor='var(--jade)';btn.style.color='var(--jade)';}
+  renderPosts();
+}
+function renderPosts(){
+  const g=document.getElementById('postsGrid');if(!g)return;
+  const posts=ST.posts||[];
+  const filtered=postFilter==='all'?posts:posts.filter(p=>p.status===postFilter);
+  g.innerHTML=filtered.length?filtered.map(p=>`
+    <div class="cp-card">
+      <div class="cp-head">
+        <div class="cp-platform">
+          <span class="pbadge ${PLAT_C[p.plat]||'p-li'}">${PLAT_NAMES[p.plat]||p.plat}</span>
+        </div>
+        <span class="cp-status ${p.status==='published'?'st-pub':p.status==='scheduled'?'st-sched':'st-draft'}">${p.status==='published'?'PUBLICADO':p.status==='scheduled'?'PROGRAMADO':'BORRADOR'}</span>
+      </div>
+      <div class="cp-body">
+        <div class="cp-title">${p.title||'Sin título'}</div>
+        ${p.hook?`<div class="cp-desc" style="color:var(--g2);font-style:italic;">"${p.hook}"</div>`:''}
+        <div class="cp-desc">${p.desc||''}</div>
+        ${p.date?`<div class="cp-date">📅 ${p.date}</div>`:''}
+        ${p.link?`<div style="font-family:var(--fm);font-size:8px;margin-bottom:4px;"><a href="${p.link}" target="_blank" style="color:var(--jade);">🔗 Ver publicación</a></div>`:''}
+        ${(p.likes||p.comments||p.shares||p.reach)?`<div class="cp-metrics">
+          ${p.likes?`<div class="cp-metric"><div class="cp-metric-val">${p.likes}</div><div class="cp-metric-lbl">❤ Likes</div></div>`:''}
+          ${p.comments?`<div class="cp-metric"><div class="cp-metric-val">${p.comments}</div><div class="cp-metric-lbl">💬 Coment.</div></div>`:''}
+          ${p.shares?`<div class="cp-metric"><div class="cp-metric-val">${p.shares}</div><div class="cp-metric-lbl">↗ Shares</div></div>`:''}
+          ${p.reach?`<div class="cp-metric"><div class="cp-metric-val">${p.reach}</div><div class="cp-metric-lbl">👁 Alcance</div></div>`:''}
+        </div>`:''}
+        <div class="cp-btns">
+          <button class="btn bj" style="font-size:7px;padding:5px 10px;" onclick="editPost('${p.id}')">✏️ Editar</button>
+          ${p.status!=='published'?`<button class="btn bg" style="font-size:7px;padding:5px 10px;" onclick="markPublished('${p.id}')">✓ Publicar</button>`:''}
+        </div>
+      </div>
+    </div>`).join('')
+    :'<div style="font-family:var(--fm);font-size:9px;color:var(--muted);grid-column:span 3;">Sin posts en esta categoría. Creá uno nuevo.</div>';
 
-        // MILESTONES
-        function renderMilestones() {
-            const bl = document.getElementById('msBlock');
-            bl.innerHTML = '';
-            MD.forEach((ms, i) => {
-                const d = ST.milestones[ms.id] || {
-                    status: ms.status,
-                    pct: ms.pct
-                };
-                const st = d.status,
-                    pct = d.pct,
-                    isLast = i === MD.length - 1;
-                const div = document.createElement('div');
-                div.className = 'ms-row';
-                div.innerHTML = `<div class="ms-when">${ms.when}</div>
+  // Metrics summary
+  const published=posts.filter(p=>p.status==='published');
+  const totalLikes=published.reduce((a,p)=>a+(parseInt(p.likes)||0),0);
+  const totalReach=published.reduce((a,p)=>a+(parseInt(p.reach)||0),0);
+  const mc=document.getElementById('metricsCards');
+  if(mc)mc.innerHTML=`
+    <div class="card cj"><div class="clbl">Posts totales</div><div class="cval" style="color:var(--jade)">${posts.length}</div><div class="csub">${published.length} publicados</div></div>
+    <div class="card cg"><div class="clbl">Likes totales</div><div class="cval" style="color:var(--gold)">${totalLikes.toLocaleString()}</div><div class="csub">publicados</div></div>
+    <div class="card cs"><div class="clbl">Alcance total</div><div class="cval" style="color:var(--sky)">${totalReach.toLocaleString()}</div><div class="csub">personas</div></div>
+    <div class="card cr"><div class="clbl">Borradores</div><div class="cval" style="color:var(--crimson)">${posts.filter(p=>p.status==='draft').length}</div><div class="csub">por publicar</div></div>`;
+
+  document.getElementById('postsHome').textContent=published.length;
+  buildEngChart();
+}
+function openAddPost(){
+  ['pTitle','pDesc','pHook','pHashtags','pLink'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  ['pLikes','pComments','pShares','pReach'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('pEditId').value='';
+  document.getElementById('pStatus').value='draft';
+  document.getElementById('mPostTtl').textContent='+ Nueva publicación';
+  document.getElementById('delPostBtn').style.display='none';
+  om('mPost');
+}
+function editPost(id){
+  const p=(ST.posts||[]).find(x=>x.id===id);if(!p)return;
+  document.getElementById('pTitle').value=p.title||'';
+  document.getElementById('pDesc').value=p.desc||'';
+  document.getElementById('pHook').value=p.hook||'';
+  document.getElementById('pHashtags').value=p.hashtags||'';
+  document.getElementById('pDate').value=p.date||'';
+  document.getElementById('pStatus').value=p.status||'draft';
+  document.getElementById('pLink').value=p.link||'';
+  document.getElementById('pLikes').value=p.likes||'';
+  document.getElementById('pComments').value=p.comments||'';
+  document.getElementById('pShares').value=p.shares||'';
+  document.getElementById('pReach').value=p.reach||'';
+  document.getElementById('pPlat').value=p.plat||'linkedin';
+  document.getElementById('pEditId').value=id;
+  document.getElementById('mPostTtl').textContent='✏️ Editar publicación';
+  document.getElementById('delPostBtn').style.display='inline-block';
+  om('mPost');
+}
+function savePost(){
+  const id=document.getElementById('pEditId').value;
+  const post={
+    id:id||'p_'+Date.now(),
+    plat:document.getElementById('pPlat').value,
+    title:document.getElementById('pTitle').value,
+    desc:document.getElementById('pDesc').value,
+    hook:document.getElementById('pHook').value,
+    hashtags:document.getElementById('pHashtags').value,
+    date:document.getElementById('pDate').value,
+    status:document.getElementById('pStatus').value,
+    link:document.getElementById('pLink').value,
+    likes:document.getElementById('pLikes').value,
+    comments:document.getElementById('pComments').value,
+    shares:document.getElementById('pShares').value,
+    reach:document.getElementById('pReach').value,
+    createdAt:id?undefined:new Date().toISOString().slice(0,10)
+  };
+  if(!ST.posts)ST.posts=[];
+  if(id){const idx=ST.posts.findIndex(x=>x.id===id);if(idx>=0)ST.posts[idx]={...ST.posts[idx],...post};}
+  else ST.posts.unshift(post);
+  cm('mPost');renderPosts();saveAll();
+}
+function deletePost(){
+  const id=document.getElementById('pEditId').value;
+  if(!id||!confirm('¿Eliminar este post?'))return;
+  ST.posts=(ST.posts||[]).filter(x=>x.id!==id);
+  cm('mPost');renderPosts();saveAll();
+}
+function markPublished(id){
+  const p=(ST.posts||[]).find(x=>x.id===id);if(!p)return;
+  p.status='published';renderPosts();saveAll();
+}
+
+// ═══ FINANZAS ═══
+function saveGasto(){
+  const tipo=document.getElementById('gTipo').value;
+  const cat=document.getElementById('gCat').value;
+  const desc=document.getElementById('gDesc').value.trim();
+  const monto=parseFloat(document.getElementById('gMonto').value);
+  const fecha=document.getElementById('gFecha').value||new Date().toLocaleDateString('es-PE');
+  if(!monto||monto<=0||!desc)return;
+  if(!ST.gastos)ST.gastos=[];
+  ST.gastos.unshift({id:'g_'+Date.now(),tipo,cat,desc,monto,fecha});
+  cm('mGasto');
+  ['gDesc','gMonto'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  renderGastos();renderHormiChart();saveAll();
+}
+function renderGastos(){
+  const d=document.getElementById('gastosList');if(!d)return;
+  const gs=ST.gastos||[];
+  const hormiga=gs.filter(g=>g.tipo==='egreso').reduce((a,g)=>a+g.monto,0);
+  const el=document.getElementById('hormiTotal');if(el)el.textContent='S/'+hormiga.toFixed(0);
+  const etfT=ST.etf?.total||0;
+  ['etfHome','etfFin'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent='S/'+etfT.toLocaleString('es-PE');});
+  d.innerHTML=gs.length?gs.slice(0,30).map(g=>`
+    <div class="logi" style="border-left-color:${g.tipo==='ingreso'?'var(--jade)':'var(--crimson)'}">
+      <div><div class="lt">${g.desc}${g.source==='boleta_ia'?' 🤖':''}</div><div class="lm">${g.cat.toUpperCase()} · ${g.fecha}</div></div>
+      <div class="ld" style="color:${g.tipo==='ingreso'?'var(--jade)':'var(--crimson)'}">
+        ${g.tipo==='ingreso'?'+':'−'}S/${g.monto.toFixed(2)}</div></div>`).join('')
+    :'<div style="font-family:var(--fm);font-size:9px;color:var(--muted);">Sin movimientos.</div>';
+}
+
+// ═══ AI RECEIPT + GITHUB UPLOAD ═══
+async function analyzeReceiptWithAI(imageDataUrl){
+  document.getElementById('aiLoad').style.display='block';
+  document.getElementById('aiResult').style.display='none';
+  document.getElementById('ghStatus').style.display='none';
+  let dots=0;
+  const di=setInterval(()=>{dots=(dots+1)%4;const e=document.getElementById('aiDots');if(e)e.textContent='.'.repeat(dots+1);},400);
+  try{
+    const base64=imageDataUrl.split(',')[1];
+    const mediaType=imageDataUrl.split(';')[0].split(':')[1];
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',max_tokens:800,
+        messages:[{role:'user',content:[
+          {type:'image',source:{type:'base64',media_type:mediaType,data:base64}},
+          {type:'text',text:`Analizá esta boleta/recibo. Respondé SOLO con JSON exacto:
+{"tipo":"egreso|ingreso","descripcion":"nombre empresa/comercio","monto":número,"fecha":"DD/MM/YYYY","categoria":"hormiga|comida|transporte|salud|entretenimiento|educacion|ropa|servicios|trabajo|pasivo|otro","confianza":"alta|media|baja"}`}
+        ]}]
+      })
+    });
+    clearInterval(di);
+    const data=await resp.json();
+    const txt=data.content?.[0]?.text||'{}';
+    let result;
+    try{result=JSON.parse(txt.replace(/```json|```/g,'').trim());}
+    catch(e){result={tipo:'egreso',descripcion:'No detectado',monto:0,fecha:'—',categoria:'otro',confianza:'baja'};}
+    ST.currentReceipt=result;
+    ST.currentReceiptB64=base64;
+    document.getElementById('arTipo').textContent=result.tipo==='ingreso'?'✅ INGRESO':'❌ EGRESO';
+    document.getElementById('arTipo').style.color=result.tipo==='ingreso'?'var(--jade)':'var(--crimson)';
+    document.getElementById('arDesc').textContent=result.descripcion||'—';
+    document.getElementById('arMonto').textContent='S/'+(parseFloat(result.monto)||0).toFixed(2);
+    document.getElementById('arMonto').style.color=result.tipo==='ingreso'?'var(--jade)':'var(--crimson)';
+    document.getElementById('arFecha').textContent=result.fecha||'—';
+    document.getElementById('arCat').textContent=(result.categoria||'otro').toUpperCase()+' · confianza: '+(result.confianza||'—');
+    document.getElementById('aiLoad').style.display='none';
+    document.getElementById('aiResult').style.display='block';
+  }catch(err){
+    clearInterval(di);
+    document.getElementById('aiLoad').style.display='none';
+    alert('Error al analizar. Verificá tu conexión.');
+    console.error(err);
+  }
+}
+
+async function confirmReceipt(){
+  if(!ST.currentReceipt)return;
+  const r=ST.currentReceipt;
+  if(!ST.gastos)ST.gastos=[];
+  if(!ST.boletas)ST.boletas=[];
+  const entry={id:'b_'+Date.now(),tipo:r.tipo,cat:r.categoria,desc:r.descripcion,monto:parseFloat(r.monto||0),fecha:r.fecha,source:'boleta_ia',scan_date:new Date().toLocaleDateString('es-PE')};
+  ST.gastos.unshift(entry);
+  ST.boletas.unshift(entry);
+  document.getElementById('aiResult').style.display='none';
+
+  // Upload to GitHub
+  const {token,user,repo}=ST.ghConfig;
+  if(token&&user&&repo&&ST.currentReceiptB64){
+    const ghDiv=document.getElementById('ghStatus');
+    ghDiv.style.display='block';
+    ['ghs1','ghs2','ghs3','ghs4'].forEach(id=>setGHStep(id,''));
+    setGHStep('ghs1','active');
+    await new Promise(r=>setTimeout(r,400));
+    setGHStep('ghs1','done');setGHStep('ghs2','active');
+    const month=new Date().toISOString().slice(0,7);
+    const filename=`boletas/${month}/${Date.now()}_${(r.descripcion||'boleta').replace(/[^a-zA-Z0-9]/g,'_')}.jpg`;
+    await new Promise(r=>setTimeout(r,400));
+    setGHStep('ghs2','done');setGHStep('ghs3','active');
+    const result=await uploadToGitHub(filename, ST.currentReceiptB64, true);
+    await new Promise(r=>setTimeout(r,400));
+    if(result.ok){
+      setGHStep('ghs3','done');setGHStep('ghs4','done');
+      entry.github_path=filename;
+      setTimeout(()=>{ghDiv.style.display='none';},3000);
+    }else{
+      setGHStep('ghs3','error');
+      document.getElementById('ghs4').textContent='Guardado localmente (GitHub no disponible)';
+      setGHStep('ghs4','active');
+      setTimeout(()=>{ghDiv.style.display='none';},4000);
+    }
+  }
+
+  ST.currentReceipt=null;ST.currentReceiptB64=null;
+  document.getElementById('receiptFile').value='';
+  renderGastos();renderBoletasList();renderHormiChart();saveAll();
+}
+
+function cancelReceipt(){
+  ST.currentReceipt=null;ST.currentReceiptB64=null;
+  document.getElementById('aiResult').style.display='none';
+  document.getElementById('receiptFile').value='';
+}
+function dropReceipt(e){
+  e.preventDefault();
+  document.getElementById('scanZone').classList.remove('drag');
+  const file=e.dataTransfer.files[0];
+  if(file&&file.type.startsWith('image/')){const reader=new FileReader();reader.onload=ev=>analyzeReceiptWithAI(ev.target.result);reader.readAsDataURL(file);}
+}
+function scanReceipt(e){
+  const file=e.target.files[0];
+  if(file){const reader=new FileReader();reader.onload=ev=>analyzeReceiptWithAI(ev.target.result);reader.readAsDataURL(file);}
+}
+function renderBoletasList(){
+  const d=document.getElementById('boletasList');if(!d)return;
+  const bs=ST.boletas||[];
+  d.innerHTML=bs.length?bs.slice(0,15).map(b=>`
+    <div class="logi" style="border-left-color:${b.tipo==='ingreso'?'var(--jade)':'var(--crimson)'}">
+      <div><div class="lt">${b.desc} 🤖${b.github_path?` <span style="font-family:var(--fm);font-size:7.5px;color:var(--jade);">📁 GitHub</span>`:''}</div>
+      <div class="lm">${b.cat?.toUpperCase()||'—'} · ${b.scan_date||b.fecha}</div></div>
+      <div class="ld" style="color:${b.tipo==='ingreso'?'var(--jade)':'var(--crimson)'}">
+        ${b.tipo==='ingreso'?'+':'−'}S/${b.monto.toFixed(2)}</div></div>`).join('')
+    :'<div style="font-family:var(--fm);font-size:9px;color:var(--muted);">Sin boletas escaneadas.</div>';
+}
+
+// ═══ MILESTONES ═══
+function renderMilestones(){
+  const bl=document.getElementById('msBlock');if(!bl)return;
+  bl.innerHTML='';
+  MS_DEF.forEach((ms,i)=>{
+    const d=ST.milestones?.[ms.id]||{status:ms.status,pct:ms.pct};
+    const st=d.status,pct=d.pct,isLast=i===MS_DEF.length-1;
+    const div=document.createElement('div');div.className='ms-row';
+    div.innerHTML=`<div class="ms-when">${ms.when}</div>
       <div class="ms-spine">
         <div class="ms-node ${st}" onclick="cycMs('${ms.id}')"></div>
         ${!isLast?`<div class="ms-wire ${st==='done'?'done':'soon'}"></div>`:''}
       </div>
       <div class="ms-body ${st}" onclick="cycMs('${ms.id}')">
-        <div class="ms-head">
-          <div class="ms-ttl">${ms.title}</div>
+        <div class="ms-head"><div class="ms-ttl">${ms.title}</div>
           <span class="ms-badge ${st==='done'?'bd-done':st==='now'?'bd-now':'bd-soon'}">${st==='done'?'HECHO':st==='now'?'EN CURSO':'PENDIENTE'}</span>
         </div>
         <div class="ms-desc">${ms.desc}</div>
         <div class="pct-row">
           <div class="pct-bar"><div class="pct-fill" id="pf_${ms.id}" style="width:${pct}%"></div></div>
-          <input type="range" min="0" max="100" value="${pct}" style="width:60px;height:2px;cursor:pointer;accent-color:var(--gold);" oninput="updP('${ms.id}',this.value)" onclick="event.stopPropagation()">
+          <input type="range" min="0" max="100" value="${pct}" style="width:55px;height:2px;cursor:pointer;accent-color:var(--gold);" oninput="updP('${ms.id}',this.value)" onclick="event.stopPropagation()">
           <div class="pct-lbl" id="pl_${ms.id}">${pct}%</div>
         </div>
       </div>`;
-                bl.appendChild(div);
-            });
-        }
+    bl.appendChild(div);
+  });
+}
+function cycMs(id){
+  const d=ST.milestones?.[id]||{status:'soon',pct:0};
+  d.status=d.status==='soon'?'now':d.status==='now'?'done':'soon';
+  if(!ST.milestones)ST.milestones={};
+  ST.milestones[id]=d;renderMilestones();saveAll();
+}
+function updP(id,val){
+  if(!ST.milestones)ST.milestones={};
+  if(!ST.milestones[id])ST.milestones[id]={status:'soon',pct:0};
+  ST.milestones[id].pct=parseInt(val);
+  const pf=document.getElementById('pf_'+id),pl=document.getElementById('pl_'+id);
+  if(pf)pf.style.width=val+'%';if(pl)pl.textContent=val+'%';
+  saveAll();
+}
 
-        function cycMs(id) {
-            const d = ST.milestones[id] || {
-                status: 'soon',
-                pct: 0
-            };
-            d.status = d.status === 'soon' ? 'now' : d.status === 'now' ? 'done' : 'soon';
-            ST.milestones[id] = d;
-            renderMilestones();
-            saveAll();
-        }
-
-        function updP(id, val) {
-            if (!ST.milestones[id]) ST.milestones[id] = {
-                status: 'soon',
-                pct: 0
-            };
-            ST.milestones[id].pct = parseInt(val);
-            const pf = document.getElementById('pf_' + id);
-            const pl = document.getElementById('pl_' + id);
-            if (pf) pf.style.width = val + '%';
-            if (pl) pl.textContent = val + '%';
-            saveAll();
-        }
-
-        // SKILLS
-        function renderSkills() {
-            const bl = document.getElementById('skillsBlock');
-            bl.innerHTML = '';
-            SKD.forEach(sk => {
-                const val = ST.skills[sk.id] !== undefined ? ST.skills[sk.id] : sk.base;
-                const r = document.createElement('div');
-                r.className = 'prow';
-                r.innerHTML = `<div class="pname">${sk.name}</div>
+// ═══ SKILLS ═══
+function renderSkills(){
+  const bl=document.getElementById('skillsBlock');if(!bl)return;
+  bl.innerHTML='';
+  SK_DEF.forEach(sk=>{
+    const val=ST.skills?.[sk.id]!==undefined?ST.skills[sk.id]:sk.base;
+    const r=document.createElement('div');r.className='prow';
+    r.innerHTML=`<div class="pname">${sk.name}</div>
       <div class="ptrack"><div class="pfill" id="sf_${sk.id}" style="width:${val}%;background:${sk.c}"></div></div>
-      <input type="range" min="0" max="100" value="${val}" style="width:60px;height:2px;cursor:pointer;accent-color:var(--gold);" oninput="updSk('${sk.id}',this.value)">
+      <input type="range" min="0" max="100" value="${val}" style="width:55px;height:2px;cursor:pointer;accent-color:var(--gold);" oninput="updSk('${sk.id}',this.value)">
       <div class="ppct" id="sp_${sk.id}">${val}%</div>`;
-                bl.appendChild(r);
-            });
-        }
+    bl.appendChild(r);
+  });
+}
+function updSk(id,val){
+  if(!ST.skills)ST.skills={};ST.skills[id]=parseInt(val);
+  const sf=document.getElementById('sf_'+id),sp=document.getElementById('sp_'+id);
+  if(sf)sf.style.width=val+'%';if(sp)sp.textContent=val+'%';saveAll();
+}
 
-        function updSk(id, val) {
-            ST.skills[id] = parseInt(val);
-            const sf = document.getElementById('sf_' + id);
-            const sp = document.getElementById('sp_' + id);
-            if (sf) sf.style.width = val + '%';
-            if (sp) sp.textContent = val + '%';
-            saveAll();
-        }
-
-        // ETF
-        function renderEtf() {
-            const t = ST.etf?.total || 0,
-                meta = 15000,
-                pct = Math.min(100, Math.round((t / meta) * 100));
-            ['etfHome', 'etfFin'].forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.textContent = 'S/' + t.toLocaleString('es-PE');
-            });
-            const c = document.getElementById('etfCards');
-            if (c) c.innerHTML = `
-    <div class="card cg"><div class="clbl">Total invertido</div><div class="cval" style="color:var(--gold)">S/${t.toLocaleString('es-PE')}</div><div class="csub">Meta S/15K · ${pct}%</div></div>
-    <div class="card ct"><div class="clbl">Aportes DCA</div><div class="cval" style="color:var(--teal)">${(ST.etf?.aportes||[]).length}</div><div class="csub">cuotas registradas</div></div>
-    <div class="card cs"><div class="clbl">Proyectado año 5</div><div class="cval" style="color:var(--sky)">S/65K</div><div class="csub">S/600/mes · 10%</div></div>`;
-            const h = document.getElementById('etfHist');
-            if (h) {
-                const ap = ST.etf?.aportes || [];
-                h.innerHTML = ap.length ? ap.slice().reverse().map(a => `
-      <div class="logi"><div><div class="lt">Aporte ETF VOO</div><div class="lm">${a.note||'VOO'}</div></div>
-      <div style="text-align:right"><div style="color:var(--gold);font-family:var(--fu);font-size:14px;">S/${a.amount.toLocaleString('es-PE')}</div><div class="ld">${a.date}</div></div></div>`).join('') :
-                    '<div style="font-family:var(--fm);font-size:9px;color:var(--muted);">Sin aportes aún. Registrá tu primera cuota el día 25.</div>';
-            }
-        }
-
-        function addEtf() {
-            const amt = document.getElementById('etfAmt'),
-                note = document.getElementById('etfNote');
-            const v = parseFloat(amt.value);
-            if (!v || v <= 0) return;
-            if (!ST.etf) ST.etf = {
-                total: 0,
-                aportes: []
-            };
-            if (!ST.etf.aportes) ST.etf.aportes = [];
-            ST.etf.total = (ST.etf.total || 0) + v;
-            ST.etf.aportes.push({
-                date: new Date().toLocaleDateString('es-PE'),
-                amount: v,
-                note: note.value || 'VOO'
-            });
-            amt.value = '';
-            note.value = '';
-            renderEtf();
-            saveAll();
-        }
-
-        // NOTES
-        function addNote() {
-            const txt = document.getElementById('noteInput').value.trim();
-            if (!txt) return;
-            const tag = document.getElementById('noteTag').value;
-            if (!ST.notes) ST.notes = [];
-            ST.notes.unshift({
-                date: new Date().toLocaleDateString('es-PE', {
-                    day: 'numeric',
-                    month: 'short',
-                    year: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                }),
-                text: txt,
-                tag
-            });
-            if (ST.notes.length > 100) ST.notes.pop();
-            document.getElementById('noteInput').value = '';
-            renderNotes();
-            saveAll();
-        }
-
-        function renderNotes() {
-            const d = document.getElementById('notesList');
-            if (!d) return;
-            const n = ST.notes || [];
-            d.innerHTML = n.length ? n.map(nt => `
-    <div class="logi" style="border-left-color:${TC[nt.tag]||'var(--teal)'}">
+// ═══ NOTES ═══
+function addNote(){
+  const txt=document.getElementById('noteInput').value.trim();if(!txt)return;
+  const tag=document.getElementById('noteTag').value;
+  if(!ST.notes)ST.notes=[];
+  ST.notes.unshift({date:new Date().toLocaleString('es-PE',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}),text:txt,tag});
+  if(ST.notes.length>100)ST.notes.pop();
+  document.getElementById('noteInput').value='';
+  renderNotes();saveAll();
+}
+function renderNotes(){
+  const d=document.getElementById('notesList');if(!d)return;
+  const n=ST.notes||[];
+  d.innerHTML=n.length?n.map(nt=>`
+    <div class="logi" style="border-left-color:${TC[nt.tag]||'var(--jade)'}">
       <div><div class="lt">${nt.text}</div><div class="lm" style="color:${TC[nt.tag]||'var(--m2)'}">${nt.tag.toUpperCase()}</div></div>
-      <div class="ld">${nt.date}</div></div>`).join('') :
-                '<div style="font-family:var(--fm);font-size:9px;color:var(--muted);">Sin notas aún.</div>';
-        }
+      <div class="ld">${nt.date}</div></div>`).join('')
+    :'<div style="font-family:var(--fm);font-size:9px;color:var(--muted);">Sin notas.</div>';
+}
 
-        // RESUMEN
-        function renderResumen() {
-            const doneMs = MD.filter(m => (ST.milestones[m.id] || {
-                status: m.status
-            }).status === 'done').length;
-            const nowMs = MD.filter(m => (ST.milestones[m.id] || {
-                status: m.status
-            }).status === 'now').length;
-            const doneH = HD.filter(h => ST.habits[h.id]?.today).length;
-            const totalStr = HD.reduce((a, h) => a + (ST.habits[h.id]?.streak || 0), 0);
-            const etfT = ST.etf?.total || 0;
-            const fs = document.getElementById('finSum');
-            if (fs) fs.innerHTML = `
-    <div class="sbox"><div class="sbox-ttl">Ingreso mensual</div><div class="sbox-val" style="color:var(--teal)">S/6,002</div><div class="sbox-sub">Meta S/25K · 24%</div><div class="sbox-bar"><div class="sbox-fill" style="width:24%;background:var(--teal)"></div></div></div>
-    <div class="sbox"><div class="sbox-ttl">Patrimonio</div><div class="sbox-val" style="color:var(--gold)">S/115K+</div><div class="sbox-sub">Caja+inmuebles+ETF</div><div class="sbox-bar"><div class="sbox-fill" style="width:35%;background:var(--gold)"></div></div></div>
-    <div class="sbox"><div class="sbox-ttl">ETF portafolio</div><div class="sbox-val" style="color:var(--sky)">S/${etfT.toLocaleString('es-PE')}</div><div class="sbox-sub">Meta S/15K · ${Math.min(100,Math.round((etfT/15000)*100))}%</div><div class="sbox-bar"><div class="sbox-fill" style="width:${Math.min(100,Math.round((etfT/15000)*100))}%;background:var(--sky)"></div></div></div>
-    <div class="sbox"><div class="sbox-ttl">Metas completadas</div><div class="sbox-val" style="color:var(--rose)">${doneMs}/${MD.length}</div><div class="sbox-sub">${nowMs} en curso</div><div class="sbox-bar"><div class="sbox-fill" style="width:${Math.round((doneMs/MD.length)*100)}%;background:var(--rose)"></div></div></div>
-    <div class="sbox"><div class="sbox-ttl">Hábitos hoy</div><div class="sbox-val" style="color:var(--lav)">${doneH}/${HD.length}</div><div class="sbox-sub">${Math.round((doneH/HD.length)*100)}% completado</div><div class="sbox-bar"><div class="sbox-fill" style="width:${Math.round((doneH/HD.length)*100)}%;background:var(--lav)"></div></div></div>
-    <div class="sbox"><div class="sbox-ttl">Racha acumulada</div><div class="sbox-val" style="color:var(--teal)">${totalStr}</div><div class="sbox-sub">días totales hábitos</div><div class="sbox-bar"><div class="sbox-fill" style="width:${Math.min(100,totalStr)}%;background:var(--teal)"></div></div></div>`;
-            const as = document.getElementById('actSum');
-            if (as) {
-                const dn = HD.filter(h => ST.habits[h.id]?.today);
-                const pn = HD.filter(h => !ST.habits[h.id]?.today);
-                as.innerHTML = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-      <div><div style="font-family:var(--fm);font-size:7px;letter-spacing:.2em;color:var(--teal);margin-bottom:7px;">COMPLETADOS HOY ✓</div>
-        ${dn.length?dn.map(h=>`<div class="logi" style="border-left-color:var(--teal);margin-bottom:3px;"><div class="lt">${h.name}</div><div class="lm">${h.freq}</div></div>`).join(''):'<div style="font-family:var(--fm);font-size:9px;color:var(--muted);">Ir a ⚡ Hábitos para marcar</div>'}
-      </div>
-      <div><div style="font-family:var(--fm);font-size:7px;letter-spacing:.2em;color:var(--rose);margin-bottom:7px;">PENDIENTES HOY</div>
-        ${pn.slice(0,6).map(h=>`<div class="logi" style="border-left-color:var(--border);margin-bottom:3px;opacity:.45;"><div class="lt">${h.name}</div><div class="lm">${h.freq}</div></div>`).join('')}
-        ${pn.length>6?`<div style="font-family:var(--fm);font-size:8px;color:var(--muted);margin-top:3px;">+${pn.length-6} más...</div>`:''}
-      </div></div>`;
-            }
-            const mp = document.getElementById('metasSum');
-            if (mp) mp.innerHTML = MD.map(ms => {
-                const d = ST.milestones[ms.id] || {
-                    status: ms.status,
-                    pct: ms.pct
-                };
-                return `<div class="prow"><div class="pname" style="min-width:190px;">${ms.title}</div>
-      <div class="ptrack"><div class="pfill" style="width:${d.pct}%;background:${d.status==='done'?'var(--teal)':d.status==='now'?'var(--gold)':'var(--border)'}"></div></div>
-      <div class="ppct">${d.pct}%</div></div>`;
-            }).join('');
-            buildPatri();
-        }
+// ═══ CHARTS ═══
+const CB={};
+function bc(id,cfg){if(CB[id])return;const el=document.getElementById(id);if(!el)return;try{CB[id]=new Chart(el,cfg);}catch(e){}}
+function buildCharts(){
+  const dOpt={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}};
+  bc('expNow',{type:'doughnut',data:{labels:['Fijos','Ahorro','Variables'],datasets:[{data:[80,12,8],backgroundColor:['rgba(224,64,96,.7)','rgba(64,144,232,.7)','rgba(176,126,248,.6)'],borderColor:['#e04060','#4090e8','#9060e0'],borderWidth:1.5}]},options:dOpt});
+}
+function renderHormiChart(){
+  const el=document.getElementById('hormiChart');if(!el)return;
+  const gs=ST.gastos||[];const cats={};
+  gs.filter(g=>g.tipo==='egreso').forEach(g=>{cats[g.cat]=(cats[g.cat]||0)+g.monto;});
+  const labels=Object.keys(cats);const data=Object.values(cats);
+  const colors=['#d4a843','#2ecfa0','#e04060','#4090e8','#9060e0','#f06820','#60b020','#e89040'];
+  if(CB.hormi){CB.hormi.data.labels=labels;CB.hormi.data.datasets[0].data=data;CB.hormi.data.datasets[0].backgroundColor=colors.slice(0,labels.length);CB.hormi.update();return;}
+  CB.hormi=new Chart(el,{type:'doughnut',data:{labels,datasets:[{data,backgroundColor:colors.slice(0,labels.length),borderColor:colors.map(c=>c+'80'),borderWidth:1}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}});
+}
+function buildEngChart(){
+  if(CB.eng)return;
+  const el=document.getElementById('engChart');if(!el)return;
+  const posts=ST.posts||[];
+  const plats={linkedin:0,instagram:0,tiktok:0,youtube:0};
+  posts.filter(p=>p.status==='published').forEach(p=>{
+    const base=p.plat==='multi'?'linkedin':p.plat;
+    if(plats[base]!==undefined)plats[base]+=(parseInt(p.likes)||0)+(parseInt(p.comments)||0)+(parseInt(p.shares)||0);
+  });
+  CB.eng=new Chart(el,{type:'bar',data:{
+    labels:['LinkedIn','Instagram','TikTok','YouTube'],
+    datasets:[{label:'Engagement',data:Object.values(plats),backgroundColor:['rgba(0,119,181,.6)','rgba(225,48,108,.6)','rgba(105,201,208,.6)','rgba(255,0,0,.5)'],borderColor:['#0077b5','#e1306c','#69c9d0','#ff0000'],borderWidth:1}]
+  },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{color:'#404870'},grid:{color:'rgba(30,37,56,.5)'},border:{color:'transparent'}},x:{ticks:{color:'#8090b8'},grid:{display:false}}}}});
+}
 
-        // CHARTS
-        const CB = {};
+// ═══ DATE & INIT ═══
+const liveDate=document.getElementById('liveDate');
+if(liveDate)liveDate.textContent=new Date().toLocaleDateString('es-PE',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
 
-        function bc(id, cfg) {
-            if (CB[id]) return;
-            const el = document.getElementById(id);
-            if (!el) return;
-            CB[id] = new Chart(el, cfg);
-        }
+function renderAll(){
+  renderPhrase(document.getElementById('homePhrase'),false);
+  renderHabits();
+  renderPlanner();
+  renderMilestones();
+  renderSkills();
+  renderGastos();
+  renderBoletasList();
+  renderNotes();
+  renderPosts();
+  renderPhrasePage();
+  buildCharts();
+  renderHormiChart();
+  const el=document.getElementById('lastUpd');if(el&&ST.lastUpdated)el.textContent=ST.lastUpdated;
+  // Prefill GitHub fields if saved
+  if(ST.ghConfig?.token)document.getElementById('ghToken').value=ST.ghConfig.token;
+  if(ST.ghConfig?.user)document.getElementById('ghUser').value=ST.ghConfig.user;
+  if(ST.ghConfig?.repo)document.getElementById('ghRepo').value=ST.ghConfig.repo;
+}
 
-        function buildCharts() {
-            // Income projection
-            bc('incChart', {
-                type: 'line',
-                data: {
-                    labels: ['Hoy', 'M3', 'M6', 'M9', 'M12', 'M18', 'M24', 'M30', 'M36'],
-                    datasets: [{
-                            data: [6002, 6300, 7500, 10000, 13000, 17000, 22000, 25000, 28000],
-                            borderColor: '#e8c46a',
-                            backgroundColor: 'rgba(232,196,106,.05)',
-                            tension: .4,
-                            fill: true,
-                            pointRadius: 3,
-                            borderWidth: 2
-                        },
-                        {
-                            data: [0, 0, 0, 2600, 3500, 5500, 8000, 10000, 12000],
-                            borderColor: '#2de8c4',
-                            backgroundColor: 'rgba(45,232,196,.03)',
-                            tension: .4,
-                            fill: true,
-                            pointRadius: 2,
-                            borderWidth: 1.5,
-                            borderDash: [4, 3]
-                        },
-                        {
-                            data: [0, 0, 0, 0, 1500, 6500, 9500, 11000, 14000],
-                            borderColor: '#b07ef8',
-                            backgroundColor: 'rgba(176,126,248,.03)',
-                            tension: .4,
-                            fill: true,
-                            pointRadius: 2,
-                            borderWidth: 1.5,
-                            borderDash: [2, 4]
-                        },
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            ticks: {
-                                callback: v => 'S/' + Math.round(v / 1000) + 'K',
-                                color: '#4a5a7a'
-                            },
-                            grid: {
-                                color: 'rgba(30,37,53,.5)'
-                            },
-                            border: {
-                                color: 'transparent'
-                            }
-                        },
-                        x: {
-                            ticks: {
-                                color: '#4a5a7a'
-                            },
-                            grid: {
-                                display: false
-                            }
-                        }
-                    }
-                }
-            });
-            // ETF
-            const yr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-
-            function g(ini, m, r, y) {
-                let v = ini;
-                const rt = r / 12 / 100;
-                for (let i = 0; i < y * 12; i++) v = v * (1 + rt) + m;
-                return Math.round(v);
-            }
-            bc('etfChart', {
-                type: 'line',
-                data: {
-                    labels: yr.map(y => 'Año ' + y),
-                    datasets: [{
-                            data: yr.map(y => g(15000, 600, 10, y)),
-                            borderColor: '#2de8c4',
-                            backgroundColor: 'rgba(45,232,196,.04)',
-                            tension: .4,
-                            fill: true,
-                            pointRadius: 3
-                        },
-                        {
-                            data: yr.map(y => g(15000, 600, 5, y)),
-                            borderColor: '#e8c46a',
-                            backgroundColor: 'rgba(232,196,106,.03)',
-                            tension: .4,
-                            fill: false,
-                            pointRadius: 2,
-                            borderDash: [4, 3]
-                        },
-                        {
-                            data: yr.map(y => 15000 + 600 * 12 * y),
-                            borderColor: '#2a3448',
-                            tension: 0,
-                            fill: false,
-                            pointRadius: 2,
-                            borderDash: [2, 5]
-                        },
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            ticks: {
-                                callback: v => 'S/' + Math.round(v / 1000) + 'K',
-                                color: '#4a5a7a'
-                            },
-                            grid: {
-                                color: 'rgba(30,37,53,.5)'
-                            },
-                            border: {
-                                color: 'transparent'
-                            }
-                        },
-                        x: {
-                            ticks: {
-                                color: '#4a5a7a'
-                            },
-                            grid: {
-                                display: false
-                            }
-                        }
-                    }
-                }
-            });
-            // Donut charts
-            const do1 = document.getElementById('expNow');
-            const do2 = document.getElementById('expMeta');
-            const dOpt = {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                }
-            };
-            if (do1 && !CB.expNow) {
-                CB.expNow = new Chart(do1, {
-                    type: 'doughnut',
-                    data: {
-                        labels: ['Gastos fijos', 'Ahorro', 'Variables'],
-                        datasets: [{
-                            data: [80, 12, 8],
-                            backgroundColor: ['rgba(240,90,126,.7)', 'rgba(90,180,245,.7)', 'rgba(176,126,248,.6)'],
-                            borderColor: ['#f05a7e', '#5ab4f5', '#b07ef8'],
-                            borderWidth: 1.5
-                        }]
-                    },
-                    options: dOpt
-                });
-            }
-            if (do2 && !CB.expMeta) {
-                CB.expMeta = new Chart(do2, {
-                    type: 'doughnut',
-                    data: {
-                        labels: ['Gastos', 'Ahorro/Inv.', 'Variables'],
-                        datasets: [{
-                            data: [50, 35, 15],
-                            backgroundColor: ['rgba(45,232,196,.2)', 'rgba(232,196,106,.7)', 'rgba(176,126,248,.5)'],
-                            borderColor: ['#2de8c4', '#e8c46a', '#b07ef8'],
-                            borderWidth: 1.5
-                        }]
-                    },
-                    options: dOpt
-                });
-            }
-        }
-
-        function buildPatri() {
-            if (CB.patri) return;
-            const el = document.getElementById('patriChart');
-            if (!el) return;
-            CB.patri = new Chart(el, {
-                type: 'bar',
-                data: {
-                    labels: ['Caja/Agora', 'Inmuebles', 'Intangibles', 'ETF', 'Dólares'],
-                    datasets: [{
-                        data: [65705, 290000, 82558, ST.etf?.total || 0, 1360],
-                        backgroundColor: ['rgba(45,232,196,.5)', 'rgba(232,196,106,.5)', 'rgba(176,126,248,.5)', 'rgba(90,180,245,.5)', 'rgba(240,90,126,.5)'],
-                        borderColor: ['#2de8c4', '#e8c46a', '#b07ef8', '#5ab4f5', '#f05a7e'],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            ticks: {
-                                callback: v => 'S/' + Math.round(v / 1000) + 'K',
-                                color: '#4a5a7a'
-                            },
-                            grid: {
-                                color: 'rgba(30,37,53,.4)'
-                            },
-                            border: {
-                                color: 'transparent'
-                            }
-                        },
-                        x: {
-                            ticks: {
-                                color: '#8898b8'
-                            },
-                            grid: {
-                                display: false
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        function renderAll() {
-            renderHabits();
-            renderMilestones();
-            renderSkills();
-            renderEtf();
-            renderNotes();
-            buildCharts();
-        }
-
-        // INIT
-        loadAll();
-        renderAll();
-    </script>
+loadAll();
+renderAll();
+</script>
 
 </body>
-
-</html>5
+</html>
