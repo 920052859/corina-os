@@ -3,449 +3,1214 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Corina OS v5 🐉</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Nunito:wght@300;400;500;600;700;800&family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet">
+<title>Corina OS v6 🐉</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
-<link rel="stylesheet" href="styles.css">
+<style>
+:root{
+  --bg:#06080e;--s1:#0b0d16;--s2:#10131e;--s3:#161928;
+  --border:#1e2438;--b2:#2a3050;
+  --gold:#d4a843;--g2:#f0cc80;--gd:rgba(212,168,67,.12);
+  --jade:#2ecfa0;--jd:rgba(46,207,160,.1);
+  --crimson:#e04060;--cd:rgba(224,64,96,.1);
+  --sky:#4090e8;--skd:rgba(64,144,232,.1);
+  --violet:#9060e0;--vd:rgba(144,96,224,.1);
+  --fire:#f06820;
+  --text:#e0e8f8;--muted:#7080a0;--m2:#a8b8d0;
+  --fh:'Nunito',sans-serif;--fm:'Fira Code',monospace;--fd:'Cinzel',serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--fh);overflow-x:hidden;cursor:none;}
+::-webkit-scrollbar{width:3px;}::-webkit-scrollbar-thumb{background:var(--gold);}
+#cur{position:fixed;pointer-events:none;z-index:9999;font-size:22px;transform:translate(-50%,-60%);filter:drop-shadow(0 0 8px var(--gold));}
+#dragonCanvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
+
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(6,8,14,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+.nav-inner{max-width:1400px;margin:0 auto;padding:0 12px;display:flex;align-items:center;min-height:52px;}
+.nav-logo{font-family:var(--fd);font-size:12px;font-weight:700;color:var(--gold)!important;margin-right:12px;white-space:nowrap;letter-spacing:.06em;flex-shrink:0;}
+.nav-logo span{color:var(--jade)!important;}
+.nav-tabs{display:flex;gap:0;flex:1;overflow-x:auto;scrollbar-width:none;}
+.nav-tabs::-webkit-scrollbar{display:none;}
+.nav-tab{font-family:var(--fm);font-size:8px!important;letter-spacing:.07em;text-transform:uppercase;padding:13px 10px;cursor:pointer;color:#a0b0c8!important;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap;background:transparent;border-top:none;border-left:none;border-right:none;}
+.nav-tab:hover{color:#fff!important;}
+.nav-tab.active{color:var(--gold)!important;border-bottom-color:var(--gold);}
+.nav-acts{display:flex;gap:4px;margin-left:auto;flex-shrink:0;align-items:center;}
+.nb{font-family:var(--fm);font-size:7.5px!important;letter-spacing:.08em;text-transform:uppercase;padding:5px 9px;background:transparent;border:1px solid;cursor:pointer;transition:all .2s;white-space:nowrap;}
+.nb-j{border-color:var(--jade);color:var(--jade)!important;}.nb-j:hover{background:var(--jd);}
+.nb-g{border-color:var(--gold);color:var(--gold)!important;}.nb-g:hover{background:var(--gd);}
+.sdot{width:5px;height:5px;border-radius:50%;background:var(--jade);display:inline-block;margin-right:4px;animation:bl 2s infinite;}
+@keyframes bl{0%,100%{opacity:1;}50%{opacity:.1;}}
+
+/* MODALS */
+.mo{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:500;display:none;align-items:center;justify-content:center;backdrop-filter:blur(8px);}
+.mo.open{display:flex;}
+.modal{background:var(--s1);border:1px solid var(--b2);padding:22px;width:92%;max-width:580px;position:relative;max-height:90vh;overflow-y:auto;}
+.modal-xl{max-width:800px;}
+.mttl{font-family:var(--fd);font-size:14px;font-weight:700;color:var(--gold)!important;margin-bottom:4px;letter-spacing:.04em;}
+.msub{font-family:var(--fm);font-size:9px!important;color:var(--m2)!important;margin-bottom:13px;line-height:1.6;}
+.mx{position:absolute;top:11px;right:13px;cursor:pointer;color:var(--muted)!important;font-size:16px;background:none;border:none;font-family:var(--fh);}
+.mx:hover{color:var(--text)!important;}
+
+/* PAGES */
+.page{display:none;padding-top:52px;min-height:100vh;position:relative;z-index:1;}
+.page.active{display:block;}
+.wrap{max-width:1400px;margin:0 auto;padding:24px 14px 80px;}
+
+/* TYPOGRAPHY */
+.stag{font-family:var(--fm);font-size:9px!important;letter-spacing:.26em;text-transform:uppercase;color:var(--m2)!important;margin-bottom:5px;}
+.sttl{font-family:var(--fd);font-size:clamp(18px,3vw,26px);font-weight:700;line-height:1.05;letter-spacing:.02em;margin-bottom:13px;color:var(--text)!important;}
+.tc{color:var(--jade)!important;}.gc{color:var(--gold)!important;}.rc{color:var(--crimson)!important;}
+
+/* CARDS */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;}
+.card{background:var(--s1);border:1px solid var(--border);padding:13px;position:relative;overflow:hidden;transition:all .2s;}
+.card:hover{border-color:var(--b2);transform:translateY(-1px);}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.cj::before{background:var(--jade);}.cg::before{background:var(--gold);}.cr::before{background:var(--crimson);}.cs::before{background:var(--sky);}.cv::before{background:var(--violet);}
+.clbl{font-family:var(--fm);font-size:8.5px!important;letter-spacing:.1em;text-transform:uppercase;color:var(--m2)!important;margin-bottom:6px;}
+.cval{font-family:var(--fd);font-size:19px;font-weight:700;line-height:1;margin-bottom:3px;}
+.csub{font-family:var(--fm);font-size:8px!important;color:var(--m2)!important;}
+
+/* LIFE BAR */
+.lbar-wrap{margin-bottom:20px;}
+.lbar-hd{display:flex;justify-content:space-between;font-family:var(--fm);font-size:9px!important;color:var(--m2)!important;margin-bottom:6px;}
+.lbar-hd span:last-child{color:var(--gold)!important;}
+.lbar{height:5px;background:var(--s3);border-radius:3px;position:relative;margin-bottom:5px;}
+.lbar-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--jade),var(--gold));width:32.1%;position:relative;}
+.lbar-fill::after{content:'🐉 25.7';position:absolute;right:-6px;top:-16px;font-family:var(--fm);font-size:8px;color:var(--gold)!important;white-space:nowrap;}
+.lbar-marks{display:flex;justify-content:space-between;font-family:var(--fm);font-size:7.5px!important;color:var(--m2)!important;}
+.last-upd{font-family:var(--fm);font-size:9px!important;color:var(--m2)!important;display:flex;align-items:center;gap:5px;margin-bottom:16px;}
+.upd-dot{width:6px;height:6px;border-radius:50%;background:var(--jade);box-shadow:0 0 7px var(--jade);}
+
+/* PHRASE */
+.phrase-card{background:linear-gradient(135deg,var(--s1),var(--s2));border:1px solid var(--b2);border-left:3px solid var(--gold);padding:18px;margin-bottom:14px;position:relative;overflow:hidden;}
+.phrase-card::after{content:'🐉';position:absolute;bottom:-8px;right:10px;font-size:46px;opacity:.05;pointer-events:none;}
+.phrase-day{font-family:var(--fm);font-size:9px!important;color:var(--m2)!important;letter-spacing:.18em;text-transform:uppercase;margin-bottom:7px;}
+.phrase-cat{font-family:var(--fm);font-size:8px!important;color:var(--gold)!important;letter-spacing:.15em;padding:2px 8px;border:1px solid rgba(212,168,67,.3);background:var(--gd);display:inline-block;margin-bottom:9px;}
+.phrase-text{font-family:var(--fd);font-size:clamp(13px,2vw,17px);font-style:italic;color:var(--g2)!important;line-height:1.5;margin-bottom:9px;}
+.phrase-author{font-family:var(--fm);font-size:9px!important;color:var(--m2)!important;}
+.phrase-own-input{width:100%;background:transparent;border:none;border-bottom:1px solid var(--border);padding:7px 0;font-family:var(--fd);font-size:13px;font-style:italic;color:var(--g2)!important;outline:none;transition:border-color .2s;}
+.phrase-own-input:focus{border-bottom-color:var(--gold);}
+.phrase-own-input::placeholder{color:var(--muted)!important;}
+
+/* DAILY */
+.daily-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.daily-block{background:var(--s1);border:1px solid var(--border);padding:14px;}
+.db-title{font-family:var(--fm);font-size:9px!important;letter-spacing:.18em;text-transform:uppercase;color:var(--m2)!important;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border);}
+.priority-item{display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid rgba(30,37,53,.5);}
+.priority-item:last-child{border-bottom:none;}
+.pcheck{width:17px;height:17px;border:1.5px solid var(--border);border-radius:3px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;}
+.pcheck.done{background:var(--jade);border-color:var(--jade);}
+.pcheck.done::after{content:'✓';color:#000;font-size:9px;font-weight:700;}
+.p-title{font-size:11.5px!important;font-weight:600;color:var(--text)!important;margin-bottom:2px;}
+.p-meta{font-family:var(--fm);font-size:8px!important;color:var(--m2)!important;}
+.p-tag{font-family:var(--fm);font-size:7px!important;padding:1px 6px;border:1px solid;margin-left:4px;}
+.tag-critical{color:var(--crimson)!important;border-color:rgba(224,64,96,.3);background:var(--cd);}
+.tag-important{color:var(--gold)!important;border-color:rgba(212,168,67,.3);background:var(--gd);}
+.tag-habit{color:var(--jade)!important;border-color:rgba(46,207,160,.3);background:var(--jd);}
+.tag-deep{color:var(--violet)!important;border-color:rgba(144,96,224,.3);background:var(--vd);}
+
+/* TIME BLOCKS */
+.time-block{display:flex;gap:0;margin-bottom:3px;}
+.tb-time{font-family:var(--fm);font-size:9px!important;color:var(--gold)!important;min-width:60px;padding-top:5px;}
+.tb-content{flex:1;background:var(--s1);border:1px solid var(--border);border-left:3px solid;padding:6px 10px;font-size:11px!important;color:var(--text)!important;cursor:pointer;transition:all .2s;}
+.tb-content.done{opacity:.35;text-decoration:line-through;}
+.tb-content:hover{border-color:var(--b2);}
+.bl-jade{border-left-color:var(--jade)!important;}.bl-gold{border-left-color:var(--gold)!important;}
+.bl-crimson{border-left-color:var(--crimson)!important;}.bl-sky{border-left-color:var(--sky)!important;}.bl-violet{border-left-color:var(--violet)!important;}
+
+/* WEEKLY */
+.review-section{background:var(--s1);border:1px solid var(--border);padding:15px;margin-bottom:10px;}
+.rs-title{font-family:var(--fd);font-size:13px;font-weight:700;color:var(--text)!important;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;}
+.rs-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.rs-q{font-family:var(--fm);font-size:9px!important;color:var(--m2)!important;margin-bottom:4px;letter-spacing:.05em;}
+.rs-in{width:100%;background:var(--s2);border:1px solid var(--border);padding:7px 10px;font-family:var(--fm);font-size:9.5px!important;color:var(--text)!important;outline:none;resize:vertical;}
+.rs-in:focus{border-color:var(--jade);}
+
+/* DECISIONS */
+.decision-card{background:var(--s1);border:1px solid var(--border);border-left:3px solid;padding:12px;margin-bottom:7px;}
+.dc-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5px;gap:8px;}
+.dc-title{font-size:12px!important;font-weight:700;color:var(--text)!important;}
+.dc-date{font-family:var(--fm);font-size:8px!important;color:var(--m2)!important;}
+.dc-impact{font-family:var(--fm);font-size:8px!important;padding:1px 7px;border:1px solid;white-space:nowrap;}
+.dc-desc{font-family:var(--fm);font-size:9px!important;color:var(--m2)!important;line-height:1.5;margin-bottom:4px;}
+.dc-outcome{font-family:var(--fm);font-size:8.5px!important;color:var(--jade)!important;font-style:italic;}
+
+/* PROJECTS */
+.project-card{background:var(--s1);border:1px solid var(--border);border-top:3px solid;padding:14px;margin-bottom:9px;}
+.pc-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;flex-wrap:wrap;gap:6px;}
+.pc-title{font-family:var(--fd);font-size:14px;font-weight:700;color:var(--text)!important;}
+.pc-status{font-family:var(--fm);font-size:8px!important;padding:2px 8px;border:1px solid;}
+.st-active{color:var(--jade)!important;border-color:var(--jade);background:var(--jd);}
+.st-pending{color:var(--gold)!important;border-color:var(--gold);background:var(--gd);}
+.st-blocked{color:var(--crimson)!important;border-color:var(--crimson);background:var(--cd);}
+.pc-bar{height:5px;background:var(--s3);border-radius:3px;overflow:hidden;margin:5px 0 8px;}
+.pc-fill{height:100%;border-radius:3px;transition:width .4s;}
+.pc-ms{font-family:var(--fm);font-size:8px!important;padding:2px 7px;background:var(--s2);border:1px solid var(--border);color:var(--m2)!important;display:inline-block;margin:2px;}
+.pc-ms.done{border-color:var(--jade)!important;color:var(--jade)!important;background:var(--jd);}
+
+/* LIFE WHEEL */
+.life-wheel{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px;}
+.lw-card{background:var(--s1);border:1px solid var(--border);padding:13px;}
+.lw-title{font-size:12px!important;font-weight:700;margin-bottom:5px;color:var(--text)!important;display:flex;justify-content:space-between;align-items:center;}
+.lw-score{font-family:var(--fd);font-size:17px;font-weight:700;}
+.lw-bar{height:4px;background:var(--s3);border-radius:2px;overflow:hidden;margin-bottom:5px;}
+.lw-fill{height:100%;border-radius:2px;transition:width .3s;}
+
+/* BRANDS */
+.brand-hub{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:9px;}
+.brand-card{background:var(--s1);border:1px solid var(--border);border-top:3px solid;overflow:hidden;}
+.bc-head{padding:11px 13px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:7px;}
+.bc-name{font-family:var(--fd);font-size:12px;font-weight:700;color:var(--text)!important;}
+.bc-handle{font-family:var(--fm);font-size:9px!important;}
+.bc-body{padding:12px 13px;}
+.bc-kpis{display:flex;gap:14px;margin-bottom:10px;}
+.bc-kpi-val{font-family:var(--fd);font-size:16px;font-weight:700;line-height:1;}
+.bc-kpi-lbl{font-family:var(--fm);font-size:7.5px!important;color:var(--m2)!important;}
+.cl-item{display:flex;align-items:center;gap:7px;font-family:var(--fm);font-size:9px!important;padding:4px 0;border-bottom:1px solid rgba(30,37,53,.4);color:var(--m2)!important;}
+.cl-item:last-child{border-bottom:none;}
+.cl-check{width:13px;height:13px;border:1px solid var(--border);border-radius:2px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:8px;}
+.cl-check.done{background:var(--jade);border-color:var(--jade);}
+
+/* HABITS */
+.day-save-bar{position:sticky;top:52px;z-index:50;background:linear-gradient(135deg,rgba(212,168,67,.12),rgba(212,168,67,.04));border:1px solid var(--gold);padding:12px 16px;margin-bottom:13px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;}
+.day-save-btn{font-family:var(--fm);font-size:10px!important;letter-spacing:.1em;text-transform:uppercase;padding:10px 18px;background:var(--gold);color:var(--bg)!important;border:none;cursor:pointer;font-weight:700;transition:all .2s;box-shadow:0 0 18px rgba(212,168,67,.3);}
+.day-save-btn:hover{background:var(--g2);transform:translateY(-1px);}
+.hgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(262px,1fr));gap:7px;}
+.hcard{background:var(--s1);border:1px solid var(--border);padding:12px;transition:border-color .2s;}
+.hcard:hover{border-color:var(--b2);}
+.hcard-top{display:flex;align-items:center;gap:8px;margin-bottom:7px;}
+.hchk{width:17px;height:17px;border:1.5px solid var(--border);border-radius:3px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;}
+.hchk.on{background:var(--jade);border-color:var(--jade);}
+.hchk.on::after{content:'✓';color:#000;font-size:10px;font-weight:700;}
+.hcard-name{font-size:11.5px!important;font-weight:600;flex:1;color:var(--text)!important;}
+.hcard-time{font-family:var(--fm);font-size:8px!important;color:var(--m2)!important;}
+.hcard-freq{font-family:var(--fm);font-size:7.5px!important;color:var(--gold)!important;padding:1px 6px;border:1px solid rgba(212,168,67,.25);background:var(--gd);}
+.hcard-comment{font-family:var(--fm);font-size:9px!important;color:var(--m2)!important;font-style:italic;margin-top:5px;padding:4px 8px;background:var(--s2);border-left:2px solid var(--border);}
+.wdots{display:flex;gap:3px;margin-top:4px;}
+.wdot{width:8px;height:8px;border-radius:50%;background:var(--s3);border:1px solid var(--border);cursor:pointer;transition:all .15s;}
+.hstreak{font-family:var(--fm);font-size:7.5px!important;color:var(--m2)!important;margin-top:3px;}
+.hstreak span{color:var(--gold)!important;}
+.hcard-btns{display:flex;gap:4px;margin-top:6px;}
+.hbtn{font-family:var(--fm);font-size:8px!important;padding:3px 8px;border:1px solid var(--border);cursor:pointer;background:transparent;color:var(--m2)!important;transition:all .15s;}
+.hbtn:hover{border-color:var(--gold);color:var(--gold)!important;}
+
+/* MILESTONES */
+.ms-row{display:grid;grid-template-columns:78px 13px 1fr;gap:0 13px;align-items:start;padding-bottom:18px;}
+.ms-when{font-family:var(--fm);font-size:9px!important;color:var(--gold)!important;text-align:right;padding-top:12px;line-height:1.3;}
+.ms-spine{display:flex;flex-direction:column;align-items:center;padding-top:12px;}
+.ms-node{width:11px;height:11px;border-radius:50%;cursor:pointer;flex-shrink:0;transition:all .2s;}
+.ms-node.done{background:var(--jade);box-shadow:0 0 9px var(--jade);}
+.ms-node.now{background:var(--gold);box-shadow:0 0 9px var(--gold);animation:np 2s infinite;}
+@keyframes np{0%,100%{box-shadow:0 0 5px var(--gold);}50%{box-shadow:0 0 14px var(--gold);}}
+.ms-node.soon{background:var(--s3);border:1.5px solid var(--border);}
+.ms-wire{width:1px;flex:1;min-height:10px;background:var(--border);margin-top:4px;}
+.ms-body{background:var(--s1);border:1px solid var(--border);border-left:2px solid;padding:10px 13px;margin:4px 0 2px;cursor:pointer;}
+.ms-body.done{border-left-color:var(--jade);}.ms-body.now{border-left-color:var(--gold);}.ms-body.soon{border-left-color:var(--border);}
+.ms-head{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:3px;}
+.ms-ttl{font-size:12px!important;font-weight:700;color:var(--text)!important;}
+.ms-badge{font-family:var(--fm);font-size:7.5px!important;padding:1px 6px;border:1px solid;}
+.bd-done{color:var(--jade)!important;border-color:rgba(46,207,160,.3);background:var(--jd);}
+.bd-now{color:var(--gold)!important;border-color:rgba(212,168,67,.3);background:var(--gd);}
+.bd-soon{color:var(--m2)!important;border-color:var(--border);}
+.ms-desc{font-family:var(--fm);font-size:9px!important;color:var(--m2)!important;line-height:1.5;}
+.pct-row{margin-top:5px;display:flex;align-items:center;gap:7px;}
+.pct-bar{flex:1;height:3px;background:var(--s3);border-radius:2px;overflow:hidden;}
+.pct-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--jade),var(--gold));transition:width .4s;}
+.pct-lbl{font-family:var(--fm);font-size:9px!important;color:var(--m2)!important;min-width:24px;}
+
+/* INPUTS */
+textarea,input[type=text],input[type=number],input[type=date],select{background:var(--s1);border:1px solid var(--border);padding:9px 11px;font-family:var(--fm);font-size:10px!important;color:var(--text)!important;outline:none;transition:border-color .2s;}
+textarea{width:100%;resize:vertical;}
+input[type=text],input[type=number],input[type=date]{width:100%;}
+select{cursor:pointer;}
+textarea:focus,input:focus,select:focus{border-color:var(--jade);}
+textarea::placeholder,input::placeholder{color:var(--muted)!important;}
+.btn{font-family:var(--fm);font-size:8px!important;letter-spacing:.1em;text-transform:uppercase;padding:8px 13px;background:transparent;border:1px solid;cursor:pointer;transition:all .2s;}
+.bj{border-color:var(--jade);color:var(--jade)!important;}.bj:hover{background:var(--jd);}
+.bg{border-color:var(--gold);color:var(--gold)!important;}.bg:hover{background:var(--gd);}
+.br{border-color:var(--crimson);color:var(--crimson)!important;}.br:hover{background:var(--cd);}
+.alrt{padding:10px 14px;border-left:3px solid;font-family:var(--fm);font-size:10px!important;line-height:1.6;margin-bottom:9px;}
+.alj{background:var(--jd);color:var(--jade)!important;border-color:var(--jade);}
+.alg{background:var(--gd);color:var(--gold)!important;border-color:var(--gold);}
+.logi{background:var(--s1);border:1px solid var(--border);border-left:2px solid var(--jade);padding:8px 12px;margin-bottom:4px;display:flex;justify-content:space-between;align-items:flex-start;gap:8px;}
+.lt{font-size:11px!important;font-weight:600;margin-bottom:2px;color:var(--text)!important;}
+.lm{font-family:var(--fm);font-size:8px!important;color:var(--m2)!important;}
+.ld{font-family:var(--fm);font-size:8px!important;color:var(--gold)!important;white-space:nowrap;}
+.prow{display:flex;align-items:center;gap:10px;margin-bottom:7px;}
+.pname{font-family:var(--fm);font-size:10px!important;color:var(--text)!important;min-width:172px;}
+.ptrack{flex:1;height:5px;background:var(--s3);border-radius:3px;overflow:hidden;}
+.pfill{height:100%;border-radius:3px;transition:width .5s ease;}
+.ppct{font-family:var(--fm);font-size:9px!important;color:var(--m2)!important;min-width:30px;text-align:right;}
+.scan-zone{background:var(--s2);border:2px dashed var(--border);padding:22px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:12px;}
+.scan-zone:hover,.scan-zone.drag{border-color:var(--gold);background:var(--gd);}
+.ai-load{display:none;text-align:center;padding:14px;font-family:var(--fm);font-size:10px!important;color:var(--jade)!important;}
+.ai-result{background:var(--s1);border:1px solid var(--b2);border-left:3px solid var(--jade);padding:13px;display:none;margin-bottom:10px;}
+.ar-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(30,37,53,.6);font-size:11px!important;}
+.ar-row:last-child{border-bottom:none;}
+.ar-lbl{font-family:var(--fm);font-size:9px!important;color:var(--m2)!important;}
+.cbox{background:var(--s1);border:1px solid var(--border);padding:15px;margin-bottom:10px;}
+.cttl{font-family:var(--fm);font-size:9px!important;letter-spacing:.18em;text-transform:uppercase;color:var(--m2)!important;margin-bottom:10px;}
+
+@media(max-width:768px){.wrap{padding:14px 10px 60px;}.daily-grid,.rs-grid{grid-template-columns:1fr;}.nav-tab{padding:12px 7px;}.ms-row{grid-template-columns:55px 11px 1fr;}.cards{grid-template-columns:repeat(2,1fr);}}
+</style>
 </head>
 <body>
 
 <div id="cur">🐉</div>
 <canvas id="dragonCanvas"></canvas>
-
-<!-- FILE INPUTS -->
 <input type="file" id="importFile" accept=".json" style="display:none" onchange="importJSON(event)">
 <input type="file" id="receiptFile" accept="image/*" style="display:none" onchange="scanReceipt(event)">
-<input type="file" id="mealPhotoFile" accept="image/*" style="display:none" onchange="handleMealPhoto(event)">
 
-<!-- ══════════ MODALS ══════════ -->
-
-<!-- JSON SYNC -->
-<div class="mo" id="mSync">
-  <div class="modal">
-    <button class="mx" onclick="cm('mSync')">✕</button>
-    <div class="mttl">⇅ Sincronizar datos</div>
-    <div class="msub">Exportá JSON → Google Drive → importá en cualquier dispositivo.</div>
-    <textarea id="jsonPrev" readonly style="height:110px;font-size:9px;" placeholder="JSON acá..."></textarea>
-    <div style="display:flex;gap:7px;margin-top:10px;flex-wrap:wrap;">
-      <button class="btn bj" onclick="exportJSON()">⬇ Descargar JSON</button>
-      <button class="btn bg" onclick="document.getElementById('importFile').click()">⬆ Importar JSON</button>
-      <button class="btn bj" onclick="copyJSON()">⧉ Copiar</button>
-    </div>
+<!-- MODALS -->
+<div class="mo" id="mSync"><div class="modal">
+  <button class="mx" onclick="cm('mSync')">✕</button>
+  <div class="mttl">⇅ Sincronizar datos</div>
+  <div class="msub">Exportá JSON → Google Drive → importalo en cualquier dispositivo.</div>
+  <textarea id="jsonPrev" readonly style="height:100px;font-size:8px;"></textarea>
+  <div style="display:flex;gap:6px;margin-top:9px;flex-wrap:wrap;">
+    <button class="btn bj" onclick="exportJSON()">⬇ Descargar</button>
+    <button class="btn bg" onclick="document.getElementById('importFile').click()">⬆ Importar</button>
+    <button class="btn bj" onclick="copyJSON()">⧉ Copiar</button>
   </div>
-</div>
+</div></div>
 
-<!-- GITHUB -->
-<div class="mo" id="mGH">
-  <div class="modal">
-    <button class="mx" onclick="cm('mGH')">✕</button>
-    <div class="mttl">🐙 Configurar GitHub</div>
-    <div class="msub">Para que las boletas suban automáticamente a tu repo.</div>
-    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px;">
-      <input type="text" id="ghToken" placeholder="Token GitHub (ghp_xxxxxx)">
-      <input type="text" id="ghUser" placeholder="Usuario GitHub (ej: 920052859)">
-      <input type="text" id="ghRepo" placeholder="Nombre del repo (ej: corina-os)">
-    </div>
-    <button class="btn bj" onclick="saveGHConfig()">GUARDAR</button>
+<div class="mo" id="mHComment"><div class="modal">
+  <button class="mx" onclick="cm('mHComment')">✕</button>
+  <div class="mttl" id="mHCTtl">💬 Nota del hábito</div>
+  <div class="msub" id="mHCSub">¿Cómo te fue hoy con este hábito?</div>
+  <textarea id="hCommentInput" rows="4" placeholder="¿Qué aprendiste? ¿Algo a mejorar?"></textarea>
+  <div style="margin-top:9px;"><button class="btn bj" onclick="saveHComment()">💾 GUARDAR</button></div>
+  <input type="hidden" id="hCommentId">
+</div></div>
+
+<div class="mo" id="mHabit"><div class="modal">
+  <button class="mx" onclick="cm('mHabit')">✕</button>
+  <div class="mttl" id="mHabitTtl">+ Hábito</div>
+  <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:11px;">
+    <input type="text" id="hName" placeholder="Nombre del hábito">
+    <input type="text" id="hTime" placeholder="Horario (ej: 5:30–6:30am)">
+    <select id="hFreq"><option>Diario</option><option>Lun–Vie</option><option>Lun/Mar/Jue</option><option>Mar/Jue/Sáb</option><option>Miércoles</option><option>Viernes</option><option>Sáb/Dom</option><option>Domingo</option><option>Semanal</option><option>Mensual</option></select>
+    <select id="hColor"><option value="jade">Verde jade</option><option value="gold">Dorado</option><option value="crimson">Rojo</option><option value="sky">Azul</option><option value="violet">Violeta</option></select>
+    <input type="hidden" id="hEditId">
   </div>
-</div>
-
-<!-- HABIT COMMENT -->
-<div class="mo" id="mHComment">
-  <div class="modal">
-    <button class="mx" onclick="cm('mHComment')">✕</button>
-    <div class="mttl" id="mHCTtl">💬 Comentario del hábito</div>
-    <div class="msub" id="mHCSub">Agregá una nota sobre cómo te fue hoy.</div>
-    <textarea id="hCommentInput" rows="4" placeholder="¿Cómo te fue? ¿Qué aprendiste?"></textarea>
-    <div style="display:flex;gap:8px;margin-top:10px;">
-      <button class="btn bj" onclick="saveHComment()">💾 GUARDAR COMENTARIO</button>
-    </div>
-    <input type="hidden" id="hCommentId">
+  <div style="display:flex;gap:6px;">
+    <button class="btn bj" onclick="saveHabit()">GUARDAR</button>
+    <button class="btn br" id="delHBtn" onclick="deleteHabit()" style="display:none">ELIMINAR</button>
   </div>
-</div>
+</div></div>
 
-<!-- HABIT ADD/EDIT -->
-<div class="mo" id="mHabit">
-  <div class="modal">
-    <button class="mx" onclick="cm('mHabit')">✕</button>
-    <div class="mttl" id="mHabitTtl">+ Agregar hábito</div>
-    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px;">
-      <input type="text" id="hName" placeholder="Nombre del hábito">
-      <input type="text" id="hTime" placeholder="Horario (ej: 6:00–7:00am)">
-      <select id="hFreq">
-        <option value="Diario">Diario</option>
-        <option value="Lun–Vie">Lun–Vie</option>
-        <option value="Lun/Mar/Jue">Lun/Mar/Jue</option>
-        <option value="Miércoles">Miércoles</option>
-        <option value="Viernes">Viernes</option>
-        <option value="Sáb/Dom">Sáb/Dom</option>
-        <option value="Domingo">Domingo</option>
-        <option value="Semanal">Semanal</option>
-        <option value="Día 25">Día 25</option>
-      </select>
-      <select id="hColor">
-        <option value="jade">Verde jade</option>
-        <option value="gold">Dorado</option>
-        <option value="crimson">Rojo</option>
-        <option value="sky">Azul</option>
-        <option value="violet">Violeta</option>
-        <option value="fire">Fuego</option>
-      </select>
-      <input type="hidden" id="hEditId">
-    </div>
-    <div style="display:flex;gap:7px;">
-      <button class="btn bj" onclick="saveHabit()">GUARDAR</button>
-      <button class="btn br" id="delHBtn" onclick="deleteHabit()" style="display:none">ELIMINAR</button>
-    </div>
+<div class="mo" id="mDecision"><div class="modal">
+  <button class="mx" onclick="cm('mDecision')">✕</button>
+  <div class="mttl">+ Registrar decisión</div>
+  <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:11px;">
+    <input type="text" id="dTitle" placeholder="¿Qué decidiste?">
+    <select id="dImpact"><option value="alto">🔴 Alto impacto</option><option value="medio">🟡 Impacto medio</option><option value="bajo">🟢 Bajo impacto</option></select>
+    <select id="dArea"><option value="carrera">💼 Carrera</option><option value="finanzas">💰 Finanzas</option><option value="educacion">🎓 Educación</option><option value="salud">💚 Salud</option><option value="marca">📱 Marca personal</option><option value="personal">💬 Personal</option><option value="negocio">🏢 Negocios</option></select>
+    <textarea id="dContext" rows="2" placeholder="Contexto: ¿por qué tomaste esta decisión?"></textarea>
+    <textarea id="dExpected" rows="2" placeholder="Resultado esperado en 30, 90, 180 días..."></textarea>
   </div>
-</div>
+  <button class="btn bj" onclick="saveDecision()">GUARDAR DECISIÓN</button>
+</div></div>
 
-<!-- POST -->
-<div class="mo" id="mPost">
-  <div class="modal modal-xl">
-    <button class="mx" onclick="cm('mPost')">✕</button>
-    <div class="mttl" id="mPostTtl">+ Nueva publicación</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:11px;">
-      <select id="pOwner" style="grid-column:span 2"></select>
-      <select id="pPlat">
-        <option value="linkedin">LinkedIn</option>
-        <option value="instagram">Instagram</option>
-        <option value="tiktok">TikTok</option>
-        <option value="youtube">YouTube</option>
-        <option value="multi">Multiplataforma</option>
-      </select>
-      <select id="pStatus">
-        <option value="draft">Borrador</option>
-        <option value="scheduled">Programado</option>
-        <option value="published">Publicado</option>
-      </select>
-      <input type="text" id="pTitle" placeholder="Título" style="grid-column:span 2">
-      <textarea id="pDesc" rows="3" placeholder="Caption / descripción" style="grid-column:span 2"></textarea>
-      <input type="text" id="pHook" placeholder="Hook (primera línea)">
-      <input type="text" id="pHashtags" placeholder="#hashtags">
-      <input type="date" id="pDate">
-      <input type="url" id="pLink" placeholder="Link publicación">
-      <input type="hidden" id="pEditId">
-    </div>
-    <div style="margin-bottom:12px;">
-      <div class="stag" style="margin-bottom:6px;">// métricas</div>
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:7px;">
-        <input type="number" id="pLikes" placeholder="❤ Likes">
-        <input type="number" id="pComments" placeholder="💬 Coment">
-        <input type="number" id="pShares" placeholder="↗ Shares">
-        <input type="number" id="pReach" placeholder="👁 Alcance">
-      </div>
-    </div>
-    <div style="display:flex;gap:7px;flex-wrap:wrap;">
-      <button class="btn bj" onclick="savePost()">GUARDAR</button>
-      <button class="btn br" id="delPostBtn" onclick="deletePost()" style="display:none">ELIMINAR</button>
-    </div>
+<!-- NAV -->
+<nav class="nav"><div class="nav-inner">
+  <div class="nav-logo">CORINA <span>OS</span> 🐉</div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="gp('home',this)">🏠 Inicio</button>
+    <button class="nav-tab" onclick="gp('diario',this)">01 📅 Planeamiento Diario</button>
+    <button class="nav-tab" onclick="gp('semanal',this)">02 📊 Revisión Semanal</button>
+    <button class="nav-tab" onclick="gp('estrategia',this)">03 🎯 Decisiones Estratégicas</button>
+    <button class="nav-tab" onclick="gp('proyectos',this)">04 🚀 Proyectos</button>
+    <button class="nav-tab" onclick="gp('balance',this)">05 ⚖️ Balance de Vida</button>
+    <button class="nav-tab" onclick="gp('decisiones',this)">06 📝 Registro Decisiones</button>
+    <button class="nav-tab" onclick="gp('marca',this)">07 🐉 Marca Personal</button>
+    <button class="nav-tab" onclick="gp('habitos',this)">⚡ Hábitos</button>
+    <button class="nav-tab" onclick="gp('metas',this)">🎯 Metas</button>
+    <button class="nav-tab" onclick="gp('finanzas',this)">💰 Finanzas</button>
+    <button class="nav-tab" onclick="gp('boletas',this)">🧾 Boletas IA</button>
   </div>
-</div>
-
-<!-- GASTO -->
-<div class="mo" id="mGasto">
-  <div class="modal">
-    <button class="mx" onclick="cm('mGasto')">✕</button>
-    <div class="mttl">+ Registrar movimiento</div>
-    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px;">
-      <select id="gTipo"><option value="egreso">Egreso</option><option value="ingreso">Ingreso</option></select>
-      <select id="gCat">
-        <option value="hormiga">Gasto hormiga</option>
-        <option value="comida">Comida</option>
-        <option value="transporte">Transporte</option>
-        <option value="salud">Salud/belleza</option>
-        <option value="entretenimiento">Entretenimiento</option>
-        <option value="educacion">Educación</option>
-        <option value="ropa">Ropa</option>
-        <option value="servicios">Servicios</option>
-        <option value="trabajo">Ingreso laboral</option>
-        <option value="pasivo">Ingreso pasivo</option>
-        <option value="otro">Otro</option>
-      </select>
-      <input type="text" id="gDesc" placeholder="Descripción">
-      <input type="number" id="gMonto" placeholder="Monto S/" step="0.01">
-      <input type="date" id="gFecha">
-    </div>
-    <button class="btn bj" onclick="saveGasto()">GUARDAR</button>
+  <div class="nav-acts">
+    <button class="nb nb-j" onclick="saveAll()" id="saveBtn"><span class="sdot"></span>GUARDAR</button>
+    <button class="nb nb-g" onclick="om('mSync')">⇅</button>
   </div>
-</div>
+</div></nav>
 
-<!-- ══════════ NAV ══════════ -->
-<nav class="nav">
-  <div class="nav-inner">
-    <div class="nav-logo">CORINA <span>OS</span> 🐉</div>
-    <div class="nav-tabs">
-      <button class="nav-tab active" onclick="gp('home',this)">🏠 Inicio</button>
-      <button class="nav-tab" onclick="gp('frase',this)">✨ Frase</button>
-      <button class="nav-tab" onclick="gp('habitos',this)">⚡ Hábitos</button>
-      <button class="nav-tab" onclick="gp('planner',this)">📅 Planner</button>
-      <button class="nav-tab" onclick="gp('contenido',this)">📱 Contenido</button>
-      <button class="nav-tab" onclick="gp('bitacora',this)">🍽 Bitácora</button>
-      <button class="nav-tab" onclick="gp('finanzas',this)">💰 Finanzas</button>
-      <button class="nav-tab" onclick="gp('finanzas-expert',this)">💼 Experto</button>
-      <button class="nav-tab" onclick="gp('boletas',this)">🧾 Boletas IA</button>
-      <button class="nav-tab" onclick="gp('metas',this)">🎯 Metas</button>
-      <button class="nav-tab" onclick="gp('notas',this)">📝 Notas</button>
-    </div>
-    <div class="nav-acts">
-      <button class="nb nb-j" onclick="saveAll()" id="saveBtn"><span class="sdot"></span>GUARDAR</button>
-      <button class="nb nb-g" onclick="om('mSync')">⇅</button>
-      <button class="nb nb-v" onclick="om('mGH')">🐙</button>
-    </div>
-  </div>
-</nav>
-
-<!-- ══════════ HOME ══════════ -->
+<!-- HOME -->
 <div class="page active" id="page-home"><div class="wrap">
-  <div class="stag">// <span id="liveDate"></span></div>
-  <div style="font-family:var(--fd);font-size:clamp(30px,6vw,60px);font-weight:900;letter-spacing:-.01em;line-height:.9;margin-bottom:12px;">CORINA<br><span class="tc">LAZO</span> <span class="gc">OS</span></div>
+  <div class="stag">// <span id="liveDate"></span> · sistema de reinvención 2026</div>
+  <div style="font-family:var(--fd);font-size:clamp(28px,5vw,54px);font-weight:900;letter-spacing:-.01em;line-height:.9;margin-bottom:12px;">CORINA<br><span class="tc">LAZO</span> <span class="gc">OS</span> <span style="color:var(--violet);font-size:.6em">v6</span></div>
   <div class="last-upd"><div class="upd-dot"></div><span>Última actualización: <strong id="lastUpd" style="color:var(--jade)">—</strong></span></div>
   <div class="lbar-wrap">
     <div class="lbar-hd"><span>PROGRESO DE VIDA</span><span>25.7 / 80 años · 32.1%</span></div>
     <div class="lbar"><div class="lbar-fill"></div></div>
     <div class="lbar-marks"><span>25★</span><span>30</span><span>35</span><span>40</span><span>50</span><span>60</span><span>80</span></div>
   </div>
-  <div id="homePhrase" style="margin-bottom:20px;"></div>
-  <div class="cards">
-    <div class="card cj"><div class="clbl">Patrimonio</div><div class="cval" style="color:var(--jade)">S/115K</div><div class="csub">+creciendo</div></div>
-    <div class="card cg"><div class="clbl">Ahorro</div><div class="cval" style="color:var(--gold)">38%</div><div class="csub">meta 45%</div></div>
-    <div class="card cr"><div class="clbl">Airbnb</div><div class="cval" style="color:var(--crimson)">NOV</div><div class="csub">S/2,600/mes</div></div>
-    <div class="card cs"><div class="clbl">ETF</div><div class="cval" style="color:var(--sky)" id="etfHome">S/0</div><div class="csub">Renta4</div></div>
-    <div class="card cv"><div class="clbl">Hábitos</div><div class="cval" style="color:var(--violet)" id="habitHome">0</div><div class="csub">hoy</div></div>
-    <div class="card cj"><div class="clbl">Posts</div><div class="cval" style="color:var(--jade)" id="postsHome">0</div><div class="csub">publicados</div></div>
+  <div id="homePhrase" style="margin-bottom:16px;"></div>
+  <div class="cards" style="margin-bottom:14px;">
+    <div class="card cg"><div class="clbl">Patrimonio total</div><div class="cval" style="color:var(--gold)">S/115K+</div><div class="csub">creciendo</div></div>
+    <div class="card cr"><div class="clbl">Deuda hipotecaria</div><div class="cval" style="color:var(--crimson)">S/225K</div><div class="csub">Nov 2026 · TCEA 8.89%</div></div>
+    <div class="card cs"><div class="clbl">ETF portafolio</div><div class="cval" style="color:var(--sky)">$4,300</div><div class="csub">Hapi · VOO 59%</div></div>
+    <div class="card cv"><div class="clbl">Hábitos hoy</div><div class="cval" style="color:var(--violet)" id="habitHome">0/0</div><div class="csub">completados</div></div>
+    <div class="card cj"><div class="clbl">Examen doctorado</div><div class="cval" style="color:var(--jade)">19 JUL</div><div class="csub">UNSA · CS</div></div>
+    <div class="card cg"><div class="clbl">PMP objetivo</div><div class="cval" style="color:var(--gold)">AGO</div><div class="csub">Plan intensivo</div></div>
   </div>
-  <div class="alrt alg" style="margin-top:16px;"><strong>🐉</strong> La constancia imperfecta siempre vence a la perfección que nunca empieza.</div>
-</div></div>
-
-<!-- ══════════ FRASE ══════════ -->
-<div class="page" id="page-frase"><div class="wrap">
-  <div class="stag">// frase diaria 365 días · matemática · filosófica · autorrealización</div>
-  <div class="sttl">Frase del <span class="gc">Día</span></div>
-  <div id="phraseMain"></div>
-  <div style="margin-top:26px;">
-    <div class="stag" style="margin-bottom:10px;">// tus frases guardadas</div>
-    <div id="savedPhrases"></div>
+  <div class="alrt alg"><strong>🐉 Visión 2026:</strong> Cerrar maestría · PMP certificada · Aprobar doctorado · Activar Airbnb · Sistematizar inversiones · Construir marca. Un hábito, un día a la vez.</div>
+  <div style="margin-top:14px;display:flex;gap:6px;flex-wrap:wrap;">
+    <button class="btn bj" onclick="gp('diario',null)">📅 Mi día</button>
+    <button class="btn bg" onclick="gp('semanal',null)">📊 Revisión semanal</button>
+    <button class="btn bj" onclick="gp('proyectos',null)">🚀 Proyectos</button>
+    <button class="btn bg" onclick="gp('marca',null)">🐉 Mi marca</button>
+    <button class="btn bj" onclick="gp('balance',null)">⚖️ Balance</button>
   </div>
 </div></div>
 
-<!-- ══════════ HÁBITOS ══════════ -->
-<div class="page" id="page-habitos"><div class="wrap">
-  <div class="stag">// hábitos atómicos · comentarios por día · guardado al final del día</div>
-  <div class="sttl" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
-    <span>Hábitos <span class="gc">Atómicos</span></span>
-    <button class="btn bj" onclick="openAddHabit()">+ NUEVO HÁBITO</button>
-  </div>
-
-  <!-- BIG DAY SAVE BUTTON -->
-  <div class="day-save-bar">
-    <div class="day-save-info">
-      <div class="day-save-ttl">💾 Guardar Día Completo</div>
-      <div class="day-save-sub">Cierra el día de hoy, guarda el historial y reinicia hábitos para mañana</div>
+<!-- 01 PLANEAMIENTO DIARIO -->
+<div class="page" id="page-diario"><div class="wrap">
+  <div class="stag">// 01 · planeamiento diario · máx 3 prioridades críticas · tu horario real</div>
+  <div class="sttl">📅 Planeamiento <span class="gc">Diario</span></div>
+  <div id="dailyPhrase2" style="margin-bottom:13px;"></div>
+  <div class="daily-grid" style="margin-bottom:10px;">
+    <div class="daily-block">
+      <div class="db-title">⚡ MIS 3 PRIORIDADES CRÍTICAS DE HOY</div>
+      <div id="prioritiesList"></div>
+      <div style="display:flex;gap:5px;margin-top:9px;">
+        <input type="text" id="newPriority" placeholder="Nueva prioridad..." style="flex:1;font-size:9px;">
+        <select id="newPriorityTag" style="width:auto;font-size:9px;">
+          <option value="critical">🔴 Crítico</option>
+          <option value="important">🟡 Importante</option>
+          <option value="habit">🟢 Hábito</option>
+          <option value="deep">🟣 Profundo</option>
+        </select>
+        <button class="btn bj" style="padding:6px 10px;" onclick="addPriority()">+</button>
+      </div>
     </div>
+    <div class="daily-block">
+      <div class="db-title">🧠 INTENCIÓN Y REFLEXIÓN</div>
+      <div class="rs-q" style="margin-bottom:4px;">Intención del día</div>
+      <textarea id="dailyIntention" rows="2" placeholder="Hoy quiero lograr..." style="margin-bottom:8px;font-size:9px;"></textarea>
+      <div class="rs-q" style="margin-bottom:4px;">Mi frase que guía hoy</div>
+      <input type="text" id="dailyPhraseInput" placeholder="Mi reflexión de hoy..." style="font-size:9px;">
+    </div>
+  </div>
+  <div class="daily-block" style="margin-bottom:10px;">
+    <div class="db-title">🕐 BLOQUES DE TIEMPO — HORARIO REAL (tocá para marcar completado)</div>
+    <div id="timeBlocksList"></div>
+  </div>
+  <div class="daily-block">
+    <div class="db-title">🌙 CIERRE DEL DÍA</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+      <div><div class="rs-q">¿Qué logré hoy?</div><textarea id="dayWin" rows="2" placeholder="..." style="font-size:9px;"></textarea></div>
+      <div><div class="rs-q">¿Qué mejoraría mañana?</div><textarea id="dayImprove" rows="2" placeholder="..." style="font-size:9px;"></textarea></div>
+    </div>
+    <button class="btn bj" onclick="saveDayReview()">💾 CERRAR DÍA Y GUARDAR</button>
+  </div>
+</div></div>
+
+<!-- 02 REVISIÓN SEMANAL -->
+<div class="page" id="page-semanal"><div class="wrap">
+  <div class="stag">// 02 · revisión semanal · cada domingo noche · 30 minutos</div>
+  <div class="sttl">📊 Revisión <span class="gc">Semanal</span></div>
+  <div class="alrt alj">Dedicá 30–45 minutos cada domingo a esta revisión. Es el hábito de gestión más valioso del sistema.</div>
+  <div class="review-section">
+    <div class="rs-title">🏆 LOGROS, APRENDIZAJES Y PLAN <button class="btn bj" onclick="saveWeeklyReview()">💾 GUARDAR REVISIÓN</button></div>
+    <div class="rs-grid">
+      <div><div class="rs-q">Tus 3 mayores logros de la semana</div><textarea class="rs-in" id="wr_wins" rows="3" placeholder="1. ...\n2. ...\n3. ..."></textarea></div>
+      <div><div class="rs-q">¿Qué te costó más? ¿Por qué?</div><textarea class="rs-in" id="wr_challenges" rows="3" placeholder="..."></textarea></div>
+      <div><div class="rs-q">¿Qué hábito necesita más atención?</div><textarea class="rs-in" id="wr_habit" rows="2" placeholder="..."></textarea></div>
+      <div><div class="rs-q">¿Avancé hacia mis metas de 2026?</div><textarea class="rs-in" id="wr_goals" rows="2" placeholder="..."></textarea></div>
+      <div><div class="rs-q">¿Cómo estuvo mi energía y bienestar?</div><textarea class="rs-in" id="wr_energy" rows="2" placeholder="..."></textarea></div>
+      <div><div class="rs-q">¿Tomé decisiones estratégicas o reactivas?</div><textarea class="rs-in" id="wr_decisions" rows="2" placeholder="..."></textarea></div>
+    </div>
+    <div style="margin-top:11px;"><div class="rs-q" style="margin-bottom:6px;">MIS 3 PRIORIDADES DE LA PRÓXIMA SEMANA</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;">
+      <textarea class="rs-in" id="nw_p1" rows="2" placeholder="Prioridad 1..."></textarea>
+      <textarea class="rs-in" id="nw_p2" rows="2" placeholder="Prioridad 2..."></textarea>
+      <textarea class="rs-in" id="nw_p3" rows="2" placeholder="Prioridad 3..."></textarea>
+    </div></div>
+  </div>
+  <div class="review-section"><div class="rs-title">📅 HISTORIAL DE REVISIONES</div><div id="weeklyHistory"></div></div>
+</div></div>
+
+<!-- 03 DECISIONES ESTRATÉGICAS -->
+<div class="page" id="page-estrategia"><div class="wrap">
+  <div class="stag">// 03 · decisiones estratégicas · solo lo que mueve la aguja</div>
+  <div class="sttl">🎯 Decisiones <span class="gc">Estratégicas</span></div>
+  <div class="alrt alg"><strong>Tus 3 prioridades del trimestre:</strong><br>1️⃣ PMP certificada — Agosto 2026 &nbsp; 2️⃣ Inglés C1 activo &nbsp; 3️⃣ Automatizar publicaciones Instagram</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
+    <div class="daily-block">
+      <div class="db-title">📌 PRÓXIMAS DECISIONES</div>
+      <div id="pendingDecisions"></div>
+      <button class="btn bj" style="margin-top:10px;" onclick="om('mDecision')">+ REGISTRAR DECISIÓN</button>
+    </div>
+    <div class="daily-block">
+      <div class="db-title">🧭 MARCO DE EVALUACIÓN</div>
+      <div style="font-family:var(--fm);font-size:9.5px;color:var(--m2);line-height:2;">
+        <span style="color:var(--gold)">→</span> ¿Impacto en mis metas de 2026?<br>
+        <span style="color:var(--gold)">→</span> ¿Urgente o solo parece urgente?<br>
+        <span style="color:var(--gold)">→</span> ¿Qué sacrifico si digo sí a esto?<br>
+        <span style="color:var(--gold)">→</span> ¿Mi yo de 2029 aprobaría esta decisión?<br>
+        <span style="color:var(--gold)">→</span> ¿Qué pasa si no lo hago hoy?
+      </div>
+    </div>
+  </div>
+  <div class="stag" style="margin-bottom:9px;">// timeline de decisiones clave 2026</div>
+  <div id="strategyTimeline"></div>
+</div></div>
+
+<!-- 04 PROYECTOS -->
+<div class="page" id="page-proyectos"><div class="wrap">
+  <div class="stag">// 04 · seguimiento de proyectos activos</div>
+  <div class="sttl">🚀 Mis <span class="gc">Proyectos</span></div>
+  <div id="projectsList"></div>
+</div></div>
+
+<!-- 05 BALANCE DE VIDA -->
+<div class="page" id="page-balance"><div class="wrap">
+  <div class="stag">// 05 · rueda de la vida · actualizar semanalmente · 1 = muy mal · 10 = excelente</div>
+  <div class="sttl">⚖️ Balance de <span class="gc">Vida</span></div>
+  <div class="alrt alj">Mové cada slider para reflejar cómo te sentís HOY. Guardá al final para ver tu evolución semana a semana.</div>
+  <div class="life-wheel" id="lifeWheel"></div>
+  <div style="margin-top:14px;display:flex;gap:7px;flex-wrap:wrap;">
+    <button class="btn bj" onclick="saveLifeBalance()">💾 GUARDAR BALANCE</button>
+  </div>
+  <div id="lifeBalanceHistory" style="margin-top:14px;"></div>
+</div></div>
+
+<!-- 06 REGISTRO DE DECISIONES -->
+<div class="page" id="page-decisiones"><div class="wrap">
+  <div class="stag">// 06 · registro histórico de decisiones</div>
+  <div class="sttl">📝 Registro de <span class="gc">Decisiones</span></div>
+  <div style="display:flex;gap:7px;margin-bottom:13px;flex-wrap:wrap;">
+    <button class="btn bj" onclick="om('mDecision')">+ NUEVA DECISIÓN</button>
+    <select id="decisionFilter" onchange="renderDecisions()">
+      <option value="all">Todas las áreas</option>
+      <option value="carrera">💼 Carrera</option>
+      <option value="finanzas">💰 Finanzas</option>
+      <option value="educacion">🎓 Educación</option>
+      <option value="salud">💚 Salud</option>
+      <option value="marca">📱 Marca</option>
+      <option value="personal">💬 Personal</option>
+    </select>
+  </div>
+  <div id="decisionsList"></div>
+</div></div>
+
+<!-- 07 MARCA PERSONAL -->
+<div class="page" id="page-marca"><div class="wrap">
+  <div class="stag">// 07 · 4 owners · contenido · métricas · seguimiento</div>
+  <div class="sttl">🐉 Marca <span class="gc">Personal</span></div>
+  <div class="brand-hub" id="brandHub"></div>
+</div></div>
+
+<!-- HÁBITOS -->
+<div class="page" id="page-habitos"><div class="wrap">
+  <div class="stag">// hábitos atómicos · check diario · comentarios por hábito</div>
+  <div class="sttl" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+    <span>Hábitos <span class="gc">Atómicos</span></span>
+    <button class="btn bj" onclick="openAddHabit()">+ NUEVO</button>
+  </div>
+  <div class="day-save-bar">
+    <div><div style="font-family:var(--fd);font-size:13px;color:var(--gold)!important;font-weight:700;">💾 Guardar Día Completo</div>
+    <div style="font-family:var(--fm);font-size:9px;color:var(--m2)!important;margin-top:2px;">Cierra el día, guarda el historial y resetea para mañana</div></div>
     <button class="day-save-btn" onclick="saveDailySnapshot()">💾 GUARDAR DÍA</button>
   </div>
-
   <div class="hgrid" id="habitGrid"></div>
 </div></div>
 
-<!-- ══════════ PLANNER ══════════ -->
-<div class="page" id="page-planner"><div class="wrap">
-  <div class="stag">// planner visual tipo to-do · tocá para completar · se desliza al marcarse</div>
-  <div class="sttl">Mi <span class="gc">Semana</span></div>
-
-  <div class="day-tabs" id="dayFilters">
-    <div class="dtab active" onclick="setPlannerFilter('today',this)">📌 Hoy</div>
-    <div class="dtab" onclick="setPlannerFilter('0',this)">Lun</div>
-    <div class="dtab" onclick="setPlannerFilter('1',this)">Mar</div>
-    <div class="dtab" onclick="setPlannerFilter('2',this)">Mié</div>
-    <div class="dtab" onclick="setPlannerFilter('3',this)">Jue</div>
-    <div class="dtab" onclick="setPlannerFilter('4',this)">Vie</div>
-    <div class="dtab" onclick="setPlannerFilter('5',this)">Sáb</div>
-    <div class="dtab" onclick="setPlannerFilter('6',this)">Dom</div>
-    <div class="dtab" onclick="setPlannerFilter('all',this)">📋 Todo</div>
-  </div>
-
-  <div class="planner-list" id="plannerList"></div>
+<!-- METAS -->
+<div class="page" id="page-metas"><div class="wrap">
+  <div class="stag">// roadmap 2026–2029 · tocá el nodo para cambiar estado</div>
+  <div class="sttl">🎯 Metas <span class="gc">2026–2029</span></div>
+  <div style="margin-bottom:22px;"><div class="stag" style="margin-bottom:9px;">// habilidades actuales — slider para actualizar</div><div id="skillsBlock"></div></div>
+  <div id="msBlock"></div>
 </div></div>
 
-<!-- ══════════ CONTENIDO ══════════ -->
-<div class="page" id="page-contenido"><div class="wrap">
-  <div class="stag">// planner de contenido · 4 owners · métricas</div>
-  <div class="sttl" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
-    <span>Planner de <span class="gc">Contenido</span></span>
-    <button class="btn bj" onclick="openAddPost()">+ NUEVO POST</button>
-  </div>
-
-  <!-- Owner filter tabs -->
-  <div class="owner-tabs" id="ownerTabs"></div>
-
-  <div class="cp-grid" id="postsGrid"></div>
-</div></div>
-
-<!-- ══════════ BITÁCORA ALIMENTACIÓN/EJERCICIO ══════════ -->
-<div class="page" id="page-bitacora"><div class="wrap">
-  <div class="stag">// alimentación con fotos · ejercicios · medidas corporales</div>
-  <div class="sttl">Bitácora <span class="gc">Salud</span></div>
-
-  <!-- FOOD SECTION -->
-  <div style="margin-bottom:26px;">
-    <div class="stag" style="margin-bottom:10px;">// 🍽 registrar comida</div>
-    <div style="background:var(--s1);border:1px solid var(--border);padding:14px;margin-bottom:14px;">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
-        <select id="mealType">
-          <option value="Desayuno">Desayuno</option>
-          <option value="Media mañana">Media mañana</option>
-          <option value="Almuerzo">Almuerzo</option>
-          <option value="Merienda">Merienda</option>
-          <option value="Cena">Cena</option>
-          <option value="Snack">Snack</option>
-        </select>
-        <input type="text" id="mealName" placeholder="Nombre (ej: Pollo al horno)">
-      </div>
-      <textarea id="mealDesc" rows="2" placeholder="Descripción / ingredientes / cómo me sentí" style="margin-bottom:8px;"></textarea>
-      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-        <button class="btn bg" onclick="document.getElementById('mealPhotoFile').click()">📸 Subir foto</button>
-        <img id="mealPhotoPreview" style="display:none;max-height:60px;border:1px solid var(--border);" alt="preview">
-        <button class="btn bj" onclick="saveMeal()">💾 GUARDAR COMIDA</button>
-      </div>
-    </div>
-    <div class="meal-grid" id="mealsGrid"></div>
-  </div>
-
-  <!-- EXERCISE SECTION -->
-  <div style="margin-bottom:26px;">
-    <div class="stag" style="margin-bottom:10px;">// 🏋️ registrar ejercicio</div>
-    <div style="background:var(--s1);border:1px solid var(--border);padding:14px;margin-bottom:12px;">
-      <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:7px;margin-bottom:8px;">
-        <input type="text" id="exName" placeholder="Nombre (ej: Sentadilla)">
-        <input type="number" id="exSets" placeholder="Sets">
-        <input type="number" id="exReps" placeholder="Reps">
-        <input type="number" id="exWeight" placeholder="Peso kg">
-      </div>
-      <button class="btn bj" onclick="saveExercise()">💾 GUARDAR EJERCICIO</button>
-    </div>
-    <div id="exercisesList"></div>
-  </div>
-
-  <!-- MEASURES SECTION -->
-  <div>
-    <div class="stag" style="margin-bottom:10px;">// 📏 medidas corporales</div>
-    <div style="background:var(--s1);border:1px solid var(--border);padding:14px;margin-bottom:12px;">
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:8px;">
-        <input type="number" id="msWeight" placeholder="Peso (kg)" step="0.1">
-        <input type="number" id="msWaist" placeholder="Cintura (cm)" step="0.5">
-        <input type="number" id="msChest" placeholder="Pecho (cm)" step="0.5">
-      </div>
-      <input type="text" id="msNotes" placeholder="Notas (cómo te sentiste)" style="margin-bottom:8px;">
-      <button class="btn bj" onclick="saveMeasure()">💾 GUARDAR MEDIDAS</button>
-    </div>
-    <div id="measuresList"></div>
-  </div>
-</div></div>
-
-<!-- ══════════ FINANZAS ══════════ -->
+<!-- FINANZAS -->
 <div class="page" id="page-finanzas"><div class="wrap">
-  <div class="stag">// movimientos · boletas · gastos</div>
-  <div class="sttl">Finanzas <span class="gc">&amp; Gastos</span></div>
-  <div class="cards" style="margin-bottom:16px;">
-    <div class="card cj"><div class="clbl">Ingreso</div><div class="cval" style="color:var(--jade)">S/6,002</div><div class="csub">mes</div></div>
-    <div class="card cr"><div class="clbl">Fijos</div><div class="cval" style="color:var(--crimson)">S/4,817</div><div class="csub">80%</div></div>
-    <div class="card cs"><div class="clbl">Variables</div><div class="cval" style="color:var(--sky)" id="hormiTotal">S/0</div><div class="csub">gastos</div></div>
-    <div class="card cg"><div class="clbl">ETF</div><div class="cval" style="color:var(--gold)" id="etfFin">S/0</div><div class="csub">Renta4</div></div>
+  <div class="stag">// finanzas reales actualizadas con contexto maestro</div>
+  <div class="sttl">💰 Finanzas <span class="gc">Reales</span></div>
+  <div class="cards" style="margin-bottom:14px;">
+    <div class="card cj"><div class="clbl">Ingreso neto</div><div class="cval" style="color:var(--jade)">S/6,302</div><div class="csub">+S/300 adicional</div></div>
+    <div class="card cr"><div class="clbl">Gastos fijos est.</div><div class="cval" style="color:var(--crimson)">S/4,015</div><div class="csub">Sin cuota hipotecaria aún</div></div>
+    <div class="card cs"><div class="clbl">ETF (Hapi)</div><div class="cval" style="color:var(--sky)">$4,300</div><div class="csub">VOO 59% VXUS 23% BND 10%</div></div>
+    <div class="card cg"><div class="clbl">Liquidez</div><div class="cval" style="color:var(--gold)">S/46,500</div><div class="csub">Confirmar y reasignar</div></div>
+    <div class="card cv"><div class="clbl">AFP Integra F3</div><div class="cval" style="color:var(--violet)">S/4,507</div><div class="csub">Largo plazo · no tocar</div></div>
+    <div class="card cr"><div class="clbl">Cuota hipotec.</div><div class="cval" style="color:var(--crimson)">S/1,977</div><div class="csub">Desde Nov 2026 · 20 años</div></div>
   </div>
-  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;">
-    <button class="btn bj" onclick="om('mGasto')">+ MOVIMIENTO</button>
-    <button class="btn bg" onclick="gp('boletas',null)">🧾 ESCANEAR BOLETA</button>
-    <button class="btn bv" onclick="gp('finanzas-expert',null)">💼 MODO EXPERTO</button>
+  <div class="alrt alg"><strong>Próximas acciones financieras:</strong><br>· Separar S/30,000 como fondo de emergencia en cuenta dedicada<br>· Mover excedente de liquidez hacia ETF (meta S/15K adicionales en 2026)<br>· Airbnb La Victoria desde Nov 2026 con PriceLabs → S/2,800–3,200/mes proyectado<br>· Ajustar presupuesto desde Ago 2026 para absorber cuota hipotecaria S/1,977</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+    <div class="cbox"><div class="cttl">PATRIMONIO DESGLOSADO</div><div id="patrimonioList"></div></div>
+    <div class="cbox"><div class="cttl">ETF HAPI — DISTRIBUCIÓN ACTUAL</div><div style="position:relative;height:190px;"><canvas id="etfChart"></canvas></div></div>
   </div>
-  <div id="gastosList"></div>
 </div></div>
 
-<!-- ══════════ FINANZAS EXPERTO ══════════ -->
-<div class="page" id="page-finanzas-expert"><div class="wrap">
-  <div class="stag">// análisis detallado · por mes · distribución · consejos</div>
-  <div class="sttl">Finanzas <span class="gc">Modo Experto</span></div>
-  <div id="financeExpert"></div>
-</div></div>
-
-<!-- ══════════ BOLETAS IA ══════════ -->
+<!-- BOLETAS IA -->
 <div class="page" id="page-boletas"><div class="wrap">
-  <div class="stag">// foto → IA → guardar en finanzas + subir a GitHub</div>
-  <div class="sttl">Boletas con <span class="tc">IA</span></div>
-
-  <div class="alrt alj">
-    <strong>Flujo automático:</strong> Subís foto → IA detecta monto → confirmás → se guarda + sube a GitHub en <code>boletas/YYYY-MM/</code>
-  </div>
-
+  <div class="stag">// foto → ia detecta monto → guarda automáticamente</div>
+  <div class="sttl">🧾 Boletas con <span class="tc">IA</span></div>
   <div class="scan-zone" id="scanZone" onclick="document.getElementById('receiptFile').click()"
     ondragover="event.preventDefault();this.classList.add('drag')"
     ondragleave="this.classList.remove('drag')"
     ondrop="dropReceipt(event)">
-    <div class="scan-icon">📸</div>
-    <div class="scan-txt">Tocá para subir foto de boleta</div>
-    <div class="scan-sub">JPG, PNG · todo tipo de comprobante</div>
+    <div style="font-size:30px;margin-bottom:7px;">📸</div>
+    <div style="font-family:var(--fm);font-size:11px;color:var(--m2);">Tocá para subir foto de boleta</div>
+    <div style="font-family:var(--fm);font-size:9px;color:var(--muted);margin-top:4px;">JPG, PNG · cualquier tipo de comprobante</div>
   </div>
-
   <div class="ai-load" id="aiLoad">🐉 Analizando con IA... <span id="aiDots"></span></div>
-
   <div class="ai-result" id="aiResult">
-    <div class="stag" style="margin-bottom:8px;">// resultado</div>
-    <div class="ar-row"><span class="ar-lbl">TIPO</span><span class="ar-val" id="arTipo">—</span></div>
-    <div class="ar-row"><span class="ar-lbl">DESCRIPCIÓN</span><span class="ar-val" id="arDesc">—</span></div>
-    <div class="ar-row"><span class="ar-lbl">MONTO</span><span class="ar-val" id="arMonto">—</span></div>
-    <div class="ar-row"><span class="ar-lbl">FECHA</span><span class="ar-val" id="arFecha">—</span></div>
-    <div class="ar-row"><span class="ar-lbl">CATEGORÍA</span><span class="ar-val" id="arCat">—</span></div>
-    <div style="display:flex;gap:8px;margin-top:12px;">
+    <div class="stag" style="margin-bottom:7px;">// resultado del análisis</div>
+    <div class="ar-row"><span class="ar-lbl">TIPO</span><span id="arTipo" style="font-weight:700;">—</span></div>
+    <div class="ar-row"><span class="ar-lbl">DESCRIPCIÓN</span><span id="arDesc" style="font-weight:700;">—</span></div>
+    <div class="ar-row"><span class="ar-lbl">MONTO</span><span id="arMonto" style="font-weight:700;">—</span></div>
+    <div class="ar-row"><span class="ar-lbl">FECHA</span><span id="arFecha" style="font-weight:700;">—</span></div>
+    <div style="display:flex;gap:7px;margin-top:11px;">
       <button class="btn bj" onclick="confirmReceipt()">✓ CONFIRMAR</button>
       <button class="btn br" onclick="cancelReceipt()">✕ DESCARTAR</button>
     </div>
   </div>
-
-  <div id="ghStatus" style="display:none;background:var(--s2);border:1px solid var(--border);padding:12px;margin-top:10px;font-family:var(--fm);font-size:10px;">
-    <div class="gh-step" id="ghs1">⚪ Preparando imagen...</div>
-    <div class="gh-step" id="ghs2">⚪ Conectando con GitHub...</div>
-    <div class="gh-step" id="ghs3">⚪ Subiendo archivo...</div>
-    <div class="gh-step" id="ghs4">⚪ ¡Listo!</div>
-  </div>
-
-  <div style="margin-top:20px;">
-    <div class="stag" style="margin-bottom:8px;">// boletas escaneadas</div>
-    <div id="boletasList"></div>
-  </div>
+  <div style="margin-top:16px;"><div class="stag" style="margin-bottom:8px;">// movimientos registrados</div><div id="gastosList"></div></div>
 </div></div>
 
-<!-- ══════════ METAS ══════════ -->
-<div class="page" id="page-metas"><div class="wrap">
-  <div class="stag">// roadmap 2026–2029</div>
-  <div class="sttl">Cronograma <span class="gc">2026–2029</span></div>
-  <div style="margin-bottom:24px;">
-    <div class="stag" style="margin-bottom:10px;">// habilidades — slider para actualizar</div>
-    <div id="skillsBlock"></div>
-  </div>
-  <div class="ms-list" id="msBlock"></div>
-</div></div>
+<script>
+// ═══════════════════════════════════════════
+// DATA — actualizada con contexto maestro
+// ═══════════════════════════════════════════
+const PHRASES_2026=[
+  {cat:'Estoicismo',text:'Memento mori: recordá que morirás. No como amenaza — como liberación de lo trivial.',author:'Séneca'},
+  {cat:'Matemática',text:'Un 1% mejor cada día = 37× mejor al año. La diferencia es exponencial.',author:'James Clear'},
+  {cat:'Filosofía',text:'Somos lo que hacemos repetidamente. La excelencia es un hábito, no un acto.',author:'Aristóteles'},
+  {cat:'Autorrealización',text:'No necesitás permiso de nadie para empezar. La única autorización que cuenta es la tuya.',author:'Brené Brown'},
+  {cat:'Física',text:'La energía ni se crea ni se destruye — solo se transforma. Lo que invertís en aprender nunca se pierde.',author:'Ley de conservación'},
+  {cat:'Matemática',text:'El interés compuesto es la octava maravilla del mundo. Quien lo entiende, lo gana. Quien no, lo paga.',author:'Albert Einstein'},
+  {cat:'Estoicismo',text:'Dividí el día en lo que controlás y lo que no. Enfocá toda tu energía en lo primero.',author:'Marco Aurelio'},
+  {cat:'Autorrealización',text:'El propósito no se encuentra — se construye, un pequeño acto diario a la vez.',author:'Viktor Frankl'},
+  {cat:'Filosofía',text:'Conocete a vos misma. Ese es el principio y el fin de toda sabiduría.',author:'Sócrates'},
+  {cat:'Ciencias',text:'Tu cerebro se reconfigura con cada nuevo hábito. Literalmente te reconstruís neurona por neurona.',author:'Neuroplasticidad'},
+  {cat:'Matemática',text:'P(éxito) = esfuerzo × tiempo × dirección. Cambiar cualquier variable cambia el resultado.',author:'Corina OS'},
+  {cat:'Estoicismo',text:'No es lo que te sucede lo que te define, sino cómo respondés. Ese espacio es tu libertad.',author:'Viktor Frankl'},
+  {cat:'Filosofía',text:'El conocimiento es la única riqueza que, al compartirse, se multiplica.',author:'Francis Bacon'},
+  {cat:'Autorrealización',text:'La hacienda tranquila que imaginás es el resultado natural de quien te estás convirtiendo hoy.',author:'Corina OS'},
+  {cat:'Física',text:'La gravedad actúa igual sobre el hierro y el oro. La constancia tampoco discrimina.',author:'Corina OS'},
+  {cat:'Matemática',text:'Fibonacci encontró belleza donde cada paso suma los dos anteriores. Así crece lo que construís.',author:'Leonardo Fibonacci'},
+  {cat:'Estoicismo',text:'El tiempo perdido no se recupera. Pero el tiempo que resta puede invertirse con mayor sabiduría.',author:'Marco Aurelio'},
+  {cat:'Ciencias',text:'Los sistemas complejos emergen de reglas simples repetidas. Tu vida emerge de tus hábitos de hoy.',author:'Teoría de sistemas'},
+  {cat:'Filosofía',text:'No hay viento favorable para quien no sabe a qué puerto va.',author:'Séneca'},
+  {cat:'Autorrealización',text:'Dejá de querer ser la versión que otros necesitan. Sé la versión que vos necesitás.',author:'Corina OS'},
+  {cat:'Matemática',text:'La derivada es la pendiente del cambio. Hoy podés definir la pendiente de tu mañana.',author:'Cálculo'},
+  {cat:'Filosofía',text:'El que tiene un porqué para vivir puede soportar casi cualquier cómo.',author:'Nietzsche'},
+  {cat:'Estoicismo',text:'No actúes sin deliberar. Pero una vez deliberado, actuá con plena decisión.',author:'Marco Aurelio'},
+  {cat:'Ciencias',text:'La dopamina se libera al acercarse a la meta, no al llegar. El viaje es la recompensa.',author:'Neurobiología'},
+  {cat:'Autorrealización',text:'Lo que no medís, no podés mejorarlo. Lo que no registrás, no podés medirlo.',author:'Peter Drucker'},
+  {cat:'Matemática',text:'La probabilidad de un evento improbable aumenta con cada intento. No abandonés antes del cambio.',author:'Corina OS'},
+  {cat:'Filosofía',text:'La libertad no es la ausencia de reglas. Es la disciplina de las correctas.',author:'Corina OS'},
+  {cat:'Estoicismo',text:'La autodisciplina es la habilidad más poderosa. Sin ella, todas las demás quedan dormidas.',author:'Séneca'},
+  {cat:'Ciencias',text:'El sueño consolida todo lo que aprendiste. 7 horas no es debilidad — es estrategia.',author:'Neurociencia'},
+  {cat:'Autorrealización',text:'La disciplina pesa gramos. El arrepentimiento pesa toneladas.',author:'Jim Rohn'},
+];
 
-<!-- ══════════ NOTAS ══════════ -->
-<div class="page" id="page-notas"><div class="wrap">
-  <div class="stag">// bitácora de reflexiones</div>
-  <div class="sttl">Mis <span class="tc">Notas</span></div>
-  <select id="noteTag" style="margin-bottom:8px;">
-    <option value="general">General</option>
-    <option value="finanzas">Finanzas</option>
-    <option value="estudio">Estudio / IA</option>
-    <option value="habitos">Hábitos</option>
-    <option value="contenido">Contenido</option>
-    <option value="personal">Personal</option>
-  </select>
-  <textarea id="noteInput" rows="5" placeholder="¿Qué avancé? ¿Qué aprendí? ¿Cómo me re-encarrilé?" style="margin-bottom:8px;"></textarea>
-  <div style="margin-bottom:20px;"><button class="btn bj" onclick="addNote()">+ GUARDAR NOTA</button></div>
-  <div id="notesList"></div>
-</div></div>
+function getPhraseForDate(d){
+  const s=new Date('2026-01-01T00:00:00');
+  const diff=Math.floor((d-s)/(1000*60*60*24));
+  const idx=((diff%PHRASES_2026.length)+PHRASES_2026.length)%PHRASES_2026.length;
+  return {...PHRASES_2026[idx],dayOfYear:diff+1};
+}
 
-<!-- ══════════ SCRIPTS ══════════ -->
-<script src="data.js"></script>
-<script src="app.js"></script>
+const HABITS_DEFAULT=[
+  {id:'wake',    name:'Despertar 5:00am + higiene',     time:'5:00–5:30am',  freq:'Diario',       c:'gold'},
+  {id:'exercise',name:'Ejercicio mañana (correr/gym)',   time:'5:30–6:30am',  freq:'Lun–Vie',      c:'crimson'},
+  {id:'bkfast',  name:'Desayuno (sin lactosa)',           time:'6:30–6:50am',  freq:'Diario',       c:'jade'},
+  {id:'icpna',   name:'ICPNA Inglés',                    time:'7:00–8:00am',  freq:'Lun–Vie',      c:'sky'},
+  {id:'work',    name:'Trabajo Hitachi Rail',             time:'8:10am–5pm',   freq:'Lun–Vie',      c:'jade'},
+  {id:'anki',    name:'Anki PMP / Inglés / Idiomas',     time:'En transporte', freq:'Diario',       c:'gold'},
+  {id:'pmp',     name:'Estudio PMP intensivo',           time:'6:00–8:00pm',  freq:'Lun/Mié/Vie',  c:'crimson'},
+  {id:'gym',     name:'Smart Fit',                       time:'6:00–7:30pm',  freq:'Mar/Jue/Sáb',  c:'crimson'},
+  {id:'maestria',name:'Maestría ESAN',                   time:'7:00–10:30pm', freq:'Lun/Jue',      c:'violet'},
+  {id:'ingles',  name:'Inglés C1 extra · 30min',         time:'10:00–10:30pm',freq:'Diario',       c:'sky'},
+  {id:'italiano',name:'Italiano · 15min',                time:'10:30–10:45pm',freq:'Diario',       c:'sky'},
+  {id:'read',    name:'Leer 10 páginas',                 time:'Antes de dormir',freq:'Diario',     c:'jade'},
+  {id:'sleep',   name:'Dormir 7h',                       time:'11:00pm–6:00am',freq:'Diario',      c:'jade'},
+  {id:'etfinv',  name:'Revisar portafolio ETF',          time:'Día 25',        freq:'Mensual',      c:'gold'},
+  {id:'plan',    name:'Planificar semana siguiente',      time:'Dom noche',     freq:'Domingo',      c:'gold'},
+];
 
+const MILESTONES_DEF=[
+  {id:'pmp',    when:'AGO 2026',  title:'PMP Certificada',                  status:'now', pct:35, desc:'Intensivo: 2h L/M/V + Anki diario. Simular 300 preguntas/semana. Fecha objetivo: agosto 2026.'},
+  {id:'docto',  when:'19 JUL',   title:'Examen Doctorado UNSA CS',          status:'now', pct:25, desc:'Examen admisión 19 julio. Correo enviado a Mesa de Partes. Preparar documentos académicos.'},
+  {id:'visa',   when:'22 SEP',   title:'Cita Visa Schengen',                status:'now', pct:10, desc:'Preparar documentación. Barcelona 18-23 ene 2027. Eurotrip hasta 31 enero con mamá.'},
+  {id:'esan',   when:'NOV 2026', title:'Cierre académico Maestría ESAN',    status:'now', pct:60, desc:'4to ciclo ago–nov. Tesis con grupo en avance. Estación E4-8 Línea 4 Metro Lima y Callao.'},
+  {id:'airbnb', when:'NOV 2026', title:'Airbnb La Victoria activo',         status:'soon',pct:10, desc:'40m² remodelado + PriceLabs + Airbnb + Booking. Proyección: S/2,800–3,200/mes neto.'},
+  {id:'europa', when:'ENE 2027', title:'Seminario int. + Eurotrip',         status:'soon',pct:5,  desc:'Barcelona 18-23 enero. Eurotrip hasta 31 enero. Con mamá. Trenes + Airbnb.'},
+  {id:'tesis',  when:'FEB 2027', title:'Defensa de Tesis ESAN',             status:'soon',pct:15, desc:'Grupo con avance consolidado. Estación E4-8. Defensa estimada feb–mar 2027.'},
+  {id:'sunedu', when:'JUL 2027', title:'Registro SUNEDU Maestría',          status:'soon',pct:0,  desc:'Trámite post-defensa. Estimado jul–oct 2027. Desbloquea postulación doctoral formal.'},
+  {id:'docto2', when:'2027-II',  title:'Inicio Doctorado CS UNSA',          status:'soon',pct:0,  desc:'Con SUNEDU listo: postulación formal. Meta: investigar IA aplicada a gestión de proyectos.'},
+];
+
+const SKILLS_DEF=[
+  {id:'pm',      name:'Gestión de Proyectos',  base:85,c:'#d4a843'},
+  {id:'mec',     name:'Ing. Mecatrónica',       base:85,c:'#2ecfa0'},
+  {id:'ingles',  name:'Inglés (B1+ → C1)',      base:58,c:'#4090e8'},
+  {id:'python',  name:'Python / ML',             base:42,c:'#2ecfa0'},
+  {id:'ia',      name:'IA / Deep Learning',      base:30,c:'#4090e8'},
+  {id:'fin',     name:'Finanzas / Inversión',    base:45,c:'#d4a843'},
+  {id:'make',    name:'Make.com / Automatiz.',   base:35,c:'#9060e0'},
+  {id:'cont',    name:'Contenido / Marcas',      base:32,c:'#e04060'},
+  {id:'italiano',name:'Italiano',                base:8, c:'#f06820'},
+  {id:'mandarin',name:'Mandarín',                base:5, c:'#e04060'},
+];
+
+const LIFE_AREAS=[
+  {id:'carrera',   name:'Carrera / Trabajo',    icon:'💼',color:'#2ecfa0'},
+  {id:'finanzas',  name:'Finanzas / Inversión', icon:'💰',color:'#d4a843'},
+  {id:'salud',     name:'Salud / Energía',      icon:'💚',color:'#2ecfa0'},
+  {id:'estudio',   name:'Estudio / Crecimiento',icon:'🎓',color:'#4090e8'},
+  {id:'relaciones',name:'Relaciones / Social',  icon:'❤️',color:'#e04060'},
+  {id:'marca',     name:'Marca Personal',       icon:'🐉',color:'#d4a843'},
+  {id:'ocio',      name:'Ocio / Diversión',     icon:'🎪',color:'#9060e0'},
+  {id:'proposito', name:'Propósito / Paz',      icon:'🌿',color:'#2ecfa0'},
+];
+
+const BRANDS=[
+  {id:'corina', name:'CORINA LAZO',   handle:'@vita_fenix_can',        icon:'🐉',color:'#d4a843',
+   plats:['LinkedIn','Instagram'],    seg:0,
+   plan:['Post frases filosóficas explicadas 3x/semana','Historia de reinvención 2026 en LinkedIn','Contenido PMP + doctorado + finanzas']},
+  {id:'shakira',name:'SHAKIRA',       handle:'@shakiralazogatita',      icon:'🐱',color:'#2ecfa0',
+   plats:['TikTok','Instagram'],      seg:23,
+   plan:['Videos cotidianos 5x/semana TikTok','Trends + humor + momentos reales','Colaboraciones marcas mascotas']},
+  {id:'audio',  name:'AUDIO ELEC.',   handle:'@audio_electronica.pe',   icon:'🔊',color:'#4090e8',
+   plats:['Instagram','YouTube'],     seg:179,
+   plan:['Tutoriales técnicos 1x/semana YouTube','Comparativas de productos audio','Reviews + guías de instalación']},
+  {id:'flores', name:'MANOS FLOR.',   handle:'@manosqueflorecen.pe',    icon:'🌸',color:'#e04060',
+   plats:['Instagram','Pinterest'],   seg:15,
+   plan:['Proceso de arreglos 3x/semana IG','Behind the scenes talleres','Temporadas y eventos Lima']},
+];
+
+const PROJECTS_DATA=[
+  {id:'hitachi',title:'Hitachi Rail — Metro L2 Power Supply',   color:'#2ecfa0',status:'active',pct:65,
+   desc:'Associate Construcción Power Supply. OTDR, megado BT, SER E20, celdas MT, KPI con Power BI.',
+   next:'Seguimiento hitos instalación. Meta: >95% cumplimiento de hitos.',
+   ms:['✓ Interfaces ICI','✓ Celdas MT','CSIL observación','Cierre Tramo 5']},
+  {id:'esan',  title:'Tesis ESAN — Estación E4-8 Línea 4',      color:'#d4a843',status:'active',pct:40,
+   desc:'Charter PM4R, EDT/WBS, organigrama RACI, costos, calidad, planificación y monitoreo.',
+   next:'Avanzar capítulos con el grupo. Defensa estimada feb–mar 2027.',
+   ms:['✓ Charter PM4R','✓ Organigrama RACI','WBS completo','Análisis riesgos','Defensa']},
+  {id:'pmp_c', title:'Certificación PMP',                        color:'#e04060',status:'active',pct:35,
+   desc:'PMI Study Hall Plus. Gaps identificados: Process domain + Business Environment.',
+   next:'Intensivo: 2h L/M/V + Anki diario + 300 simulacros/semana. Fecha: Agosto 2026.',
+   ms:['✓ Study Hall activado','Simulacros 70%+','300 preguntas/semana','Examen Agosto 2026']},
+  {id:'docto', title:'Doctorado CS — UNSA',                      color:'#9060e0',status:'active',pct:20,
+   desc:'Ciencias de la Computación. IA aplicada a gestión de proyectos. Admisión condicional en gestión.',
+   next:'Examen admisión 19 julio. Correo enviado. Preparar portafolio académico.',
+   ms:['✓ Correo enviado','Examen 19 Jul 2026','Admisión condicional','1er semestre 2027']},
+  {id:'airbnb',title:'Airbnb La Victoria',                       color:'#f06820',status:'pending',pct:10,
+   desc:'Departamento 40m² · 1 dormitorio. Remodelación + PriceLabs + gestión dual plataformas.',
+   next:'Preparar presupuesto de remodelación. Activar noviembre 2026.',
+   ms:['Presupuesto remodelación','Fotografía profesional','Alta Airbnb + Booking','Primera reserva']},
+  {id:'visio', title:'Visio Guard Solutions',                     color:'#4090e8',status:'pending',pct:5,
+   desc:'Cámaras IA para detección de comportamientos y alertas. Modelo: implementación + mensualidad.',
+   next:'Definir MVP. Investigar partners tecnológicos. Evaluar mercado Lima.',
+   ms:['Investigación de mercado','MVP definido','Pitch a primer cliente']},
+];
+
+const STRATEGY_TIMELINE=[
+  {date:'19 Jul 2026',title:'Examen Doctorado UNSA CS',         impact:'alto', area:'educacion'},
+  {date:'Ago 2026',   title:'Examen PMP — Plan intensivo',      impact:'alto', area:'carrera'},
+  {date:'22 Sep 2026',title:'Cita Visa Schengen',               impact:'alto', area:'personal'},
+  {date:'Nov 2026',   title:'Cierre académico Maestría ESAN',   impact:'alto', area:'educacion'},
+  {date:'Nov 2026',   title:'Activar Airbnb La Victoria',       impact:'alto', area:'finanzas'},
+  {date:'Nov 2026',   title:'Cuota hipotecaria activa S/1,977', impact:'alto', area:'finanzas'},
+  {date:'Ene 2027',   title:'Eurotrip + Seminario Internacional',impact:'medio',area:'personal'},
+  {date:'Feb 2027',   title:'Defensa de Tesis ESAN',            impact:'alto', area:'educacion'},
+];
+
+const PATRIMONIO=[
+  {name:'Liquidez / Efectivo',      val:'S/ 46,500',   note:'Confirmar saldo · reasignar excedente',color:'#d4a843'},
+  {name:'Dólares',                  val:'$360–3,000',  note:'Confirmar monto exacto',                color:'#2ecfa0'},
+  {name:'ETF portafolio (Hapi)',    val:'$4,300 USD',  note:'VOO 59% / VXUS 23% / BND 10.5% / QQQ 6.6%',color:'#4090e8'},
+  {name:'AFP Integra Fondo 3',      val:'S/ 4,507',    note:'Largo plazo · no tocar',                color:'#9060e0'},
+  {name:'Depa La Victoria',         val:'S/ 250,000',  note:'Airbnb desde Nov 2026 · Deuda S/225K TCEA 8.89%',color:'#e04060'},
+  {name:'Terreno Huancayo (93 m²)', val:'S/ 25,000',   note:'Evaluar arrendamiento 2027',             color:'#2ecfa0'},
+  {name:'Terreno Ica',              val:'S/ 15,000',   note:'Zona agroindustrial · potencial solar',  color:'#2ecfa0'},
+];
+
+const COLORS={jade:'var(--jade)',gold:'var(--gold)',crimson:'var(--crimson)',sky:'var(--sky)',violet:'var(--violet)',fire:'var(--fire)'};
+const IMPACT_COLORS={alto:'var(--crimson)',medio:'var(--gold)',bajo:'var(--jade)'};
+const AREA_ICONS={carrera:'💼',finanzas:'💰',educacion:'🎓',salud:'💚',marca:'📱',personal:'💬',negocio:'🏢'};
+
+// ═══ STATE ═══
+let ST={
+  habits:{},habitsDef:null,milestones:{},skills:{},
+  gastos:[],boletas:[],phrases:{},habitComments:{},
+  dailySnapshots:{},decisions:[],weeklyReviews:[],
+  priorities:{},dayReviews:{},lifeBalance:{},lifeBalanceHistory:[],
+  brandMetrics:{},plannerDone:{},
+  currentReceipt:null,currentReceiptB64:null,lastUpdated:null,
+};
+
+function LS(k,v){try{localStorage.setItem('corina_v6_'+k,JSON.stringify(v));}catch(e){}}
+function LG(k,d){try{const v=localStorage.getItem('corina_v6_'+k);return v?JSON.parse(v):d;}catch(e){return d;}}
+function loadAll(){const s=LG('state',null);if(s)ST={...ST,...s};}
+function saveAll(){
+  ST.lastUpdated=new Date().toLocaleString('es-PE',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+  LS('state',ST);
+  const el=document.getElementById('lastUpd');if(el&&ST.lastUpdated)el.textContent=ST.lastUpdated;
+  const b=document.getElementById('saveBtn');
+  if(b){const o=b.innerHTML;b.innerHTML='✓ GUARDADO';setTimeout(()=>b.innerHTML=o,1500);}
+}
+setInterval(saveAll,15000);
+
+// ═══ DRAGON ═══
+function initDragonCursor(){
+  const cur=document.getElementById('cur');
+  const canvas=document.getElementById('dragonCanvas');
+  const ctx=canvas.getContext('2d');
+  function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
+  resize();window.addEventListener('resize',resize);
+  const pts=[];
+  document.addEventListener('mousemove',e=>{
+    cur.style.left=e.clientX+'px';cur.style.top=e.clientY+'px';
+    if(Math.random()>.6){pts.push({x:e.clientX+(Math.random()-.5)*16,y:e.clientY+(Math.random()-.5)*16,vx:(Math.random()-.5)*1.5,vy:-Math.random()*2-.4,life:1,size:Math.random()*3+.6,type:Math.random()>.5?'fire':'spark'});}
+  });
+  document.addEventListener('touchmove',e=>{const t=e.touches[0];cur.style.left=t.clientX+'px';cur.style.top=t.clientY+'px';},{passive:true});
+  (function anim(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    for(let i=pts.length-1;i>=0;i--){
+      const p=pts[i];p.x+=p.vx;p.y+=p.vy;p.life-=.025;p.vy+=.04;
+      if(p.life<=0){pts.splice(i,1);continue;}
+      ctx.globalAlpha=p.life*.75;
+      if(p.type==='fire'){const g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.size*2);g.addColorStop(0,'rgba(240,168,32,.9)');g.addColorStop(1,'rgba(240,80,32,0)');ctx.fillStyle=g;}
+      else ctx.fillStyle=`rgba(212,168,67,${p.life})`;
+      ctx.beginPath();ctx.arc(p.x,p.y,p.size,0,Math.PI*2);ctx.fill();
+    }
+    ctx.globalAlpha=1;requestAnimationFrame(anim);
+  })();
+}
+
+// ═══ NAV ═══
+function gp(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  if(btn)btn.classList.add('active');
+  else document.querySelectorAll('.nav-tab').forEach(t=>{if(t.getAttribute('onclick')&&t.getAttribute('onclick').includes("'"+id+"'"))t.classList.add('active');});
+  const renders={proyectos:renderProjects,balance:renderLifeWheel,marca:renderBrands,finanzas:renderPatrimonio,diario:renderDailyPage,semanal:renderWeeklyPage,estrategia:renderStrategyPage,decisiones:renderDecisions,metas:()=>{renderMilestones();renderSkills();}};
+  if(renders[id])renders[id]();
+}
+function om(id){document.getElementById(id).classList.add('open');if(id==='mSync')refreshJSON();}
+function cm(id){document.getElementById(id).classList.remove('open');}
+function initModals(){document.querySelectorAll('.mo').forEach(m=>{m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');});});}
+
+// ═══ JSON ═══
+function getJSON(){return JSON.stringify(ST,null,2);}
+function refreshJSON(){const el=document.getElementById('jsonPrev');if(el)el.value=getJSON();}
+function exportJSON(){saveAll();const b=new Blob([getJSON()],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='corina_os_'+new Date().toISOString().slice(0,7)+'.json';a.click();}
+function copyJSON(){navigator.clipboard.writeText(getJSON()).then(()=>{const btn=document.querySelector('#mSync .bj:nth-child(3)');if(btn){const o=btn.textContent;btn.textContent='✓';setTimeout(()=>btn.textContent=o,1500);}});}
+function importJSON(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{try{const d=JSON.parse(ev.target.result);ST={...ST,...d};saveAll();renderAll();cm('mSync');alert('✅ Datos importados.');}catch(err){alert('Error al leer el JSON.');}};r.readAsText(f);}
+
+// ═══ PHRASES ═══
+function renderPhrase(container,showForm=true){
+  if(!container)return;
+  const today=new Date();const dateKey=today.toISOString().slice(0,10);
+  const phrase=getPhraseForDate(today);const myPhrase=ST.phrases?.[dateKey]||'';
+  container.innerHTML=`<div class="phrase-card">
+    <div class="phrase-day">Día ${phrase.dayOfYear} de 2026 · ${today.toLocaleDateString('es-PE',{weekday:'long',day:'numeric',month:'long'})}</div>
+    <span class="phrase-cat">${phrase.cat}</span>
+    <div class="phrase-text">"${phrase.text}"</div>
+    <div class="phrase-author">— ${phrase.author}</div>
+    ${showForm?`<div style="margin-top:11px;border-top:1px solid var(--border);padding-top:11px;">
+      <div style="font-family:var(--fm);font-size:8px;color:var(--m2);margin-bottom:5px;letter-spacing:.15em;">✨ TU REFLEXIÓN DE HOY</div>
+      <input class="phrase-own-input" type="text" id="myPhrase_${dateKey}" placeholder="Escribí tu reflexión..." value="${myPhrase.replace(/"/g,'&quot;')}" oninput="saveMyPhrase('${dateKey}',this.value)">
+    </div>`:''}
+  </div>`;
+}
+function saveMyPhrase(k,v){if(!ST.phrases)ST.phrases={};ST.phrases[k]=v;saveAll();}
+
+// ═══ 01 DAILY ═══
+function renderDailyPage(){
+  renderPhrase(document.getElementById('dailyPhrase2'),true);
+  const today=new Date().toISOString().slice(0,10);
+  const saved=ST.dayReviews?.[today]||{};
+  ['dailyIntention','dailyPhraseInput','dayWin','dayImprove'].forEach(id=>{const el=document.getElementById(id);if(el&&saved[id.replace('daily','').replace('Input','').replace('day','').toLowerCase()]){}});
+  if(saved.intention&&document.getElementById('dailyIntention'))document.getElementById('dailyIntention').value=saved.intention;
+  if(saved.wins&&document.getElementById('dayWin'))document.getElementById('dayWin').value=saved.wins;
+  if(saved.improve&&document.getElementById('dayImprove'))document.getElementById('dayImprove').value=saved.improve;
+  renderPriorities();renderTimeBlocks();
+}
+function renderPriorities(){
+  const today=new Date().toISOString().slice(0,10);
+  const pList=ST.priorities?.[today]||[];
+  const g=document.getElementById('prioritiesList');if(!g)return;
+  g.innerHTML=pList.length?pList.map((p,i)=>`
+    <div class="priority-item">
+      <div class="pcheck${p.done?' done':''}" onclick="togPriority(${i})"></div>
+      <div style="flex:1"><div class="p-title">${p.done?'<s style="opacity:.4">':''}${p.text}${p.done?'</s>':''}</div></div>
+      <span class="p-tag tag-${p.tag}">${{critical:'CRÍTICO',important:'IMPORTANTE',habit:'HÁBITO',deep:'PROFUNDO'}[p.tag]||p.tag}</span>
+    </div>`).join('')
+    :'<div style="font-family:var(--fm);font-size:9px;color:var(--muted);padding:10px 0;">Sin prioridades. Máximo 3 críticas por día.</div>';
+}
+function addPriority(){
+  const txt=document.getElementById('newPriority').value.trim();if(!txt)return;
+  const tag=document.getElementById('newPriorityTag').value;
+  const today=new Date().toISOString().slice(0,10);
+  if(!ST.priorities)ST.priorities={};if(!ST.priorities[today])ST.priorities[today]=[];
+  if(tag==='critical'&&(ST.priorities[today]||[]).filter(p=>p.tag==='critical').length>=3){alert('Máximo 3 prioridades críticas por día.');return;}
+  ST.priorities[today].push({text:txt,tag,done:false});
+  document.getElementById('newPriority').value='';
+  renderPriorities();saveAll();
+}
+function togPriority(i){
+  const today=new Date().toISOString().slice(0,10);
+  if(ST.priorities?.[today]?.[i])ST.priorities[today][i].done=!ST.priorities[today][i].done;
+  renderPriorities();saveAll();
+}
+function renderTimeBlocks(){
+  const g=document.getElementById('timeBlocksList');if(!g)return;
+  const d=new Date().getDay();const isWE=d===0||d===6;
+  const blocks=isWE?[
+    {t:'5:00am',txt:'🌅 Despertar + higiene',cl:'bl-gold'},
+    {t:'6:00am',txt:'⛪ Misa (dom) / Descanso',cl:'bl-gold'},
+    {t:'7:00am',txt:'📖 Estudio PMP / GRE',cl:'bl-crimson'},
+    {t:'10:00am',txt:'💼 Proyectos propios / Tesis',cl:'bl-sky'},
+    {t:'3:00pm',txt:'💃 Baile / Folklore / Gym',cl:'bl-crimson'},
+    {t:'7:00pm',txt:'📱 Contenido / Redes sociales',cl:'bl-gold'},
+    {t:'10:00pm',txt:'🇮🇹 Italiano / 📚 Leer / Dormir',cl:'bl-jade'},
+  ]:[
+    {t:'5:00am',txt:'🌅 Despertar + higiene',cl:'bl-gold'},
+    {t:'5:30am',txt:'🏃 Ejercicio mañana',cl:'bl-crimson'},
+    {t:'6:30am',txt:'🍳 Desayuno (sin lactosa)',cl:'bl-jade'},
+    {t:'7:00am',txt:'📚 ICPNA Inglés',cl:'bl-sky'},
+    {t:'8:10am',txt:'⚙️ Trabajo Hitachi Rail L2',cl:'bl-jade'},
+    {t:'En transporte',txt:'🗂 Anki PMP / Inglés / Italiano',cl:'bl-gold'},
+    {t:'5:00pm',txt:'🔄 Cierre laboral + traslado',cl:'bl-jade'},
+    {t:'6:00pm',txt:'💪 Gym SmartFit / 📖 PMP Intensivo',cl:'bl-crimson'},
+    {t:'7:00pm',txt:'🎓 Maestría ESAN (Lun/Jue)',cl:'bl-violet'},
+    {t:'10:00pm',txt:'🇬🇧 Inglés C1 extra · 30min',cl:'bl-sky'},
+    {t:'10:30pm',txt:'🇮🇹 Italiano · 15min',cl:'bl-sky'},
+    {t:'11:00pm',txt:'😴 Dormir 7h',cl:'bl-jade'},
+  ];
+  g.innerHTML=blocks.map((b,i)=>{
+    const key='tb_'+i;const done=ST.plannerDone?.[key];
+    return `<div class="time-block"><div class="tb-time">${b.t}</div>
+    <div class="tb-content ${b.cl}${done?' done':''}" onclick="togTB('${key}')">${b.txt}</div></div>`;
+  }).join('');
+}
+function togTB(k){if(!ST.plannerDone)ST.plannerDone={};ST.plannerDone[k]=!ST.plannerDone[k];renderTimeBlocks();saveAll();}
+function saveDayReview(){
+  const today=new Date().toISOString().slice(0,10);
+  if(!ST.dayReviews)ST.dayReviews={};
+  ST.dayReviews[today]={
+    intention:document.getElementById('dailyIntention')?.value||'',
+    wins:document.getElementById('dayWin')?.value||'',
+    improve:document.getElementById('dayImprove')?.value||'',
+    phrase:document.getElementById('dailyPhraseInput')?.value||'',
+  };
+  saveAll();alert('✅ Día cerrado y guardado en el historial.');
+}
+
+// ═══ 02 WEEKLY ═══
+function renderWeeklyPage(){renderWeeklyHistory();}
+function saveWeeklyReview(){
+  const r={
+    date:new Date().toLocaleDateString('es-PE'),
+    week:new Date().toLocaleDateString('es-PE',{month:'short',day:'numeric'}),
+    wins:document.getElementById('wr_wins')?.value||'',
+    challenges:document.getElementById('wr_challenges')?.value||'',
+    habit:document.getElementById('wr_habit')?.value||'',
+    goals:document.getElementById('wr_goals')?.value||'',
+    energy:document.getElementById('wr_energy')?.value||'',
+    decisions:document.getElementById('wr_decisions')?.value||'',
+    next:[document.getElementById('nw_p1')?.value||'',document.getElementById('nw_p2')?.value||'',document.getElementById('nw_p3')?.value||''],
+  };
+  if(!ST.weeklyReviews)ST.weeklyReviews=[];
+  ST.weeklyReviews.unshift(r);
+  saveAll();renderWeeklyHistory();alert('✅ Revisión semanal guardada.');
+}
+function renderWeeklyHistory(){
+  const h=document.getElementById('weeklyHistory');if(!h)return;
+  const reviews=(ST.weeklyReviews||[]).slice(0,6);
+  h.innerHTML=reviews.length?reviews.map(r=>`
+    <div class="logi" style="border-left-color:var(--jade);flex-direction:column;align-items:flex-start;gap:4px;">
+      <div style="display:flex;justify-content:space-between;width:100%;"><div class="lt">Semana del ${r.week}</div><div class="ld">${r.date}</div></div>
+      ${r.wins?`<div class="lm">🏆 ${r.wins.slice(0,120)}</div>`:''}
+      ${r.next?.filter(Boolean).length?`<div class="lm">→ ${r.next.filter(Boolean).join(' / ')}</div>`:''}
+    </div>`).join('')
+    :'<div style="font-family:var(--fm);font-size:10px;color:var(--m2);">Aún no hay revisiones. Guardá la primera este domingo.</div>';
+}
+
+// ═══ 03 STRATEGY ═══
+function renderStrategyPage(){
+  const d=document.getElementById('pendingDecisions');
+  if(d){
+    const decs=(ST.decisions||[]).slice(0,3);
+    d.innerHTML=decs.length?decs.map(dc=>`
+      <div class="priority-item">
+        <div style="flex:1"><div class="p-title">${dc.title}</div>
+        <div class="p-meta">${AREA_ICONS[dc.area]||'📌'} ${dc.area} · ${dc.date}</div></div>
+        <span class="p-tag" style="color:${IMPACT_COLORS[dc.impact]};border-color:${IMPACT_COLORS[dc.impact]};background:transparent;">${dc.impact.toUpperCase()}</span>
+      </div>`).join('')
+      :'<div style="font-family:var(--fm);font-size:9px;color:var(--m2);padding:8px 0;">Registrá tu primera decisión estratégica.</div>';
+  }
+  const t=document.getElementById('strategyTimeline');
+  if(t)t.innerHTML=STRATEGY_TIMELINE.map(s=>`
+    <div class="logi" style="border-left-color:${IMPACT_COLORS[s.impact]}">
+      <div><div class="lt">${s.title}</div><div class="lm">${AREA_ICONS[s.area]||'📌'} ${s.area}</div></div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;">
+        <div class="ld">${s.date}</div>
+        <span style="font-family:var(--fm);font-size:7.5px;padding:1px 6px;border:1px solid;color:${IMPACT_COLORS[s.impact]};border-color:${IMPACT_COLORS[s.impact]};">${s.impact.toUpperCase()}</span>
+      </div>
+    </div>`).join('');
+}
+
+// ═══ DECISIONS ═══
+function saveDecision(){
+  const title=document.getElementById('dTitle').value.trim();if(!title)return;
+  if(!ST.decisions)ST.decisions=[];
+  ST.decisions.unshift({id:'d_'+Date.now(),title,impact:document.getElementById('dImpact').value,area:document.getElementById('dArea').value,context:document.getElementById('dContext').value,expected:document.getElementById('dExpected').value,date:new Date().toLocaleDateString('es-PE')});
+  cm('mDecision');renderDecisions();renderStrategyPage();saveAll();
+}
+function renderDecisions(){
+  const d=document.getElementById('decisionsList');if(!d)return;
+  const filter=document.getElementById('decisionFilter')?.value||'all';
+  const decs=(ST.decisions||[]).filter(dc=>filter==='all'||dc.area===filter);
+  const ac={carrera:'var(--jade)',finanzas:'var(--gold)',educacion:'var(--sky)',salud:'var(--jade)',marca:'var(--gold)',personal:'var(--violet)',negocio:'var(--sky)'};
+  d.innerHTML=decs.length?decs.map(dc=>`
+    <div class="decision-card" style="border-left-color:${ac[dc.area]||'var(--m2)'}">
+      <div class="dc-header"><div><div class="dc-title">${dc.title}</div><div class="dc-date">${AREA_ICONS[dc.area]||'📌'} ${dc.area} · ${dc.date}</div></div>
+        <span class="dc-impact" style="color:${IMPACT_COLORS[dc.impact]};border-color:${IMPACT_COLORS[dc.impact]};">${dc.impact.toUpperCase()}</span></div>
+      ${dc.context?`<div class="dc-desc">${dc.context}</div>`:''}
+      ${dc.expected?`<div class="dc-outcome">→ ${dc.expected}</div>`:''}
+    </div>`).join('')
+    :'<div style="font-family:var(--fm);font-size:10px;color:var(--m2);">Sin decisiones registradas. Cada decisión importante merece quedar documentada.</div>';
+}
+
+// ═══ 04 PROJECTS ═══
+function renderProjects(){
+  const d=document.getElementById('projectsList');if(!d)return;
+  d.innerHTML=PROJECTS_DATA.map(p=>`
+    <div class="project-card" style="border-top-color:${p.color}">
+      <div class="pc-header"><div class="pc-title">${p.title}</div>
+        <span class="pc-status ${p.status==='active'?'st-active':p.status==='pending'?'st-pending':'st-blocked'}">${{active:'ACTIVO',pending:'PENDIENTE',blocked:'BLOQUEADO'}[p.status]}</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-family:var(--fm);font-size:9px;color:var(--m2);margin-bottom:3px;"><span>${p.desc}</span><span style="color:${p.color};flex-shrink:0;margin-left:8px;">${p.pct}%</span></div>
+      <div class="pc-bar"><div class="pc-fill" style="width:${p.pct}%;background:${p.color}"></div></div>
+      <div style="font-family:var(--fm);font-size:9px;color:var(--gold);margin-bottom:8px;">→ ${p.next}</div>
+      <div>${p.ms.map(m=>`<span class="pc-ms${m.startsWith('✓')?' done':''}">${m}</span>`).join('')}</div>
+    </div>`).join('');
+}
+
+// ═══ 05 LIFE BALANCE ═══
+function renderLifeWheel(){
+  const g=document.getElementById('lifeWheel');if(!g)return;
+  g.innerHTML=LIFE_AREAS.map(a=>{
+    const val=ST.lifeBalance?.[a.id]||5;
+    return `<div class="lw-card">
+      <div class="lw-title"><span>${a.icon} ${a.name}</span><span class="lw-score" id="lws_${a.id}" style="color:${a.color}">${val}</span></div>
+      <div class="lw-bar"><div class="lw-fill" id="lwf_${a.id}" style="width:${val*10}%;background:${a.color}"></div></div>
+      <input type="range" min="1" max="10" value="${val}" style="width:100%;margin-bottom:7px;accent-color:${a.color};" oninput="updLife('${a.id}',this.value)">
+      <textarea class="rs-in" id="lwn_${a.id}" rows="2" placeholder="¿Qué está pasando en esta área?" style="font-size:9px;">${ST.lifeBalance?.['note_'+a.id]||''}</textarea>
+    </div>`;
+  }).join('');
+}
+function updLife(id,val){
+  if(!ST.lifeBalance)ST.lifeBalance={};ST.lifeBalance[id]=parseInt(val);
+  const sc=document.getElementById('lws_'+id),fill=document.getElementById('lwf_'+id);
+  if(sc)sc.textContent=val;if(fill)fill.style.width=val*10+'%';saveAll();
+}
+function saveLifeBalance(){
+  LIFE_AREAS.forEach(a=>{const n=document.getElementById('lwn_'+a.id)?.value;if(n&&ST.lifeBalance)ST.lifeBalance['note_'+a.id]=n;});
+  if(!ST.lifeBalanceHistory)ST.lifeBalanceHistory=[];
+  const snap={date:new Date().toLocaleDateString('es-PE'),scores:{}};
+  LIFE_AREAS.forEach(a=>{snap.scores[a.id]=ST.lifeBalance?.[a.id]||5;});
+  ST.lifeBalanceHistory.unshift(snap);if(ST.lifeBalanceHistory.length>12)ST.lifeBalanceHistory.pop();
+  saveAll();
+  const h=document.getElementById('lifeBalanceHistory');
+  if(h){
+    const hist=(ST.lifeBalanceHistory||[]).slice(0,4);
+    h.innerHTML=hist.length?hist.map(s=>`
+      <div class="logi" style="border-left-color:var(--jade);flex-direction:column;gap:4px;align-items:flex-start;">
+        <div class="ld">${s.date}</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">${LIFE_AREAS.map(a=>`<span style="font-family:var(--fm);font-size:9px;color:var(--m2);">${a.icon} <span style="color:${a.color}">${s.scores[a.id]||5}</span></span>`).join('')}</div>
+      </div>`).join(''):'';
+  }
+  alert('✅ Balance de vida guardado.');
+}
+
+// ═══ 07 BRANDS ═══
+function renderBrands(){
+  const g=document.getElementById('brandHub');if(!g)return;
+  g.innerHTML=BRANDS.map(b=>`
+    <div class="brand-card" style="border-top-color:${b.color}">
+      <div class="bc-head">
+        <div><div class="bc-name">${b.icon} ${b.name}</div><div class="bc-handle" style="color:${b.color}">${b.handle}</div></div>
+        <div style="font-family:var(--fm);font-size:8px;color:var(--m2);">${b.plats.join(' · ')}</div>
+      </div>
+      <div class="bc-body">
+        <div class="bc-kpis">
+          <div class="bc-kpi"><div class="bc-kpi-val" style="color:${b.color}">${ST.brandMetrics?.[b.id]?.seg||b.seg}</div><div class="bc-kpi-lbl">Seguidores</div></div>
+          <div class="bc-kpi"><div class="bc-kpi-val" style="color:${b.color}">${ST.brandMetrics?.[b.id]?.posts||0}</div><div class="bc-kpi-lbl">Posts mes</div></div>
+        </div>
+        <div class="stag" style="margin-bottom:6px;">// plan de contenido</div>
+        ${b.plan.map((item,i)=>{const key=b.id+'_c'+i;const done=ST.plannerDone?.[key];return `<div class="cl-item"><div class="cl-check${done?' done':''}" onclick="togContent('${key}')">${done?'✓':''}</div>${item}</div>`;}).join('')}
+        <div style="margin-top:9px;display:flex;gap:5px;">
+          <input type="number" placeholder="Actualizar seguidores" style="flex:1;font-size:9px;" id="seg_${b.id}">
+          <button class="btn bj" style="font-size:7px;padding:5px 8px;" onclick="updSeg('${b.id}')">OK</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+function togContent(k){if(!ST.plannerDone)ST.plannerDone={};ST.plannerDone[k]=!ST.plannerDone[k];renderBrands();saveAll();}
+function updSeg(id){const input=document.getElementById('seg_'+id);if(!input?.value)return;if(!ST.brandMetrics)ST.brandMetrics={};if(!ST.brandMetrics[id])ST.brandMetrics[id]={};ST.brandMetrics[id].seg=parseInt(input.value);input.value='';renderBrands();saveAll();}
+
+// ═══ HABITS ═══
+function getHDef(){return ST.habitsDef||HABITS_DEFAULT;}
+function renderHabits(){
+  const g=document.getElementById('habitGrid');if(!g)return;
+  const defs=getHDef();const todayKey=new Date().toISOString().slice(0,10);
+  let done=0;g.innerHTML='';
+  defs.forEach(h=>{
+    if(!ST.habits[h.id])ST.habits[h.id]={today:false,week:[0,0,0,0,0,0,0],streak:0};
+    const hd=ST.habits[h.id];if(hd.today)done++;
+    const col=COLORS[h.c]||'var(--jade)';const comment=ST.habitComments?.[h.id+'_'+todayKey]||'';
+    const div=document.createElement('div');div.className='hcard';
+    div.innerHTML=`<div class="hcard-top">
+      <div class="hchk${hd.today?' on':''}" onclick="togH('${h.id}')"></div>
+      <div style="flex:1"><div class="hcard-name">${h.name}</div><div class="hcard-time">${h.time||''}</div></div>
+      <div class="hcard-freq">${h.freq}</div>
+    </div>
+    ${comment?`<div class="hcard-comment">💬 ${comment}</div>`:''}
+    <div class="wdots">${hd.week.map((v,i)=>`<div class="wdot${v?' on':''}" style="${v?`background:${col};border-color:${col};box-shadow:0 0 4px ${col}`:''}" onclick="togD('${h.id}',${i})"></div>`).join('')}</div>
+    <div class="hstreak">Racha: <span>${hd.streak}</span> días · L M X J V S D</div>
+    <div class="hcard-btns">
+      <div class="hbtn" onclick="openHComment('${h.id}')">💬 ${comment?'Editar':'Agregar'} nota</div>
+      <div class="hbtn" onclick="editHabit('${h.id}')">✏️ Editar</div>
+    </div>`;
+    g.appendChild(div);
+  });
+  const hh=document.getElementById('habitHome');if(hh)hh.textContent=done+'/'+defs.length;
+}
+function togH(id){if(!ST.habits[id])ST.habits[id]={today:false,week:[0,0,0,0,0,0,0],streak:0};ST.habits[id].today=!ST.habits[id].today;renderHabits();saveAll();}
+function togD(id,i){if(!ST.habits[id])ST.habits[id]={today:false,week:[0,0,0,0,0,0,0],streak:0};ST.habits[id].week[i]=ST.habits[id].week[i]?0:1;let s=0;const w=ST.habits[id].week;for(let j=w.length-1;j>=0;j--){if(w[j])s++;else break;}ST.habits[id].streak=s;renderHabits();saveAll();}
+function openHComment(id){const h=getHDef().find(x=>x.id===id);if(!h)return;const tk=new Date().toISOString().slice(0,10);document.getElementById('mHCTtl').textContent='💬 '+h.name;document.getElementById('mHCSub').textContent='Nota del '+new Date().toLocaleDateString('es-PE');document.getElementById('hCommentInput').value=ST.habitComments?.[h.id+'_'+tk]||'';document.getElementById('hCommentId').value=id;om('mHComment');}
+function saveHComment(){const id=document.getElementById('hCommentId').value;const txt=document.getElementById('hCommentInput').value.trim();const tk=new Date().toISOString().slice(0,10);if(!ST.habitComments)ST.habitComments={};if(txt)ST.habitComments[id+'_'+tk]=txt;else delete ST.habitComments[id+'_'+tk];cm('mHComment');renderHabits();saveAll();}
+function openAddHabit(){['hName','hTime'].forEach(i=>{const e=document.getElementById(i);if(e)e.value='';});document.getElementById('hEditId').value='';document.getElementById('mHabitTtl').textContent='+ Agregar hábito';const d=document.getElementById('delHBtn');if(d)d.style.display='none';om('mHabit');}
+function editHabit(id){const h=getHDef().find(x=>x.id===id);if(!h)return;document.getElementById('hName').value=h.name;document.getElementById('hTime').value=h.time||'';document.getElementById('hFreq').value=h.freq;document.getElementById('hColor').value=h.c;document.getElementById('hEditId').value=id;document.getElementById('mHabitTtl').textContent='✏️ Editar';const d=document.getElementById('delHBtn');if(d)d.style.display='inline-block';om('mHabit');}
+function saveHabit(){const name=document.getElementById('hName').value.trim();if(!name)return;const id=document.getElementById('hEditId').value;let defs=[...getHDef()];const hab={id:id||'h_'+Date.now(),name,time:document.getElementById('hTime').value,freq:document.getElementById('hFreq').value,c:document.getElementById('hColor').value};if(id){const idx=defs.findIndex(x=>x.id===id);if(idx>=0)defs[idx]=hab;}else defs.push(hab);ST.habitsDef=defs;cm('mHabit');renderHabits();saveAll();}
+function deleteHabit(){const id=document.getElementById('hEditId').value;if(!id||!confirm('¿Eliminar?'))return;ST.habitsDef=getHDef().filter(x=>x.id!==id);cm('mHabit');renderHabits();saveAll();}
+function saveDailySnapshot(){
+  const today=new Date().toISOString().slice(0,10);const defs=getHDef();
+  const snap={date:today,habits:defs.map(h=>({id:h.id,name:h.name,done:ST.habits[h.id]?.today||false,comment:ST.habitComments?.[h.id+'_'+today]||''})),completedCount:defs.filter(h=>ST.habits[h.id]?.today).length,totalHabits:defs.length};
+  if(!ST.dailySnapshots)ST.dailySnapshots={};ST.dailySnapshots[today]=snap;
+  defs.forEach(h=>{if(!ST.habits[h.id])ST.habits[h.id]={today:false,week:[0,0,0,0,0,0,0],streak:0};const w=ST.habits[h.id].week;w.shift();w.push(ST.habits[h.id].today?1:0);ST.habits[h.id].today=false;});
+  renderHabits();saveAll();alert('✅ Día guardado. '+snap.completedCount+'/'+snap.totalHabits+' hábitos.');
+}
+
+// ═══ MILESTONES ═══
+function renderMilestones(){
+  const bl=document.getElementById('msBlock');if(!bl)return;bl.innerHTML='';
+  MILESTONES_DEF.forEach((ms,i)=>{
+    const d=ST.milestones?.[ms.id]||{status:ms.status,pct:ms.pct};
+    const st=d.status,pct=d.pct,isLast=i===MILESTONES_DEF.length-1;
+    const div=document.createElement('div');div.className='ms-row';
+    div.innerHTML=`<div class="ms-when">${ms.when}</div>
+      <div class="ms-spine"><div class="ms-node ${st}" onclick="cycMs('${ms.id}')"></div>${!isLast?`<div class="ms-wire"></div>`:''}</div>
+      <div class="ms-body ${st}" onclick="cycMs('${ms.id}')">
+        <div class="ms-head"><div class="ms-ttl">${ms.title}</div>
+          <span class="ms-badge ${st==='done'?'bd-done':st==='now'?'bd-now':'bd-soon'}">${{done:'HECHO',now:'EN CURSO',soon:'PENDIENTE'}[st]}</span></div>
+        <div class="ms-desc">${ms.desc}</div>
+        <div class="pct-row"><div class="pct-bar"><div class="pct-fill" id="pf_${ms.id}" style="width:${pct}%"></div></div>
+          <input type="range" min="0" max="100" value="${pct}" style="width:55px;height:3px;cursor:pointer;accent-color:var(--gold);" oninput="updP('${ms.id}',this.value)" onclick="event.stopPropagation()">
+          <div class="pct-lbl" id="pl_${ms.id}">${pct}%</div></div>
+      </div>`;
+    bl.appendChild(div);
+  });
+}
+function cycMs(id){const d=ST.milestones?.[id]||{status:'soon',pct:0};d.status=d.status==='soon'?'now':d.status==='now'?'done':'soon';if(!ST.milestones)ST.milestones={};ST.milestones[id]=d;renderMilestones();saveAll();}
+function updP(id,val){if(!ST.milestones)ST.milestones={};if(!ST.milestones[id])ST.milestones[id]={status:'soon',pct:0};ST.milestones[id].pct=parseInt(val);const pf=document.getElementById('pf_'+id),pl=document.getElementById('pl_'+id);if(pf)pf.style.width=val+'%';if(pl)pl.textContent=val+'%';saveAll();}
+function renderSkills(){
+  const bl=document.getElementById('skillsBlock');if(!bl)return;bl.innerHTML='';
+  SKILLS_DEF.forEach(sk=>{
+    const val=ST.skills?.[sk.id]!==undefined?ST.skills[sk.id]:sk.base;
+    const r=document.createElement('div');r.className='prow';
+    r.innerHTML=`<div class="pname">${sk.name}</div><div class="ptrack"><div class="pfill" id="sf_${sk.id}" style="width:${val}%;background:${sk.c}"></div></div>
+      <input type="range" min="0" max="100" value="${val}" style="width:55px;height:3px;cursor:pointer;accent-color:var(--gold);" oninput="updSk('${sk.id}',this.value)">
+      <div class="ppct" id="sp_${sk.id}">${val}%</div>`;
+    bl.appendChild(r);
+  });
+}
+function updSk(id,val){if(!ST.skills)ST.skills={};ST.skills[id]=parseInt(val);const sf=document.getElementById('sf_'+id),sp=document.getElementById('sp_'+id);if(sf)sf.style.width=val+'%';if(sp)sp.textContent=val+'%';saveAll();}
+
+// ═══ FINANZAS ═══
+function renderPatrimonio(){
+  const d=document.getElementById('patrimonioList');if(!d)return;
+  d.innerHTML=PATRIMONIO.map(p=>`
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;padding:6px 0;border-bottom:1px solid rgba(30,37,53,.5);gap:8px;">
+      <div><div style="font-weight:600;font-size:11px;color:var(--text);">${p.name}</div><div style="font-family:var(--fm);font-size:8px;color:var(--m2);">${p.note}</div></div>
+      <div style="font-family:var(--fd);font-size:14px;font-weight:700;color:${p.color};white-space:nowrap;">${p.val}</div>
+    </div>`).join('');
+  const el=document.getElementById('etfChart');
+  if(el&&!el.dataset.built){
+    el.dataset.built='1';
+    new Chart(el,{type:'doughnut',data:{
+      labels:['VOO','VXUS','BND','QQQ','GOOGL'],
+      datasets:[{data:[59,23,10.5,6.6,0.9],backgroundColor:['#d4a843','#2ecfa0','#4090e8','#9060e0','#e04060'],borderColor:['#d4a84360','#2ecfa060','#4090e860','#9060e060','#e0406060'],borderWidth:1}]
+    },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:'#a8b8d0',font:{size:9},boxWidth:10}}}}});
+  }
+}
+
+// ═══ BOLETAS IA ═══
+function dropReceipt(e){e.preventDefault();document.getElementById('scanZone').classList.remove('drag');const f=e.dataTransfer.files[0];if(f&&f.type.startsWith('image/')){const r=new FileReader();r.onload=ev=>analyzeReceiptWithAI(ev.target.result);r.readAsDataURL(f);}}
+function scanReceipt(e){const f=e.target.files[0];if(f){const r=new FileReader();r.onload=ev=>analyzeReceiptWithAI(ev.target.result);r.readAsDataURL(f);}}
+async function analyzeReceiptWithAI(imageDataUrl){
+  document.getElementById('aiLoad').style.display='block';document.getElementById('aiResult').style.display='none';
+  let dots=0;const di=setInterval(()=>{dots=(dots+1)%4;const e=document.getElementById('aiDots');if(e)e.textContent='.'.repeat(dots+1);},400);
+  try{
+    const base64=imageDataUrl.split(',')[1];const mediaType=imageDataUrl.split(';')[0].split(':')[1];
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:600,
+        messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:mediaType,data:base64}},
+          {type:'text',text:'Analizá esta boleta. JSON exacto sin texto extra: {"tipo":"egreso|ingreso","descripcion":"nombre empresa","monto":número,"fecha":"DD/MM/YYYY","categoria":"comida|transporte|salud|entretenimiento|educacion|ropa|servicios|trabajo|otro"}'}]}]})});
+    clearInterval(di);const data=await resp.json();const txt=data.content?.[0]?.text||'{}';
+    let result;try{result=JSON.parse(txt.replace(/```json|```/g,'').trim());}catch(e){result={tipo:'egreso',descripcion:'No detectado',monto:0,fecha:'—',categoria:'otro'};}
+    ST.currentReceipt=result;ST.currentReceiptB64=base64;
+    document.getElementById('arTipo').textContent=result.tipo==='ingreso'?'✅ INGRESO':'❌ EGRESO';
+    document.getElementById('arTipo').style.color=result.tipo==='ingreso'?'var(--jade)':'var(--crimson)';
+    document.getElementById('arDesc').textContent=result.descripcion||'—';
+    document.getElementById('arMonto').textContent='S/'+(parseFloat(result.monto)||0).toFixed(2);
+    document.getElementById('arMonto').style.color=result.tipo==='ingreso'?'var(--jade)':'var(--crimson)';
+    document.getElementById('arFecha').textContent=result.fecha||'—';
+    document.getElementById('aiLoad').style.display='none';document.getElementById('aiResult').style.display='block';
+  }catch(err){clearInterval(di);document.getElementById('aiLoad').style.display='none';alert('Error al analizar. Verificá tu conexión.');}
+}
+function confirmReceipt(){
+  if(!ST.currentReceipt)return;const r=ST.currentReceipt;
+  if(!ST.gastos)ST.gastos=[];
+  ST.gastos.unshift({id:'b_'+Date.now(),tipo:r.tipo,cat:r.categoria,desc:r.descripcion,monto:parseFloat(r.monto||0),fecha:r.fecha,source:'boleta_ia',scan_date:new Date().toLocaleDateString('es-PE')});
+  ST.currentReceipt=null;document.getElementById('aiResult').style.display='none';document.getElementById('receiptFile').value='';
+  renderGastos();saveAll();
+}
+function cancelReceipt(){ST.currentReceipt=null;document.getElementById('aiResult').style.display='none';}
+function renderGastos(){
+  const d=document.getElementById('gastosList');if(!d)return;
+  const gs=ST.gastos||[];
+  d.innerHTML=gs.length?gs.slice(0,20).map(g=>`
+    <div class="logi" style="border-left-color:${g.tipo==='ingreso'?'var(--jade)':'var(--crimson)'}">
+      <div><div class="lt">${g.desc}${g.source==='boleta_ia'?' 🤖':''}</div><div class="lm">${(g.cat||'—').toUpperCase()} · ${g.fecha}</div></div>
+      <div class="ld" style="color:${g.tipo==='ingreso'?'var(--jade)':'var(--crimson)'};">${g.tipo==='ingreso'?'+':'−'}S/${g.monto.toFixed(2)}</div>
+    </div>`).join('')
+    :'<div style="font-family:var(--fm);font-size:10px;color:var(--m2);">Sin movimientos. Escaneá tu primera boleta.</div>';
+}
+
+// ═══ INIT ═══
+function renderAll(){
+  renderPhrase(document.getElementById('homePhrase'),false);
+  renderHabits();renderGastos();
+  const ld=document.getElementById('liveDate');
+  if(ld)ld.textContent=new Date().toLocaleDateString('es-PE',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  const lu=document.getElementById('lastUpd');if(lu&&ST.lastUpdated)lu.textContent=ST.lastUpdated;
+}
+document.addEventListener('DOMContentLoaded',()=>{initDragonCursor();initModals();loadAll();renderAll();});
+</script>
 </body>
 </html>
