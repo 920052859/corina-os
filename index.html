@@ -867,15 +867,22 @@ function togPriority(i){
 }
 function renderTimeBlocks(){
   const g=document.getElementById('timeBlocksList');if(!g)return;
-  const d=new Date().getDay();const isWE=d===0||d===6;
-  const blocks=isWE?[
-    {t:'5:00am',txt:'🌅 Despertar + higiene',cl:'bl-gold'},
-    {t:'6:00am',txt:'⛪ Misa (dom) / Descanso',cl:'bl-gold'},
-    {t:'7:00am',txt:'📖 Estudio PMP / GRE',cl:'bl-crimson'},
-    {t:'10:00am',txt:'💼 Proyectos propios / Tesis',cl:'bl-sky'},
-    {t:'3:00pm',txt:'💃 Baile / Folklore / Gym',cl:'bl-crimson'},
-    {t:'7:00pm',txt:'📱 Contenido / Redes sociales',cl:'bl-gold'},
-    {t:'10:00pm',txt:'🇮🇹 Italiano / 📚 Leer / Dormir',cl:'bl-jade'},
+  const d=new Date().getDay();
+  const blocks=d===6?[
+    {t:'7:30am',txt:'🌅 Despertar + desayuno sin prisa',cl:'bl-gold'},
+    {t:'8:30–11:00am',txt:'🎯 PMP · preguntas cronometradas + revisión de errores',cl:'bl-crimson'},
+    {t:'11:00am–1:30pm',txt:'🍽 Almuerzo + preparación Datex + traslado',cl:'bl-jade'},
+    {t:'3:00–7:00pm',txt:'💻 Docencia Python · Datex',cl:'bl-sky'},
+    {t:'7:30pm',txt:'🔋 Cena + recuperación · sin trabajo profundo',cl:'bl-jade'},
+    {t:'10:30pm',txt:'😴 Cierre temprano · dormir 7.5h',cl:'bl-jade'},
+  ]:d===0?[
+    {t:'7:30am',txt:'🌅 Despertar + desayuno / misa matutina',cl:'bl-gold'},
+    {t:'9:00–11:00am',txt:'🎯 PMP · simulacro parcial / análisis de errores',cl:'bl-crimson'},
+    {t:'Cada 2 semanas',txt:'⏱️ Simulacro completo PMP 8:00am–12:00pm',cl:'bl-crimson'},
+    {t:'12:00–1:30pm',txt:'🍽 Almuerzo + preparación Datex',cl:'bl-jade'},
+    {t:'2:00–6:00pm',txt:'💻 Docencia Python · Datex',cl:'bl-sky'},
+    {t:'6:30pm',txt:'👨‍👩‍👧 Familia + revisión semanal ligera',cl:'bl-gold'},
+    {t:'10:00pm',txt:'😴 Preparar lunes + dormir 7.5h',cl:'bl-jade'},
   ]:[
     {t:'5:00am',txt:'🌅 Despertar + higiene',cl:'bl-gold'},
     {t:'5:30am',txt:'🏃 Ejercicio mañana',cl:'bl-crimson'},
