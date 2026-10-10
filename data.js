@@ -436,33 +436,33 @@ const HABITS_DEFAULT = [
 
 // ── CONTENT PLANNER OWNERS ──
 const OWNERS = [
-  {id:'corina',    name:'Corina · Hábitos & Superación', icon:'🐉', color:'#d4a843'},
-  {id:'shakira',   name:'Shakira · Contenido Gato',      icon:'🐱', color:'#2ecfa0'},
-  {id:'audio',     name:'Audio Electrónica · Negocio',   icon:'🔊', color:'#4090e8'},
-  {id:'flores',    name:'Manos que Florecen · Flores',   icon:'🌸', color:'#e04060'},
+  {id:'corina',    name:'Corina · Hábitos & Ingeniería',  icon:'🐉', color:'#d4a843'},
+  {id:'linkedin',  name:'Marca Personal · LinkedIn',       icon:'💼', color:'#4090e8'},
+  {id:'audio',     name:'Audio Electrónica · Negocio',     icon:'🔊', color:'#2ecfa0'},
+  {id:'flores',    name:'Manos que Florecen · Flores',     icon:'🌸', color:'#e04060'},
 ];
 
 // ── MILESTONES ──
 const MILESTONES_DEF = [
-  {id:'m0',when:'ABR–MAY 2026',title:'Base del sistema activa',status:'now',pct:15,desc:'Make.com + Buffer · Notion offline · Pagos automáticos · Renta4 abierta · CS50P iniciado'},
-  {id:'m1',when:'JUN–JUL 2026',title:'ETF + 1K seguidores LinkedIn',status:'soon',pct:0,desc:'S/15K en VOO (DCA) · Google AI Essentials · 1,000 seg. LinkedIn'},
-  {id:'m2',when:'AGO–OCT 2026',title:'Maestría finalizada + charla',status:'soon',pct:0,desc:'Maestría ESAN · S/1,740 liberados · Primera charla pagada · TOEFL programado'},
-  {id:'m3',when:'NOV–DIC 2026',title:'Airbnb activo + S/10K/mes',status:'soon',pct:0,desc:'Depa La Victoria Airbnb → S/2,600/mes · Python intermedio · 5K seguidores'},
-  {id:'m4',when:'2027 Q1–Q2',title:'Primer ingreso remoto USD',status:'soon',pct:0,desc:'Upwork/Torre.co · Inglés B2 · ETF S/30K+'},
-  {id:'m5',when:'2027 Q3–2028',title:'Remoto full-time + hacienda',status:'soon',pct:0,desc:'$2,500–4,000 USD/mes · Starlink · 10K seguidores'},
-  {id:'m6',when:'2028–2029',title:'Libertad total + hacienda',status:'soon',pct:0,desc:'Hacienda + Starlink · ETF S/80K+ · Airbnb doble · Italia/China · Shakira 🐱'},
+  {id:'m0',when:'AGO–OCT 2026',title:'Sistema de vida activo',status:'done',pct:100,desc:'Hermes IA orquestador · 12 agentes nombrados · Corina OS v6 · LinkedIn 8 posts publicados · ETF $4,300 activo · CIP obtenido · Doctorado UNSA ciclo 1 iniciado'},
+  {id:'m1',when:'NOV 2026',title:'PMP aprobado + Airbnb Santa Catalina',status:'now',pct:40,desc:'Examen PMP 28 nov 2026 · Tercer intento definitivo · Hipoteca S/225K inicia nov · Airbnb SC → S/3,000/mes · Thayle → Gestora de Proyectos S/8,000'},
+  {id:'m2',when:'DIC 2026–ENE 2027',title:'Maestría ESAN finalizada + Eurotrip',status:'soon',pct:0,desc:'Maestría Project Management finalizada · Viaje Europa 31 dic–26 ene · BIM iniciado · Airbnb Chupaca publicado · Audio Electrónica reactivado'},
+  {id:'m3',when:'2027 Q1–Q2',title:'Doctorado ciclo 2 + LinkedIn 5K',status:'soon',pct:0,desc:'Doctorado UNSA ciclo 2 · ETF $37K+ (aporte $762/mes) · LinkedIn 5,000 seguidores · Instagram pipeline activo · Consulting/charlas primer ingreso'},
+  {id:'m4',when:'2027 Q3–2028',title:'Ingreso pasivo supera S/10K/mes',status:'soon',pct:0,desc:'Airbnb x2 + Audio + LinkedIn → S/10K+ pasivo · ETF $65K+ · Doctorado en curso · Primer cliente consulting remoto'},
+  {id:'m5',when:'2028–2029',title:'Libertad financiera operativa',status:'soon',pct:0,desc:'Ingresos sin Hitachi: S/15,741/mes · ETF $100K+ · Hacienda plan activo · Shakira 🐱 · Starlink · Trabajo 100% elegido'},
+  {id:'m6',when:'2029–2032',title:'Libertad total + hacienda',status:'soon',pct:0,desc:'Hacienda + Starlink · ETF $163K+ (retiro seguro S/2,000/mes) · Airbnb x2 consolidado · Italia/China · Doctorado completado'},
 ];
 
 // ── SKILLS ──
 const SKILLS_DEF = [
-  {id:'python',name:'Python / programación',base:45,c:'#2ecfa0'},
-  {id:'ingles',name:'Inglés (nivel actual)',base:55,c:'#d4a843'},
-  {id:'ia',    name:'IA / ML conceptos',   base:25,c:'#4090e8'},
-  {id:'make',  name:'Make.com / automatiz',base:35,c:'#9060e0'},
-  {id:'pm',    name:'Gestión proyectos PM',base:80,c:'#2ecfa0'},
-  {id:'mec',   name:'Ing. mecatrónica',    base:85,c:'#d4a843'},
-  {id:'cont',  name:'Contenido / redes',   base:30,c:'#e04060'},
-  {id:'fin',   name:'Finanzas/inversiones',base:40,c:'#4090e8'},
+  {id:'pm',    name:'Gestión proyectos PM / PMP',base:80,c:'#2ecfa0'},
+  {id:'mec',   name:'Ing. mecatrónica / sistemas',base:85,c:'#d4a843'},
+  {id:'ingles',name:'Inglés (C1 en proceso)',      base:62,c:'#4090e8'},
+  {id:'python',name:'Python / programación',       base:50,c:'#2ecfa0'},
+  {id:'ia',    name:'IA / Hermes / automatización',base:55,c:'#9060e0'},
+  {id:'make',  name:'Make.com / blueprints',       base:40,c:'#9060e0'},
+  {id:'fin',   name:'Finanzas / ETF / inversiones',base:48,c:'#4090e8'},
+  {id:'cont',  name:'LinkedIn / marca personal',   base:45,c:'#e04060'},
 ];
 
 // ── PLANNER SEMANAL ──
