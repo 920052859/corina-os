@@ -72,6 +72,11 @@ body{background:var(--bg);color:var(--text);font-family:var(--fh);overflow-x:hid
 .clbl{font-family:var(--fm);font-size:8.5px!important;letter-spacing:.1em;text-transform:uppercase;color:var(--m2)!important;margin-bottom:6px;}
 .cval{font-family:var(--fd);font-size:19px;font-weight:700;line-height:1;margin-bottom:3px;}
 .csub{font-family:var(--fm);font-size:8px!important;color:var(--m2)!important;}
+.role-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;margin:10px 0 14px;}
+.role-card{background:var(--s1);border:1px solid var(--border);border-left:3px solid;padding:12px;}
+.role-card h3{font-family:var(--fd);font-size:12px;color:var(--text);margin-bottom:5px;}
+.role-meta{font-family:var(--fm);font-size:8.5px;color:var(--m2);line-height:1.55;}
+.role-device{display:inline-block;margin-top:7px;padding:2px 7px;border:1px solid currentColor;font-family:var(--fm);font-size:8px;}
 
 /* LIFE BAR */
 .lbar-wrap{margin-bottom:20px;}
@@ -254,7 +259,7 @@ textarea::placeholder,input::placeholder{color:var(--muted)!important;}
 .cbox{background:var(--s1);border:1px solid var(--border);padding:15px;margin-bottom:10px;}
 .cttl{font-family:var(--fm);font-size:9px!important;letter-spacing:.18em;text-transform:uppercase;color:var(--m2)!important;margin-bottom:10px;}
 
-@media(max-width:768px){.wrap{padding:14px 10px 60px;}.daily-grid,.rs-grid{grid-template-columns:1fr;}.nav-tab{padding:12px 7px;}.ms-row{grid-template-columns:55px 11px 1fr;}.cards{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:768px){.wrap{padding:14px 10px 60px;}.daily-grid,.rs-grid{grid-template-columns:1fr;}.nav-tab{padding:12px 7px;}.ms-row{grid-template-columns:55px 11px 1fr;}.cards{grid-template-columns:repeat(2,minmax(0,1fr));}.role-grid{grid-template-columns:1fr;}.role-card{min-width:0;}}
 </style>
 </head>
 <body>
@@ -354,10 +359,19 @@ textarea::placeholder,input::placeholder{color:var(--muted)!important;}
     <div class="card cr"><div class="clbl">Deuda hipotecaria</div><div class="cval" style="color:var(--crimson)">S/225K</div><div class="csub">Nov 2026 · TCEA 8.89%</div></div>
     <div class="card cs"><div class="clbl">ETF portafolio</div><div class="cval" style="color:var(--sky)">$4,300</div><div class="csub">Hapi · VOO 59%</div></div>
     <div class="card cv"><div class="clbl">Hábitos hoy</div><div class="cval" style="color:var(--violet)" id="habitHome">0/0</div><div class="csub">completados</div></div>
-    <div class="card cj"><div class="clbl">Examen doctorado</div><div class="cval" style="color:var(--jade)">19 JUL</div><div class="csub">UNSA · CS</div></div>
-    <div class="card cg"><div class="clbl">PMP objetivo</div><div class="cval" style="color:var(--gold)">AGO</div><div class="csub">Plan intensivo</div></div>
+    <div class="card cj"><div class="clbl">Roles profesionales</div><div class="cval" style="color:var(--jade)">4</div><div class="csub">Hitachi · Datux · UNI · Thayle</div></div>
+    <div class="card cg"><div class="clbl">PMP objetivo</div><div class="cval" style="color:var(--gold)">28 NOV</div><div class="csub">Tercer intento · prioridad</div></div>
   </div>
-  <div class="alrt alg"><strong>🐉 Visión 2026:</strong> Cerrar maestría · PMP certificada · Aprobar doctorado · Activar Airbnb · Sistematizar inversiones · Construir marca. Un hábito, un día a la vez.</div>
+  <div class="stag">// roles activos · separación por dispositivo y contexto</div>
+  <div class="role-grid">
+    <div class="role-card" style="border-left-color:var(--jade)"><h3>🚆 Hitachi Rail</h3><div class="role-meta">Rol principal · L–V 8:00–17:15<br>Proyectos ferroviarios, coordinación y entregables.</div><span class="role-device" style="color:var(--jade)">📱 iPhone 15</span></div>
+    <div class="role-card" style="border-left-color:var(--sky)"><h3>💻 Profesora en Datux</h3><div class="role-meta">Docencia Python · sábado 15:00–19:00<br>Comunicación académica separada del trabajo principal.</div><span class="role-device" style="color:var(--sky)">📱 iPhone 13</span></div>
+    <div class="role-card" style="border-left-color:var(--violet)"><h3>🎓 Profesora UNI</h3><div class="role-meta">TSP UNI–FIM · miércoles 19:00–22:00<br>Alumnos, asesorías, materiales y evaluaciones.</div><span class="role-device" style="color:var(--violet)">📱 iPhone 13 · iPad Pro</span></div>
+    <div class="role-card" style="border-left-color:var(--gold)"><h3>⚡ Thayle · medio tiempo</h3><div class="role-meta">Gestión técnica y documental<br>Ventana: L–V 18:00–22:00 y sáb. 8:00–17:00.</div><span class="role-device" style="color:var(--gold)">📱 Xiaomi 12</span></div>
+    <div class="role-card" style="border-left-color:var(--violet)"><h3>📚 Maestría ESAN</h3><div class="role-meta">Project Management · tesis y cierre académico.<br>Cliente recomendado: iPad Pro + iPhone 13.</div><span class="role-device" style="color:var(--violet)">🎓 Formación</span></div>
+    <div class="role-card" style="border-left-color:var(--crimson)"><h3>🏋️ Gym y recuperación</h3><div class="role-meta">40 min después del trabajo cuando el calendario lo permite.<br>El iPhone 7 queda como música/respaldo, no para MFA.</div><span class="role-device" style="color:var(--crimson)">💚 Salud</span></div>
+  </div>
+  <div class="alrt alg"><strong>🐉 Visión 2026:</strong> Sostener cuatro roles profesionales sin mezclar canales · cerrar la maestría · aprobar PMP · proteger descanso y gimnasio · construir marca con evidencia. Un sistema, una prioridad a la vez.</div>
   <div style="margin-top:14px;display:flex;gap:6px;flex-wrap:wrap;">
     <button class="btn bj" onclick="gp('diario',null)">📅 Mi día</button>
     <button class="btn bg" onclick="gp('semanal',null)">📊 Revisión semanal</button>
@@ -623,10 +637,13 @@ const HABITS_DEFAULT=[
   {id:'exercise',name:'Ejercicio mañana (correr/gym)',   time:'5:30–6:30am',  freq:'Lun–Vie',      c:'crimson'},
   {id:'bkfast',  name:'Desayuno (sin lactosa)',           time:'6:30–6:50am',  freq:'Diario',       c:'jade'},
   {id:'icpna',   name:'ICPNA Inglés',                    time:'7:00–8:00am',  freq:'Lun–Vie',      c:'sky'},
-  {id:'work',    name:'Trabajo Hitachi Rail',             time:'8:10am–5pm',   freq:'Lun–Vie',      c:'jade'},
+  {id:'work',    name:'Trabajo Hitachi Rail',             time:'8:00am–5:15pm',freq:'Lun–Vie',      c:'jade'},
   {id:'anki',    name:'Anki PMP / Inglés / Idiomas',     time:'En transporte', freq:'Diario',       c:'gold'},
   {id:'pmp',     name:'Estudio PMP intensivo',           time:'6:00–8:00pm',  freq:'Lun/Mié/Vie',  c:'crimson'},
-  {id:'gym',     name:'Smart Fit',                       time:'6:00–7:30pm',  freq:'Mar/Jue/Sáb',  c:'crimson'},
+  {id:'gym',     name:'Gym + recuperación',              time:'40 min posTrabajo',freq:'3x semana', c:'crimson'},
+  {id:'datux',   name:'Docencia Python · Datux',         time:'3:00–7:00pm', freq:'Sábado',        c:'sky'},
+  {id:'uni',     name:'Docencia TSP · UNI FIM',          time:'7:00–10:00pm',freq:'Miércoles',     c:'violet'},
+  {id:'thayle',  name:'Thayle · gestión medio tiempo',   time:'Ventana 6:00–10:00pm',freq:'Lun–Vie',c:'gold'},
   {id:'maestria',name:'Maestría ESAN',                   time:'7:00–10:30pm', freq:'Lun/Jue',      c:'violet'},
   {id:'ingles',  name:'Inglés C1 extra · 30min',         time:'10:00–10:30pm',freq:'Diario',       c:'sky'},
   {id:'italiano',name:'Italiano · 15min',                time:'10:30–10:45pm',freq:'Diario',       c:'sky'},
@@ -637,8 +654,8 @@ const HABITS_DEFAULT=[
 ];
 
 const MILESTONES_DEF=[
-  {id:'pmp',    when:'AGO 2026',  title:'PMP Certificada',                  status:'now', pct:35, desc:'Intensivo: 2h L/M/V + Anki diario. Simular 300 preguntas/semana. Fecha objetivo: agosto 2026.'},
-  {id:'docto',  when:'19 JUL',   title:'Examen Doctorado UNSA CS',          status:'now', pct:25, desc:'Examen admisión 19 julio. Correo enviado a Mesa de Partes. Preparar documentos académicos.'},
+  {id:'pmp',    when:'28 NOV 2026',title:'PMP Certificada',                 status:'now', pct:35, desc:'Tercer intento. Simulacros cronometrados, revisión de errores y control del tiempo. Examen: 28 noviembre 2026.'},
+  {id:'docto',  when:'2026-II',   title:'Doctorado UNSA CS · ciclo 1',       status:'now', pct:35, desc:'Ciencias de la Computación. Mantener el avance sin desplazar PMP, ESAN ni el descanso.'},
   {id:'visa',   when:'22 SEP',   title:'Cita Visa Schengen',                status:'now', pct:10, desc:'Preparar documentación. Barcelona 18-23 ene 2027. Eurotrip hasta 31 enero con mamá.'},
   {id:'esan',   when:'NOV 2026', title:'Cierre académico Maestría ESAN',    status:'now', pct:60, desc:'4to ciclo ago–nov. Tesis con grupo en avance. Estación E4-8 Línea 4 Metro Lima y Callao.'},
   {id:'airbnb', when:'NOV 2026', title:'Airbnb La Victoria activo',         status:'soon',pct:10, desc:'40m² remodelado + PriceLabs + Airbnb + Booking. Proyección: S/2,800–3,200/mes neto.'},
@@ -689,21 +706,37 @@ const BRANDS=[
 
 const PROJECTS_DATA=[
   {id:'hitachi',title:'Hitachi Rail — Metro L2 Power Supply',   color:'#2ecfa0',status:'active',pct:65,
-   desc:'Associate Construcción Power Supply. OTDR, megado BT, SER E20, celdas MT, KPI con Power BI.',
-   next:'Seguimiento hitos instalación. Meta: >95% cumplimiento de hitos.',
-   ms:['✓ Interfaces ICI','✓ Celdas MT','CSIL observación','Cierre Tramo 5']},
+   desc:'Rol principal L–V 8:00–17:15 · coordinación, campo, project controls y entregables · canal iPhone 15.',
+   next:'Proteger horario laboral y mantener separadas las comunicaciones corporativas.',
+   ms:['✓ iPhone 15 asignado','Seguimiento de hitos','Entregables','Cierre diario']},
+  {id:'datux',title:'Docencia Python — Datux',                    color:'#4090e8',status:'active',pct:55,
+   desc:'Profesora de programación/Python · sábado 15:00–19:00 · comunicaciones académicas en iPhone 13.',
+   next:'Preparar clase y materiales antes del sábado; cerrar asistencia y pendientes al terminar.',
+   ms:['Plan de clase','Materiales','Sesión sábado','Seguimiento alumnos']},
+  {id:'uni',title:'Docencia TSP — UNI FIM',                       color:'#9060e0',status:'active',pct:55,
+   desc:'Profesora y asesora TSP · miércoles 19:00–22:00 · alumnos y coordinación principalmente por iPhone 13.',
+   next:'Consolidar asesorías, observaciones y entregables en un bloque semanal.',
+   ms:['✓ Canal iPhone 13','Clase miércoles','Revisión TSP','Seguimiento asesorados']},
+  {id:'thayle',title:'Thayle — Gestión medio tiempo',             color:'#d4a843',status:'active',pct:60,
+   desc:'Gestión técnica y documental · ventana L–V 18:00–22:00 y sábado 8:00–17:00 · canal recomendado Xiaomi 12.',
+   next:'Trabajar por entregables y evitar ocupar automáticamente todas las noches disponibles.',
+   ms:['✓ Flujo de expedientes','Informes','Ofertas','Cierre semanal']},
   {id:'esan',  title:'Tesis ESAN — Estación E4-8 Línea 4',      color:'#d4a843',status:'active',pct:40,
    desc:'Charter PM4R, EDT/WBS, organigrama RACI, costos, calidad, planificación y monitoreo.',
    next:'Avanzar capítulos con el grupo. Defensa estimada feb–mar 2027.',
    ms:['✓ Charter PM4R','✓ Organigrama RACI','WBS completo','Análisis riesgos','Defensa']},
+  {id:'gym',title:'Salud — Gym y recuperación',                  color:'#e04060',status:'active',pct:50,
+   desc:'40 minutos posTrabajo, tres veces por semana, ajustado a docencia, ESAN y carga real.',
+   next:'Proteger sueño y descanso; no convertir todos los espacios libres en trabajo.',
+   ms:['3 sesiones/semana','Sueño 7 h','Recuperación','Revisión semanal']},
   {id:'pmp_c', title:'Certificación PMP',                        color:'#e04060',status:'active',pct:35,
    desc:'PMI Study Hall Plus. Gaps identificados: Process domain + Business Environment.',
-   next:'Intensivo: 2h L/M/V + Anki diario + 300 simulacros/semana. Fecha: Agosto 2026.',
-   ms:['✓ Study Hall activado','Simulacros 70%+','300 preguntas/semana','Examen Agosto 2026']},
-  {id:'docto', title:'Doctorado CS — UNSA',                      color:'#9060e0',status:'active',pct:20,
-   desc:'Ciencias de la Computación. IA aplicada a gestión de proyectos. Admisión condicional en gestión.',
-   next:'Examen admisión 19 julio. Correo enviado. Preparar portafolio académico.',
-   ms:['✓ Correo enviado','Examen 19 Jul 2026','Admisión condicional','1er semestre 2027']},
+   next:'Simulacros cronometrados, revisión de errores y control del tiempo. Examen: 28 noviembre 2026.',
+   ms:['✓ Study Hall activado','Simulacros 70%+','Revisión de errores','Examen 28 Nov 2026']},
+  {id:'docto', title:'Doctorado CS — UNSA',                      color:'#9060e0',status:'active',pct:35,
+   desc:'Ciencias de la Computación. IA aplicada a gestión de proyectos · ciclo 2026-II.',
+   next:'Mantener el avance del ciclo sin desplazar PMP, ESAN ni el descanso.',
+   ms:['✓ Admisión','✓ Matrícula','Ciclo 1','Avance académico']},
   {id:'airbnb',title:'Airbnb La Victoria',                       color:'#f06820',status:'pending',pct:10,
    desc:'Departamento 40m² · 1 dormitorio. Remodelación + PriceLabs + gestión dual plataformas.',
    next:'Preparar presupuesto de remodelación. Activar noviembre 2026.',
@@ -715,8 +748,8 @@ const PROJECTS_DATA=[
 ];
 
 const STRATEGY_TIMELINE=[
-  {date:'19 Jul 2026',title:'Examen Doctorado UNSA CS',         impact:'alto', area:'educacion'},
-  {date:'Ago 2026',   title:'Examen PMP — Plan intensivo',      impact:'alto', area:'carrera'},
+  {date:'2026-II',    title:'Doctorado UNSA CS — ciclo 1',      impact:'alto', area:'educacion'},
+  {date:'28 Nov 2026',title:'Examen PMP — tercer intento',       impact:'alto', area:'carrera'},
   {date:'22 Sep 2026',title:'Cita Visa Schengen',               impact:'alto', area:'personal'},
   {date:'Nov 2026',   title:'Cierre académico Maestría ESAN',   impact:'alto', area:'educacion'},
   {date:'Nov 2026',   title:'Activar Airbnb La Victoria',       impact:'alto', area:'finanzas'},
@@ -870,31 +903,31 @@ function renderTimeBlocks(){
   const d=new Date().getDay();
   const blocks=d===6?[
     {t:'7:30am',txt:'🌅 Despertar + desayuno sin prisa',cl:'bl-gold'},
-    {t:'8:30–11:00am',txt:'🎯 PMP · preguntas cronometradas + revisión de errores',cl:'bl-crimson'},
-    {t:'11:00am–1:30pm',txt:'🍽 Almuerzo + preparación Datex + traslado',cl:'bl-jade'},
-    {t:'3:00–7:00pm',txt:'💻 Docencia Python · Datex',cl:'bl-sky'},
+    {t:'8:00am–12:00pm',txt:'⚡ Thayle · bloque por entregables / solo si está planificado',cl:'bl-gold'},
+    {t:'12:00–1:30pm',txt:'🍽 Almuerzo + preparación Datux + traslado',cl:'bl-jade'},
+    {t:'3:00–7:00pm',txt:'💻 Docencia Python · Datux',cl:'bl-sky'},
     {t:'7:30pm',txt:'🔋 Cena + recuperación · sin trabajo profundo',cl:'bl-jade'},
     {t:'10:30pm',txt:'😴 Cierre temprano · dormir 7.5h',cl:'bl-jade'},
   ]:d===0?[
     {t:'7:30am',txt:'🌅 Despertar + desayuno / misa matutina',cl:'bl-gold'},
     {t:'9:00–11:00am',txt:'🎯 PMP · simulacro parcial / análisis de errores',cl:'bl-crimson'},
     {t:'Cada 2 semanas',txt:'⏱️ Simulacro completo PMP 8:00am–12:00pm',cl:'bl-crimson'},
-    {t:'12:00–1:30pm',txt:'🍽 Almuerzo + preparación Datex',cl:'bl-jade'},
-    {t:'2:00–6:00pm',txt:'💻 Docencia Python · Datex',cl:'bl-sky'},
-    {t:'6:30pm',txt:'👨‍👩‍👧 Familia + revisión semanal ligera',cl:'bl-gold'},
+    {t:'12:00–3:00pm',txt:'🍽 Familia + descanso real',cl:'bl-jade'},
+    {t:'4:00–5:00pm',txt:'📚 Preparación ligera UNI / Datux',cl:'bl-sky'},
+    {t:'6:30pm',txt:'📊 Revisión semanal + planificación de capacidad',cl:'bl-gold'},
     {t:'10:00pm',txt:'😴 Preparar lunes + dormir 7.5h',cl:'bl-jade'},
   ]:[
     {t:'5:00am',txt:'🌅 Despertar + higiene',cl:'bl-gold'},
     {t:'5:30am',txt:'🏃 Ejercicio mañana',cl:'bl-crimson'},
     {t:'6:30am',txt:'🍳 Desayuno (sin lactosa)',cl:'bl-jade'},
     {t:'7:00am',txt:'📚 ICPNA Inglés',cl:'bl-sky'},
-    {t:'8:10am',txt:'⚙️ Trabajo Hitachi Rail L2',cl:'bl-jade'},
+    {t:'8:00am–5:15pm',txt:'⚙️ Hitachi Rail · rol principal · iPhone 15',cl:'bl-jade'},
     {t:'En transporte',txt:'🗂 Anki PMP / Inglés / Italiano',cl:'bl-gold'},
-    {t:'5:00pm',txt:'🔄 Cierre laboral + traslado',cl:'bl-jade'},
-    {t:'6:00pm',txt:'💪 Gym SmartFit / 📖 PMP Intensivo',cl:'bl-crimson'},
-    {t:'7:00pm',txt:'🎓 Maestría ESAN (Lun/Jue)',cl:'bl-violet'},
-    {t:'10:00pm',txt:'🇬🇧 Inglés C1 extra · 30min',cl:'bl-sky'},
-    {t:'10:30pm',txt:'🇮🇹 Italiano · 15min',cl:'bl-sky'},
+    {t:'5:15pm',txt:'🔄 Cierre Hitachi + transición de contexto',cl:'bl-jade'},
+    ...(d===1||d===4?[{t:'7:00–10:30pm',txt:'🎓 Maestría ESAN · iPad / iPhone 13',cl:'bl-violet'}]:[]),
+    ...(d===3?[{t:'7:00–10:00pm',txt:'🎓 Docencia TSP UNI–FIM · iPhone 13',cl:'bl-violet'}]:[]),
+    ...(d===2||d===5?[{t:'5:45–6:25pm',txt:'💪 Gym 40 min + recuperación',cl:'bl-crimson'},{t:'7:00–9:00pm',txt:'⚡ Thayle · bloque por entregables · Xiaomi 12',cl:'bl-gold'}]:[]),
+    {t:'10:15pm',txt:'📵 Cierre digital y preparación para dormir',cl:'bl-sky'},
     {t:'11:00pm',txt:'😴 Dormir 7h',cl:'bl-jade'},
   ];
   g.innerHTML=blocks.map((b,i)=>{
