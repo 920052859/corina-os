@@ -357,7 +357,7 @@ textarea::placeholder,input::placeholder{color:var(--muted)!important;}
   <div class="cards" style="margin-bottom:14px;">
     <div class="card cg"><div class="clbl">Patrimonio total</div><div class="cval" style="color:var(--gold)">S/115K+</div><div class="csub">creciendo</div></div>
     <div class="card cr"><div class="clbl">Deuda hipotecaria</div><div class="cval" style="color:var(--crimson)">S/225K</div><div class="csub">Nov 2026 · TCEA 8.89%</div></div>
-    <div class="card cs"><div class="clbl">ETF portafolio</div><div class="cval" style="color:var(--sky)">$4,300</div><div class="csub">Hapi · VOO 59%</div></div>
+    <div class="card cs"><div class="clbl">ETF portafolio</div><div class="cval" style="color:var(--sky)">$6,300</div><div class="csub">Hapi · VOO 59%</div></div>
     <div class="card cv"><div class="clbl">Hábitos hoy</div><div class="cval" style="color:var(--violet)" id="habitHome">0/0</div><div class="csub">completados</div></div>
     <div class="card cj"><div class="clbl">Roles profesionales</div><div class="cval" style="color:var(--jade)">4</div><div class="csub">Hitachi · Datux · UNI · Thayle</div></div>
     <div class="card cg"><div class="clbl">PMP objetivo</div><div class="cval" style="color:var(--gold)">28 NOV</div><div class="csub">Tercer intento · prioridad</div></div>
@@ -549,8 +549,8 @@ textarea::placeholder,input::placeholder{color:var(--muted)!important;}
   <div class="cards" style="margin-bottom:14px;">
     <div class="card cj"><div class="clbl">Ingreso neto</div><div class="cval" style="color:var(--jade)">S/6,302</div><div class="csub">+S/300 adicional</div></div>
     <div class="card cr"><div class="clbl">Gastos fijos est.</div><div class="cval" style="color:var(--crimson)">S/4,015</div><div class="csub">Sin cuota hipotecaria aún</div></div>
-    <div class="card cs"><div class="clbl">ETF (Hapi)</div><div class="cval" style="color:var(--sky)">$4,300</div><div class="csub">VOO 59% VXUS 23% BND 10%</div></div>
-    <div class="card cg"><div class="clbl">Liquidez</div><div class="cval" style="color:var(--gold)">S/46,500</div><div class="csub">Confirmar y reasignar</div></div>
+    <div class="card cs"><div class="clbl">ETF (Hapi)</div><div class="cval" style="color:var(--sky)">$6,300</div><div class="csub">VOO 59% VXUS 23% BND 10%</div></div>
+    <div class="card cg"><div class="clbl">Liquidez</div><div class="cval" style="color:var(--gold)">S/26,000</div><div class="csub">+ USD 2,200 · Trii S/8,975</div></div>
     <div class="card cv"><div class="clbl">AFP Integra F3</div><div class="cval" style="color:var(--violet)">S/4,507</div><div class="csub">Largo plazo · no tocar</div></div>
     <div class="card cr"><div class="clbl">Cuota hipotec.</div><div class="cval" style="color:var(--crimson)">S/1,977</div><div class="csub">Desde Nov 2026 · 20 años</div></div>
   </div>
@@ -759,9 +759,10 @@ const STRATEGY_TIMELINE=[
 ];
 
 const PATRIMONIO=[
-  {name:'Liquidez / Efectivo',      val:'S/ 46,500',   note:'Confirmar saldo · reasignar excedente',color:'#d4a843'},
-  {name:'Dólares',                  val:'$360–3,000',  note:'Confirmar monto exacto',                color:'#2ecfa0'},
-  {name:'ETF portafolio (Hapi)',    val:'$4,300 USD',  note:'VOO 59% / VXUS 23% / BND 10.5% / QQQ 6.6%',color:'#4090e8'},
+  {name:'Liquidez / Efectivo (soles)', val:'S/ 26,000', note:'Agora · oct 2026',                     color:'#d4a843'},
+  {name:'Dólares (cash + BBVA)',    val:'USD 2,200',   note:'Cash USD 2,000 · BBVA USD 200',         color:'#2ecfa0'},
+  {name:'ETF portafolio (Hapi)',    val:'USD 6,300',   note:'VOO 59% / VXUS 23% / BND 10.5% / QQQ 6.6%',color:'#4090e8'},
+  {name:'Trii (BVL)',               val:'S/ 8,975',    note:'3 posiciones activas · oct 2026',       color:'#2ecfa0'},
   {name:'AFP Integra Fondo 3',      val:'S/ 4,507',    note:'Largo plazo · no tocar',                color:'#9060e0'},
   {name:'Depa La Victoria',         val:'S/ 250,000',  note:'Airbnb desde Nov 2026 · Deuda S/225K TCEA 8.89%',color:'#e04060'},
   {name:'Terreno Huancayo (93 m²)', val:'S/ 25,000',   note:'Evaluar arrendamiento 2027',             color:'#2ecfa0'},
