@@ -490,3 +490,78 @@ const TAG_COLORS = {
   general:'var(--m2)', finanzas:'var(--gold)', estudio:'var(--jade)',
   habitos:'var(--crimson)', contenido:'var(--violet)', personal:'var(--sky)'
 };
+
+
+// ════════════════════════════════════════════════
+// FINANZAS_2026 — CORINA OS | Agente Finanzas
+// Última actualización: 26-oct-2026
+// ════════════════════════════════════════════════
+const FINANZAS_2026 = {
+  fecha_actualizacion: "26-oct-2026",
+  tc_usd_pen: 3.453,
+  google_sheet: "https://docs.google.com/spreadsheets/d/1aVx2GjxzWeMUMjl-cfGuf7RvKxqA6Ng59PtDpVbeSgM/edit",
+
+  // ── CUENTAS LÍQUIDAS ──
+  cuentas: [
+    { nombre: "Trii — invertido",  saldo: 8012.10,  moneda: "PEN", estado: "Activo" },
+    { nombre: "Trii — disponible", saldo: 987.20,   moneda: "PEN", estado: "Efectivo" },
+    { nombre: "Hapi (ETFs)",       saldo: 6247.80,  moneda: "USD", estado: "Invertido" },
+    { nombre: "Agora PEN",         saldo: 29974.00, moneda: "PEN", estado: "Reserva" },
+    { nombre: "Agora USD",         saldo: 2011.65,  moneda: "USD", estado: "Reserva viaje" },
+    { nombre: "BBVA USD",          saldo: 252.17,   moneda: "USD", estado: "Emergencia" },
+    { nombre: "BBVA PEN",          saldo: 1137.95,  moneda: "PEN", estado: "Emergencia" },
+  ],
+
+  // ── ACTIVOS FIJOS ──
+  activos_fijos: [
+    { nombre: "Depa Ate",          valor: 25000, moneda: "PEN", estado: "Por entregar 30-nov-2026" },
+    { nombre: "Terreno Huancayo",  valor: 25000, moneda: "PEN", estado: "Pagado" },
+    { nombre: "Terreno Ica",       valor: 15000, moneda: "PEN", estado: "Pagado" },
+  ],
+
+  // ── RESUMEN ──
+  resumen: {
+    patrimonio_liquido_pen: 69502,
+    activos_fijos_pen:      65000,
+    patrimonio_bruto_pen:   134502,
+    fire_meta_pen:          2100000,
+    fire_pct:               3.31,
+    ahorro_oct_2026:        3097.54,
+    tasa_ahorro_oct_2026:   41.3,
+  },
+
+  // ── HAPI ETFs (26-oct-2026) ──
+  hapi: {
+    total_usd:    6247.80,
+    poder_compra: 0.00,
+    perf_1a_usd:  -0.91,
+    perf_1a_pct:  -0.01,
+    nota:         "Crecimiento fue por aportes, no por rentabilidad de mercado",
+    posiciones: [
+      { etf: "VOO",   shares: 4.6547,   precio: 698.59, total: 3252.38, pct: 52.1 },
+      { etf: "VXUS",  shares: 19.13147, precio: 82.53,  total: 1579.39, pct: 25.3 },
+      { etf: "BND",   shares: 15.92673, precio: 71.54,  total: 1139.40, pct: 18.2 },
+      { etf: "QQQ",   shares: 0.39534,  precio: 704.40, total: 278.47,  pct: 4.5  },
+      { etf: "GOOGL", shares: 0.01468,  precio: 320.21, total: 4.70,    pct: 0.1  },
+    ]
+  },
+
+  // ── TRII BVL (26-oct-2026) ──
+  trii: {
+    total_invertido: 8012.10,
+    disponible:      987.20,
+    posiciones: [
+      { ticker: "FERREYC1",    empresa: "Ferreycorp",        precio_compra: 4.607,  acciones: 600,  total: 2764.20 },
+      { ticker: "INGENIERÍA1", empresa: "ENGIE Energía Perú", precio_compra: 5.13,   acciones: 550,  total: 2821.50 },
+      { ticker: "PLUENZENC1",  empresa: "Pluz Energía Perú",  precio_compra: 1.348,  acciones: 1800, total: 2426.40 },
+    ]
+  },
+
+  // ── PRESUPUESTO OCT-2026 ──
+  ppto_oct: {
+    ingresos: { real: 7506.02, meta: 13905 },
+    gastos_fijos: { real: 3530.28, meta_pct: 0.40 },
+    gastos_variables: { real: 878.20, meta_pct: 0.30 },
+    ahorro: { real: 3097.54, pct: 41.3 },
+  }
+};
