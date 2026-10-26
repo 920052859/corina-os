@@ -1,0 +1,289 @@
+[
+  {
+    "name": "Aenza",
+    "ticker": "AENZAC1",
+    "price": "S/ 0,40",
+    "daily_change": "S/ 0,00 ( 0 %)",
+    "volume": "5233"
+  },
+  {
+    "name": "Alicorp",
+    "ticker": "ALICORC1",
+    "price": "S/ 13.49",
+    "daily_change": "S/ 0,00 ( 0 %)",
+    "volume": "2823"
+  },
+  {
+    "name": "ANDINO INVESTMENT HOLDING SAA",
+    "ticker": "AIHC1",
+    "price": "S/ 1.20",
+    "daily_change": "S/ 0,00 ( 0 %)",
+    "volume": "0"
+  },
+  {
+    "name": "Banco Crédito del Perú",
+    "ticker": "CRÉDITO1",
+    "price": "S/ 6.70",
+    "daily_change": "S/ 0,00 ( 0 %)",
+    "volume": "89384"
+  },
+  {
+    "name": "Banco Internacional del Perú",
+    "ticker": "INTERBC1",
+    "price": "S/ 2.25",
+    "daily_change": "S/ 0,00 ( 0 %)",
+    "volume": "927"
+  },
+  {
+    "name": "BBVA Perú",
+    "ticker": "BBVAC1",
+    "price": "S/ 2.31",
+    "daily_change": "S/ 0,00 ( 0 %)",
+    "volume": "168246"
+  },
+  {
+    "name": "Cartavio Sociedad Anónima Abierta",
+    "ticker": "CARTAVC1",
+    "price": "S/ 32.00",
+    "daily_change": "S/ 0,00 ( 0 %)",
+    "volume": "13"
+  },
+  {
+    "name": "Casa Grande",
+    "ticker": "CASAGRC1",
+    "price": "S/ 8.64",
+    "daily_change": "S/ 0,00 ( 0 %)",
+    "volume": "10218"
+  },
+  {
+    "name": "Cementos Pacasmayo",
+    "ticker": "CPACASC1",
+    "price": "S/ 8.65",
+    "daily_change": "S/ 0,00 ( 0 %)",
+    "volume": "37226"
+  },
+  {
+    "name": "Cementos Pacasmayo SAA",
+    "ticker": "CPACASI1",
+    "price": "S/ 7.25",
+    "daily_change": "S/ 0,00 ( 0 %)",
+    "volume": "0"
+  },
+  {
+    "name": "Cervecería San Juan SA",
+    "ticker": "SNJUANC1",
+    "price": "S/ 67.20",
+    "daily_change": "S/ 0,00 ( 0 %)",
+    "volume": "0"
+  },
+  {
+    "name": "Cervecería San Juan SA",
+    "ticker": "SNJUANI1",
+    "price": "S/ 74.00",
+    "daily_change": "S/ 0,00 ( 0 %)",
+    "volume": "16"
+  },
+  {
+    "name": "Compañía Minera Poderosa SA",
+    "ticker": "PODERC1",
+    "price": "S/ 8.81",
+    "daily_change": "S/ 0,00 ( 0 %)",
+    "volume": "1243"
+  },
+  {
+    "name": "Corporación Aceros Arequipa",
+    "ticker": "CORAREI1",
+    "price": "S/ 1.81",
+    "daily_change": "S/ 0,00 ( 0 %)",
+    "volume": "21871"
+  },
+  {
+    "name": "Corporación Aceros Arequipa SA",
+    "ticker": "CORAREC1",
+    "price": "S/ 2.03",
+    "daily_change": "S/ 0,00 ( 0 %)",
+    "volume": "1507"
+  },
+  {
+    "name": "Corporación Lindley SA",
+    "ticker": "CORLINI1",
+    "price": "S/ 3.88",
+    "daily_change": "S/ 0,00 ( 0 %)",
+    "volume": "0"
+  },
+  {
+    "name": "CSP FIBRA Prime",
+    "ticker": "CSPFIBPR",
+    "price": "0,02 USD",
+    "daily_change": "0,00 USD ( 0 %)",
+    "volume": "0"
+  },
+  {
+    "name": "CUMBRA HOLDING SAA",
+    "ticker": "CUMBRAC1",
+    "price": "S/ 0,06",
+    "daily_change": "S/ 0,00 ( 0 %)",
+    "volume": "5"
+  },
+  {
+    "name": "Emp. Reg. De Servicio Público De Electricidad Electronorte Medio SA- Hidrandina",
+    "ticker": "HIDRA2C1",
+    "price": "S/ 1.13",
+    "daily_change": "S/ 0,00 ( 0 %)",
+    "volume": "16116"
+  },
+  {
+    "name": "Empresa Agroindustrial Pomalca SAA",
+    "ticker": "POMALCC1",
+    "price": "S/ 0,29",
+    "daily_change": "S/ 0,00 ( 0 %)",
+    "volume": "47"
+  },
+  {
+    "name": "Empresa Siderúrgica del Perú",
+    "ticker": "SIDERC1",
+    "price": "S/ 3.27",
+    "daily_change": "S/ 0,00 ( 0 %)",
+    "volume": "22403"
+  },
+  {
+    "name": "Engie Energía Perú",
+    "ticker": "INGENIERÍA1",
+    "price": "S/ 5.10",
+    "daily_change": "S/ 0,00 ( 0 %)",
+    "volume": "25658"
+  },
+  {
+    "name": "Ferreycorp",
+    "ticker": "FERREYC1",
+    "price": "S/ 4.59",
+    "daily_change": "S/ 0,00 ( 0 %)",
+    "volume": "61914"
+  },
+  {
+    "name": "HERMES TRANSPORTES BLINDADOS SA",
+    "ticker": "HERMESC1",
+    "price": "S/ 11.50",
+    "daily_change": "S/ 0,00 ( 0 %)",
+    "volume": "0"
+  },
+  {
+    "name": "Inversiones Portuarias Chancay SAA",
+    "ticker": "IPCHAC1",
+    "price": "S/ 1.52",
+    "daily_change": "S/ 0,00 ( 0 %)",
+    "volume": "11666"
+  },
+  {
+    "name": "Inversiones Portuarias Chancay SAA",
+    "ticker": "IPCHBC1",
+    "price": "S/ 0,12",
+    "daily_change": "S/ 0,00 ( 0 %)",
+    "volume": "510972"
+  },
+  {
+    "name": "Leche Gloria SA",
+    "ticker": "GLORIAI1",
+    "price": "S/ 11.50",
+    "daily_change": "S/ 0,00 ( 0 %)",
+    "volume": "2"
+  },
+  {
+    "name": "Luz del Sur",
+    "ticker": "LUSURC1",
+    "price": "S/ 12.63",
+    "daily_change": "S/ 0,00 ( 0 %)",
+    "volume": "1687"
+  },
+  {
+    "name": "Minera Atacocha",
+    "ticker": "ATACOBC1",
+    "price": "S/ 0,31",
+    "daily_change": "S/ 0,00 ( 0 %)",
+    "volume": "80804"
+  },
+  {
+    "name": "Minsur",
+    "ticker": "MINSURI1",
+    "price": "S/ 7.75",
+    "daily_change": "S/ 0,00 ( 0 %)",
+    "volume": "259887"
+  },
+  {
+    "name": "Nexa Resources Perú SAA",
+    "ticker": "NEXAPEC1",
+    "price": "S/ 4.35",
+    "daily_change": "S/ 0,00 ( 0 %)",
+    "volume": "140067"
+  },
+  {
+    "name": "ORYGEN PERÚ SAA (antes ENEL GENERACIÓN)",
+    "ticker": "ORGÁNICO1",
+    "price": "S/ 2.44",
+    "daily_change": "S/ 0,00 ( 0 %)",
+    "volume": "43108"
+  },
+  {
+    "name": "Pesquera Exalmar SAA",
+    "ticker": "EXALMC1",
+    "price": "S/ 2.35",
+    "daily_change": "S/ 0,00 ( 0 %)",
+    "volume": "0"
+  },
+  {
+    "name": "PLUZ ENERGIA PERÚ SAA (antes ENEL DISTRIBUCIÓN)",
+    "ticker": "PLUENZENC1",
+    "price": "S/ 1.34",
+    "daily_change": "S/ 0,00 ( 0 %)",
+    "volume": "32767"
+  },
+  {
+    "name": "RIMAC SEGUROS Y REASEGUROS",
+    "ticker": "RIMSEGC1",
+    "price": "S/ 1.38",
+    "daily_change": "S/ 0,00 ( 0 %)",
+    "volume": "0"
+  },
+  {
+    "name": "Scotiabank Perú SAA",
+    "ticker": "SCOTIAC1",
+    "price": "S/ 21.00",
+    "daily_change": "S/ 0,00 ( 0 %)",
+    "volume": "0"
+  },
+  {
+    "name": "Sociedad Minera el Brocal",
+    "ticker": "BRÓCALO1",
+    "price": "S/ 25.02",
+    "daily_change": "S/ 0,00 ( 0 %)",
+    "volume": "2003"
+  },
+  {
+    "name": "Corporación de Cobre del Sur del Perú - Sucursal del Perú",
+    "ticker": "SPCCPI1",
+    "price": "S/ 265.00",
+    "daily_change": "S/ 0,00 ( 0 %)",
+    "volume": "285"
+  },
+  {
+    "name": "Unión Andina de Cementos",
+    "ticker": "UNACEMC1",
+    "price": "S/ 2.43",
+    "daily_change": "S/ 0,00 ( 0 %)",
+    "volume": "11166"
+  },
+  {
+    "name": "Unión de Cervecerías Peruanas",
+    "ticker": "RETROCESO1",
+    "price": "S/ 28.73",
+    "daily_change": "S/ 0,00 ( 0 %)",
+    "volume": "2318"
+  },
+  {
+    "name": "Volcán Compañía Minera",
+    "ticker": "VOLCABC1",
+    "price": "S/ 0,86",
+    "daily_change": "S/ 0,00 ( 0 %)",
+    "volume": "514504"
+  }
+]
